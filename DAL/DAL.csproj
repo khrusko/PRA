@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D4E77EA3-8EE5-401C-B1A2-41CDC8087EA8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DAL</RootNamespace>
+    <AssemblyName>DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstract\DAO\AbstractDAO.cs" />
+    <Compile Include="Abstract\DAO\IDAO.cs" />
+    <Compile Include="Abstract\DAO\IManageable.cs" />
+    <Compile Include="Abstract\DAO\IIdentifiable.cs" />
+    <Compile Include="Abstract\Repository\DAO\IAuthorDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IBookDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IBookStoreDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IBranchOfficeDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\ILoanDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IMessageDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IPublisherDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IPurchaseDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\ISubscriptionDAORepository.cs" />
+    <Compile Include="Abstract\Repository\DAO\IUserDAORepository.cs" />
+    <Compile Include="Abstract\Repository\Database\IDatabaseRepository.cs" />
+    <Compile Include="Abstract\Repository\IIdentifiableRepository.cs" />
+    <Compile Include="Abstract\Repository\IRepository.cs" />
+    <Compile Include="DAO\AuthorDAO.cs" />
+    <Compile Include="DAO\BookDAO.cs" />
+    <Compile Include="DAO\BookStoreDAO.cs" />
+    <Compile Include="DAO\BranchOfficeDAO.cs" />
+    <Compile Include="DAO\LoanDAO.cs" />
+    <Compile Include="DAO\MessageDAO.cs" />
+    <Compile Include="DAO\PublisherDAO.cs" />
+    <Compile Include="DAO\PurchaseDAO.cs" />
+    <Compile Include="DAO\SubscriptionDAO.cs" />
+    <Compile Include="DAO\UserDAO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Repository\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
