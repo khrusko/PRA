@@ -23,9 +23,7 @@ AS BEGIN
     [UpdatedBy],
     [BookFK],
     [UserFK],
-    [SubscriptionDate],
-    [IsResolved],
-    [ResolvedDate]
+    [SubscriptionDate]
   )
   VALUES 
   (

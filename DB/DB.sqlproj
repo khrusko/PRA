@@ -65,6 +65,29 @@
     <Folder Include="Programmability\Types" />
     <Folder Include="Programmability\Stored Procedures\Authors" />
     <Folder Include="Programmability\Stored Procedures\Authors\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Books" />
+    <Folder Include="Programmability\Stored Procedures\Books\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\BookStores" />
+    <Folder Include="Programmability\Stored Procedures\BookStores\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\BranchOffices" />
+    <Folder Include="Programmability\Stored Procedures\BranchOffices\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Loans" />
+    <Folder Include="Programmability\Stored Procedures\Loans\BL" />
+    <Folder Include="Programmability\Stored Procedures\Loans\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Messages" />
+    <Folder Include="Programmability\Stored Procedures\Messages\BL" />
+    <Folder Include="Programmability\Stored Procedures\Messages\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Publishers" />
+    <Folder Include="Programmability\Stored Procedures\Publishers\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Purchases" />
+    <Folder Include="Programmability\Stored Procedures\Purchases\BL" />
+    <Folder Include="Programmability\Stored Procedures\Purchases\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions\BL" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Users" />
+    <Folder Include="Programmability\Stored Procedures\Users\BL" />
+    <Folder Include="Programmability\Stored Procedures\Users\CRUD" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -82,11 +105,54 @@
     <Build Include="Programmability\Stored Procedures\Authors\CRUD\Delete.sql" />
     <Build Include="Programmability\Stored Procedures\Authors\CRUD\Read.sql" />
     <Build Include="Programmability\Stored Procedures\Authors\CRUD\Update.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BOOKSTORE.publish.xml" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\BookStores\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\BookStores\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\Loan.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\Return.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\BL\Respond.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\BL\Send.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\BL\Purchase.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\BL\Subscribe.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\Login.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\Register.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Update.sql" />
+    <Build Include="Programmability\Types\Ids.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BOOKSTORE.publish.xml" />
   </ItemGroup>
 </Project>
