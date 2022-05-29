@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{6ac4e6b6-ed51-45df-8d64-fba845800e3c}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>DB</RootNamespace>
+    <AssemblyName>DB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateCreateScript>True</GenerateCreateScript>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <SqlTargetName>BOOKSTORE</SqlTargetName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Programmability" />
+    <Folder Include="Programmability\Stored Procedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Programmability\Types" />
+    <Folder Include="Programmability\Stored Procedures\Authors" />
+    <Folder Include="Programmability\Stored Procedures\Authors\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Books" />
+    <Folder Include="Programmability\Stored Procedures\Books\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\BookStores" />
+    <Folder Include="Programmability\Stored Procedures\BookStores\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\BranchOffices" />
+    <Folder Include="Programmability\Stored Procedures\BranchOffices\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Loans" />
+    <Folder Include="Programmability\Stored Procedures\Loans\BL" />
+    <Folder Include="Programmability\Stored Procedures\Loans\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Messages" />
+    <Folder Include="Programmability\Stored Procedures\Messages\BL" />
+    <Folder Include="Programmability\Stored Procedures\Messages\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Publishers" />
+    <Folder Include="Programmability\Stored Procedures\Publishers\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Purchases" />
+    <Folder Include="Programmability\Stored Procedures\Purchases\BL" />
+    <Folder Include="Programmability\Stored Procedures\Purchases\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions\BL" />
+    <Folder Include="Programmability\Stored Procedures\Subscriptions\CRUD" />
+    <Folder Include="Programmability\Stored Procedures\Users" />
+    <Folder Include="Programmability\Stored Procedures\Users\BL" />
+    <Folder Include="Programmability\Stored Procedures\Users\CRUD" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\Authors.sql" />
+    <Build Include="Tables\Publishers.sql" />
+    <Build Include="Tables\Books.sql" />
+    <Build Include="Tables\BooksAuthors.sql" />
+    <Build Include="Tables\BookStores.sql" />
+    <Build Include="Tables\BranchOffices.sql" />
+    <Build Include="Tables\Loans.sql" />
+    <Build Include="Tables\Messages.sql" />
+    <Build Include="Tables\Purchases.sql" />
+    <Build Include="Tables\Subscriptions.sql" />
+    <Build Include="Programmability\Stored Procedures\Authors\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Authors\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Authors\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Authors\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\BookStores\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\BookStores\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\BranchOffices\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\Loan.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\Return.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\BL\Respond.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\BL\Send.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Messages\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Publishers\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\BL\Purchase.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\BL\Subscribe.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\CRUD\Update.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\Login.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\Register.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Create.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Delete.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Read.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\CRUD\Update.sql" />
+    <Build Include="Programmability\Types\Ids.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BOOKSTORE.publish.xml" />
+  </ItemGroup>
+</Project>
