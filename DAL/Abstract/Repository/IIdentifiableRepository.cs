@@ -7,6 +7,6 @@ namespace DAL.Abstract.Repository
   {
     T Read(K ID);
     int Update(K ID, T entity);
-    int Delete(K ID);
+    int Delete(K ID, T entity);
   }
 }
