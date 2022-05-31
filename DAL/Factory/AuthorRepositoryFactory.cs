@@ -1,5 +1,5 @@
 ﻿using DAL.Abstract.Repository;
-using DAL.DAO;
+using DAL.Model;
 using DAL.Repository.Database;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,6 @@ namespace DAL.Factory
 {
   public static class AuthorRepositoryFactory
   {
-    public static IRepository<AuthorDAO> GetRepository() => new AuthorDatabaseRepository();
+    public static IRepository<AuthorModel> GetRepository() => new AuthorDatabaseRepository();
   }
 }

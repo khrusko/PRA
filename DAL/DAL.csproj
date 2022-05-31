@@ -93,7 +93,16 @@
     <Compile Include="DAO\SubscriptionDAO.cs" />
     <Compile Include="DAO\UserDAO.cs" />
     <Compile Include="Factory\AuthorRepositoryFactory.cs" />
+    <Compile Include="Factory\BookRepositoryFactory.cs" />
+    <Compile Include="Factory\BookStoreRepositoryFactory.cs" />
+    <Compile Include="Factory\BranchOfficeRepositoryFactory.cs" />
     <Compile Include="Factory\ConnectionStringManager.cs" />
+    <Compile Include="Factory\LoanRepositoryFactory.cs" />
+    <Compile Include="Factory\MessageRepositoryFactory.cs" />
+    <Compile Include="Factory\PublisherRepositoryFactory.cs" />
+    <Compile Include="Factory\PurchaseRepositoryFactory.cs" />
+    <Compile Include="Factory\SubscriptionRepositoryFactory.cs" />
+    <Compile Include="Factory\UserRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Database\AuthorDatabaseRepository.cs" />
     <Compile Include="Repository\Database\BookDatabaseRepository.cs" />

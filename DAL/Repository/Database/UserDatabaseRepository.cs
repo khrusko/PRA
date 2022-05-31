@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class UserDatabaseRepository : AbstractDatabaseRepository<UserDAO, int>, IUserRepository
+  internal class UserDatabaseRepository : AbstractDatabaseRepository<UserModel, int>, IUserRepository
   {
     public override string EntityName => "User";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -35,7 +35,7 @@ namespace DAL.Repository.Database
         { "IsAdmin",        SqlDbType.Bit },
       };
 
-    public UserDAO Login(string Email, string Password)
+    public UserModel Login(string Email, string Password)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -58,15 +58,15 @@ namespace DAL.Repository.Database
       SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Login), parameters.ToArray());
 
       return reader.Read()
-        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserDAO>(), (obj, prop) =>
+        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserModel>(), (obj, prop) =>
         {
-          typeof(UserDAO).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop]);
           return obj;
         })
-        : default(UserDAO);
+        : default(UserModel);
     }
 
-    public UserDAO Register(string UserID, string FName, string LName, string Email, string Password, bool IsAdmin, int CreatedBy)
+    public UserModel Register(string UserID, string FName, string LName, string Email, string Password, bool IsAdmin, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -124,12 +124,12 @@ namespace DAL.Repository.Database
       SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());
 
       return reader.Read()
-        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserDAO>(), (obj, prop) =>
+        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserModel>(), (obj, prop) =>
         {
-          typeof(UserDAO).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop]);
           return obj;
         })
-        : default(UserDAO);
+        : default(UserModel);
     }
   }
 }

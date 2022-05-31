@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class AuthorDatabaseRepository : AbstractDatabaseRepository<AuthorDAO, int>, IAuthorRepository
+  internal class AuthorDatabaseRepository : AbstractDatabaseRepository<AuthorModel, int>, IAuthorRepository
   {
     public override string EntityName => "Author";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }

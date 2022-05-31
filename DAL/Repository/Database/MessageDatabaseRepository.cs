@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class MessageDatabaseRepository : AbstractDatabaseRepository<MessageDAO, int>, IMessageRepository
+  internal class MessageDatabaseRepository : AbstractDatabaseRepository<MessageModel, int>, IMessageRepository
   {
     public override string EntityName => "Message";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -33,8 +33,8 @@ namespace DAL.Repository.Database
         { "ResponderMessage", SqlDbType.NVarChar },
       };
 
-    public int Send(MessageDAO entity) => Send(entity, entity.CreatedBy);
-    public int Send(MessageDAO entity, int CreatedBy) => Send(entity.SenderUserFK, entity.SenderMessage, CreatedBy);
+    public int Send(MessageModel entity) => Send(entity, entity.CreatedBy);
+    public int Send(MessageModel entity, int CreatedBy) => Send(entity.SenderUserFK, entity.SenderMessage, CreatedBy);
     public int Send(int SenderUserFK, string SenderMessage, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
@@ -73,8 +73,8 @@ namespace DAL.Repository.Database
       return int.Parse(returnValue.Value.ToString());
     }
 
-    public int Respond(MessageDAO entity) => Respond(entity, entity.UpdatedBy);
-    public int Respond(MessageDAO entity, int UpdatedBy) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage, UpdatedBy);
+    public int Respond(MessageModel entity) => Respond(entity, entity.UpdatedBy);
+    public int Respond(MessageModel entity, int UpdatedBy) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage, UpdatedBy);
     public int Respond(int ID, int ResponderUserFK, string ResponderMessage, int UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()

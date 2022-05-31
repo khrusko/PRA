@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using DAL.Factory;
 using Microsoft.ApplicationBlocks.Data;
 using System;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class BookStoreDatabaseRepository : IDatabaseRepository<BookStoreDAO, int>, IBookStoreRepository
+  internal class BookStoreDatabaseRepository : IDatabaseRepository<BookStoreModel, int>, IBookStoreRepository
   {
     public string ConnectionString => ConnectionStringFactory.GetConnectionString();
     public string EntityName => "BookStore";
@@ -33,7 +33,7 @@ namespace DAL.Repository.Database
         { "Email",            SqlDbType.NVarChar },
       };
 
-    public IEnumerable<BookStoreDAO> Read()
+    public IEnumerable<BookStoreModel> Read()
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
 
@@ -41,20 +41,20 @@ namespace DAL.Repository.Database
 
       while (reader.Read())
       {
-        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<BookStoreDAO>(), (obj, prop) =>
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<BookStoreModel>(), (obj, prop) =>
         {
-          typeof(BookStoreDAO).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(BookStoreModel).GetProperty(prop).SetValue(obj, reader[prop]);
           return obj;
         });
       }
     }
 
-    public int Update(BookStoreDAO entity) => Update(entity.ID, entity, entity.UpdatedBy);
-    public int Update(int ID, BookStoreDAO entity) => Update(ID, entity, entity.UpdatedBy);
-    public int Update(int ID, BookStoreDAO entity, int UpdatedBy)
+    public int Update(BookStoreModel entity) => Update(entity.ID, entity, entity.UpdatedBy);
+    public int Update(int ID, BookStoreModel entity) => Update(ID, entity, entity.UpdatedBy);
+    public int Update(int ID, BookStoreModel entity, int UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(BookStoreDAO).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(BookStoreModel).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (var item in DbKeyTypePairs)
       {
@@ -64,7 +64,7 @@ namespace DAL.Repository.Database
           ParameterName = "@" + item.Key,
           Direction = ParameterDirection.Input,
           SqlDbType = item.Value,
-          Value = typeof(BookStoreDAO).GetProperty(item.Key).GetValue(entity),
+          Value = typeof(BookStoreModel).GetProperty(item.Key).GetValue(entity),
         });
       }
 
@@ -95,11 +95,11 @@ namespace DAL.Repository.Database
       return int.Parse(returnValue.Value.ToString());
     }
 
-    public int Create(BookStoreDAO entity) => throw new NotImplementedException();
-    public int Create(BookStoreDAO entity, int CreatedBy) => throw new NotImplementedException();
-    public int Delete(int ID, BookStoreDAO entity) => throw new NotImplementedException();
-    public int Delete(BookStoreDAO entity) => throw new NotImplementedException();
+    public int Create(BookStoreModel entity) => throw new NotImplementedException();
+    public int Create(BookStoreModel entity, int CreatedBy) => throw new NotImplementedException();
+    public int Delete(int ID, BookStoreModel entity) => throw new NotImplementedException();
+    public int Delete(BookStoreModel entity) => throw new NotImplementedException();
     public int Delete(int ID, int DeletedBy) => throw new NotImplementedException();
-    public BookStoreDAO Read(int ID) => throw new NotImplementedException();
+    public BookStoreModel Read(int ID) => throw new NotImplementedException();
   }
 }

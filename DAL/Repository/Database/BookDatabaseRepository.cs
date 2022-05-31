@@ -1,7 +1,7 @@
-﻿using DAL.Abstract.DAO;
-using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Model;
+using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class BookDatabaseRepository : AbstractDatabaseRepository<BookDAO, int>, IBookRepository
+  internal class BookDatabaseRepository : AbstractDatabaseRepository<BookModel, int>, IBookRepository
   {
     public override string EntityName => "Book";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -39,12 +39,12 @@ namespace DAL.Repository.Database
         { "ImagePath",      SqlDbType.NVarChar },
       };
 
-    public override int Create(BookDAO entity) => throw new NotImplementedException();
-    public override int Create(BookDAO entity, int CreatedBy) => throw new NotImplementedException();
-    public int Create(BookDAO entity, IEnumerable<int> Authors, int CreatedBy)
+    public override int Create(BookModel entity) => throw new NotImplementedException();
+    public override int Create(BookModel entity, int CreatedBy) => throw new NotImplementedException();
+    public int Create(BookModel entity, IEnumerable<int> Authors, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IDAO<int>).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(IModel<int>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (var item in DbKeyTypePairs)
       {
@@ -54,7 +54,7 @@ namespace DAL.Repository.Database
           ParameterName = "@" + item.Key,
           Direction = ParameterDirection.Input,
           SqlDbType = item.Value,
-          Value = typeof(BookDAO).GetProperty(item.Key).GetValue(entity),
+          Value = typeof(BookModel).GetProperty(item.Key).GetValue(entity),
         });
       }
 
@@ -85,14 +85,14 @@ namespace DAL.Repository.Database
       return int.Parse(returnValue.Value.ToString());
     }
 
-    public override int Update(BookDAO entity) => throw new NotImplementedException();
-    public override int Update(int ID, BookDAO entity) => throw new NotImplementedException();
-    public override int Update(int ID, BookDAO entity, int UpdatedBy) => throw new NotImplementedException();
-    public int Update(BookDAO entity, IEnumerable<int> Authors, int UpdatedBy) => Update(entity.ID, entity, Authors, UpdatedBy);
-    public int Update(int ID, BookDAO entity, IEnumerable<int> Authors, int UpdatedBy)
+    public override int Update(BookModel entity) => throw new NotImplementedException();
+    public override int Update(int ID, BookModel entity) => throw new NotImplementedException();
+    public override int Update(int ID, BookModel entity, int UpdatedBy) => throw new NotImplementedException();
+    public int Update(BookModel entity, IEnumerable<int> Authors, int UpdatedBy) => Update(entity.ID, entity, Authors, UpdatedBy);
+    public int Update(int ID, BookModel entity, IEnumerable<int> Authors, int UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IDAO<int>).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(IModel<int>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (var item in DbKeyTypePairs)
       {
@@ -102,7 +102,7 @@ namespace DAL.Repository.Database
           ParameterName = "@" + item.Key,
           Direction = ParameterDirection.Input,
           SqlDbType = item.Value,
-          Value = typeof(BookDAO).GetProperty(item.Key).GetValue(entity),
+          Value = typeof(BookModel).GetProperty(item.Key).GetValue(entity),
         });
       }
 

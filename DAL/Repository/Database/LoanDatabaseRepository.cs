@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class LoanDatabaseRepository : AbstractDatabaseRepository<LoanDAO, int>, ILoanRepository
+  internal class LoanDatabaseRepository : AbstractDatabaseRepository<LoanModel, int>, ILoanRepository
   {
     public override string EntityName => "Loan";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -35,8 +35,8 @@ namespace DAL.Repository.Database
         { "DelayPricePerDay",   SqlDbType.Decimal },
       };
 
-    public int Loan(LoanDAO entity) => Loan(entity, entity.CreatedBy);
-    public int Loan(LoanDAO entity, int CreatedBy) => Loan(entity.BookFK, entity.UserFK, entity.PlannedReturnDate, entity.CreatedBy);
+    public int Loan(LoanModel entity) => Loan(entity, entity.CreatedBy);
+    public int Loan(LoanModel entity, int CreatedBy) => Loan(entity.BookFK, entity.UserFK, entity.PlannedReturnDate, entity.CreatedBy);
     public int Loan(int BookFK, int UserFK, DateTime PlannedReturnDate, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
@@ -82,8 +82,8 @@ namespace DAL.Repository.Database
       return int.Parse(returnValue.Value.ToString());
     }
 
-    public int Return(LoanDAO entity) => Return(entity, entity.UpdatedBy);
-    public int Return(LoanDAO entity, int UpdatedBy) => Return(entity.ID, UpdatedBy);
+    public int Return(LoanModel entity) => Return(entity, entity.UpdatedBy);
+    public int Return(LoanModel entity, int UpdatedBy) => Return(entity.ID, UpdatedBy);
     public int Return(int ID, int UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()

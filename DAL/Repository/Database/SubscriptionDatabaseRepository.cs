@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class SubscriptionDatabaseRepository : AbstractDatabaseRepository<SubscriptionDAO, int>, ISubscriptionRepository
+  internal class SubscriptionDatabaseRepository : AbstractDatabaseRepository<SubscriptionModel, int>, ISubscriptionRepository
   {
     public override string EntityName => "Subscription";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -32,8 +32,8 @@ namespace DAL.Repository.Database
         { "ResolvedDate",     SqlDbType.DateTime },
       };
 
-    public int Subscribe(SubscriptionDAO entity) => Subscribe(entity, entity.CreatedBy);
-    public int Subscribe(SubscriptionDAO entity, int CreatedBy) => Subscribe(entity.BookFK, entity.UserFK, CreatedBy);
+    public int Subscribe(SubscriptionModel entity) => Subscribe(entity, entity.CreatedBy);
+    public int Subscribe(SubscriptionModel entity, int CreatedBy) => Subscribe(entity.BookFK, entity.UserFK, CreatedBy);
     public int Subscribe(int BookFK, int UserFK, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()

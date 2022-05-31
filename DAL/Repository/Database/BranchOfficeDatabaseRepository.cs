@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class BranchOfficeDatabaseRepository : AbstractDatabaseRepository<BranchOfficeDAO, int>, IBranchOfficeRepository
+  internal class BranchOfficeDatabaseRepository : AbstractDatabaseRepository<BranchOfficeModel, int>, IBranchOfficeRepository
   {
     public override string EntityName => "BranchOffice";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }

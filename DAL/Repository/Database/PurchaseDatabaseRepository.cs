@@ -1,6 +1,6 @@
-﻿using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Repository.Model;
 using DAL.Abstract.Repository.Database;
-using DAL.DAO;
+using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.Database
 {
-  internal class PurchaseDatabaseRepository : AbstractDatabaseRepository<PurchaseDAO, int>, IPurchaseRepository
+  internal class PurchaseDatabaseRepository : AbstractDatabaseRepository<PurchaseModel, int>, IPurchaseRepository
   {
     public override string EntityName => "Purchase";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
@@ -32,8 +32,8 @@ namespace DAL.Repository.Database
         { "PurchaseDate",   SqlDbType.DateTime },
       };
 
-    public int Purchase(PurchaseDAO entity) => Purchase(entity, entity.CreatedBy);
-    public int Purchase(PurchaseDAO entity, int CreatedBy) => Purchase(entity.BookFK, entity.UserFK, entity.Quantity, CreatedBy);
+    public int Purchase(PurchaseModel entity) => Purchase(entity, entity.CreatedBy);
+    public int Purchase(PurchaseModel entity, int CreatedBy) => Purchase(entity.BookFK, entity.UserFK, entity.Quantity, CreatedBy);
     public int Purchase(int BookFK, int UserFK, int Quantity, int CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
