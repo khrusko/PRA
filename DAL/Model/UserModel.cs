@@ -1,8 +1,8 @@
-﻿using DAL.Abstract.DAO;
+﻿using DAL.Abstract.Model;
 
-namespace DAL.DAO
+namespace DAL.Model
 {
-  public class UserDAO : AbstractDAO<int>
+  public class UserModel : AbstractModel<int>
   {
     public string UserID { get; set; }
     public string FName { get; set; }

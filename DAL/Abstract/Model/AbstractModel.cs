@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace DAL.Abstract.DAO
+namespace DAL.Abstract.Model
 {
-  public abstract class AbstractDAO<K> : IDAO<K>
+  public abstract class AbstractModel<K> : IModel<K>
   {
     public K ID { get; set; }
     public DateTime CreateDate { get; set; }

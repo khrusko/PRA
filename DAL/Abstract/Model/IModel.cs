@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Abstract.DAO
+namespace DAL.Abstract.Model
 {
-  public interface IDAO<K> : IIdentifiable<K>, IManageable<K>
+  public interface IModel<K> : IIdentifiable<K>, IManageable<K>
   {
   }
 }

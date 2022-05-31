@@ -1,4 +1,4 @@
-﻿namespace DAL.Abstract.DAO
+﻿namespace DAL.Abstract.Model
 {
   public interface IIdentifiable<K>
   {

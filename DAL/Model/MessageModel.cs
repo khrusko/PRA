@@ -1,9 +1,9 @@
-﻿using DAL.Abstract.DAO;
+﻿using DAL.Abstract.Model;
 using System;
 
-namespace DAL.DAO
+namespace DAL.Model
 {
-  public class MessageDAO : AbstractDAO<int>
+  public class MessageModel : AbstractModel<int>
   {
     public int SenderUserFK { get; set; }
     public DateTime SenderDate { get; set; }

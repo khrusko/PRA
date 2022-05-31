@@ -1,9 +1,9 @@
-﻿using DAL.Abstract.DAO;
+﻿using DAL.Abstract.Model;
 using System;
 
-namespace DAL.DAO
+namespace DAL.Model
 {
-  public class AuthorDAO : AbstractDAO<int>
+  public class AuthorModel : AbstractModel<int>
   {
     public string FName { get; set; }
     public string LName { get; set; }

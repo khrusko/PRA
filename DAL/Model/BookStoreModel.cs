@@ -1,8 +1,8 @@
-﻿using DAL.Abstract.DAO;
+﻿using DAL.Abstract.Model;
 
-namespace DAL.DAO
+namespace DAL.Model
 {
-  public class BookStoreDAO : AbstractDAO<int>
+  public class BookStoreModel : AbstractModel<int>
   {
     public string Name { get; set; }
     public string OIB { get; set; }

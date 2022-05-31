@@ -1,9 +1,9 @@
-﻿using DAL.Abstract.DAO;
+﻿using DAL.Abstract.Model;
 using System;
 
-namespace DAL.DAO
+namespace DAL.Model
 {
-  public class PurchaseDAO : AbstractDAO<int>
+  public class PurchaseModel : AbstractModel<int>
   {
     public int BookFK { get; set; }
     public int UserFK { get; set; }
