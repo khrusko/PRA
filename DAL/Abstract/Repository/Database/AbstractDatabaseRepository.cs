@@ -1,5 +1,5 @@
-﻿using DAL.Abstract.DAO;
-using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Model;
+using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using Microsoft.ApplicationBlocks.Data;
 using System;
@@ -10,8 +10,8 @@ using System.Linq;
 
 namespace DAL.Abstract.Repository.Database
 {
-  internal abstract class AbstractDatabaseRepository<T, K> : IDatabaseRepository<T, K>, IDAORepository<T, K>
-    where T : class, IDAO<K>
+  internal abstract class AbstractDatabaseRepository<T, K> : IDatabaseRepository<T, K>, IModelRepository<T, K>
+    where T : class, IModel<K>
   {
     public string ConnectionString => ConnectionStringFactory.GetConnectionString();
     public abstract string EntityName { get; }
@@ -21,7 +21,7 @@ namespace DAL.Abstract.Repository.Database
     public virtual int Create(T entity, K CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IDAO<K>).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (var item in DbKeyTypePairs)
       {
@@ -59,7 +59,7 @@ namespace DAL.Abstract.Repository.Database
     public virtual int Delete(K ID, K DeletedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IDAO<K>).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       parameters.Add(new SqlParameter()
       {
@@ -140,7 +140,7 @@ namespace DAL.Abstract.Repository.Database
     public virtual int Update(K ID, T entity, K UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IDAO<K>).GetProperties().Select(x => x.Name).ToArray();
+      string[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (var item in DbKeyTypePairs)
       {

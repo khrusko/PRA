@@ -1,5 +1,5 @@
-﻿using DAL.Abstract.DAO;
-using DAL.Abstract.Repository.DAO;
+﻿using DAL.Abstract.Model;
+using DAL.Abstract.Repository.Model;
 using System.Collections.Generic;
 using System.Data;
 
