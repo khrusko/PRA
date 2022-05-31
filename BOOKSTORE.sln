@@ -7,6 +7,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DB", "DB\DB.sqlproj", "{6AC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{D4E77EA3-8EE5-401C-B1A2-41CDC8087EA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{5CCD4743-8AF8-4F20-BA50-5F23A53859B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{D4E77EA3-8EE5-401C-B1A2-41CDC8087EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4E77EA3-8EE5-401C-B1A2-41CDC8087EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4E77EA3-8EE5-401C-B1A2-41CDC8087EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CCD4743-8AF8-4F20-BA50-5F23A53859B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CCD4743-8AF8-4F20-BA50-5F23A53859B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CCD4743-8AF8-4F20-BA50-5F23A53859B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CCD4743-8AF8-4F20-BA50-5F23A53859B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
