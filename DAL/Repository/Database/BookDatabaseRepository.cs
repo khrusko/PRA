@@ -138,5 +138,30 @@ namespace DAL.Repository.Database
 
       return int.Parse(returnValue.Value.ToString());
     }
+
+    public IEnumerable<BookModel> ReadByAuthorFK(int AuthorFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@AuthorFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = AuthorFK,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByAuthorFK), parameters.ToArray());
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<BookModel>(), (obj, prop) =>
+        {
+          typeof(BookModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          return obj;
+        });
+      }
+    }
   }
 }
