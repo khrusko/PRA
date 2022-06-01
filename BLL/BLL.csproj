@@ -41,8 +41,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Manager\IManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IAuthorManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IBookManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IBookStoreManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IBranchOfficeManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\ILoanManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IMessageManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IProjectionManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IPublisherManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IPurchaseManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\ISubscriptionManager.cs" />
+    <Compile Include="Abstract\Manager\Projection\IUserManager.cs" />
+    <Compile Include="Abstract\Projection\AbstractProjection.cs" />
+    <Compile Include="Abstract\Projection\IProjection.cs" />
+    <Compile Include="Manager\AuthorManager.cs" />
+    <Compile Include="Manager\BookManager.cs" />
+    <Compile Include="Manager\BookStoreManager.cs" />
+    <Compile Include="Manager\BranchOfficeManager.cs" />
+    <Compile Include="Manager\LoanManager.cs" />
+    <Compile Include="Manager\MessageManager.cs" />
+    <Compile Include="Manager\PublisherManager.cs" />
+    <Compile Include="Manager\PurchaseManager.cs" />
+    <Compile Include="Manager\SubscriptionManager.cs" />
+    <Compile Include="Projection\AuthorProjection.cs" />
+    <Compile Include="Manager\UserManager.cs" />
+    <Compile Include="Projection\BookProjection.cs" />
+    <Compile Include="Projection\BookStoreProjection.cs" />
+    <Compile Include="Projection\BranchOfficeProjection.cs" />
+    <Compile Include="Projection\LoanProjection.cs" />
+    <Compile Include="Projection\MessageProjection.cs" />
+    <Compile Include="Projection\PublisherProjection.cs" />
+    <Compile Include="Projection\PurchaseProjection.cs" />
+    <Compile Include="Projection\SubscriptionProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="Projection\UserProjection.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{d4e77ea3-8ee5-401c-b1a2-41cdc8087ea8}</Project>
+      <Name>DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
