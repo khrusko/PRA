@@ -6,7 +6,7 @@ namespace BLL.Projection
   {
     public string Name { get; set; }
     public string OIB { get; set; }
-    public double DelayPricePerDay { get; set; }
+    public decimal DelayPricePerDay { get; set; }
     public string Email { get; set; }
   }
 }
