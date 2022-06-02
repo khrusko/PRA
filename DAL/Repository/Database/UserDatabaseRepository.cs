@@ -64,17 +64,10 @@ namespace DAL.Repository.Database
         : default(UserModel);
     }
 
-    public UserModel Register(string UserID, string FName, string LName, string Email, string Password, bool IsAdmin, int CreatedBy)
+    public UserModel Register(string FName, string LName, string Email, string Password, bool IsAdmin)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
-        new SqlParameter()
-        {
-          ParameterName = "@UserID",
-          Direction = ParameterDirection.Input,
-          SqlDbType = DbKeyTypePairs["UserID"],
-          Value = UserID,
-        },
         new SqlParameter()
         {
           ParameterName = "@FName",
@@ -109,14 +102,7 @@ namespace DAL.Repository.Database
           Direction = ParameterDirection.Input,
           SqlDbType = DbKeyTypePairs["IsAdmin"],
           Value = IsAdmin,
-        },
-        new SqlParameter()
-        {
-          ParameterName = "@CreatedBy",
-          Direction = ParameterDirection.Input,
-          SqlDbType = DbKeyTypePairs["CreatedBy"],
-          Value = CreatedBy,
-        },
+        }
       };
 
       SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());

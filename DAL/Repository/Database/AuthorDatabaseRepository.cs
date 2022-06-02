@@ -1,8 +1,12 @@
 ﻿using DAL.Abstract.Repository.Database;
 using DAL.Abstract.Repository.Model;
 using DAL.Model;
+using Microsoft.ApplicationBlocks.Data;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace DAL.Repository.Database
 {
@@ -25,5 +29,30 @@ namespace DAL.Repository.Database
         { "ImagePath",      SqlDbType.NVarChar },
         { "Biography",      SqlDbType.NVarChar },
       };
+
+    public IEnumerable<AuthorModel> ReadByBookFK(int BookFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@BookFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = BookFK,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByBookFK), parameters.ToArray());
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<AuthorModel>(), (obj, prop) =>
+        {
+          typeof(AuthorModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          return obj;
+        });
+      }
+    }
   }
 }
