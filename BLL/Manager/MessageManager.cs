@@ -4,6 +4,8 @@ using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Manager
 {
@@ -22,6 +24,15 @@ namespace BLL.Manager
         ResponderDate = model.ResponderDate,
         ResponderMessage = model.ResponderMessage
       };
+
+    public MessageProjection GetByID(int ID)
+    {
+      MessageModel model = (Repository as IMessageRepository).Read(ID);
+      return model is null ? null : Project(model);
+    }
+
+    public IEnumerable<MessageProjection> GetAll()
+      => (Repository as IMessageRepository).Read().Select(Project);
 
     public int Send(MessageProjection projection)
       => Send(projection.SenderUserFK, projection.SenderMessage);

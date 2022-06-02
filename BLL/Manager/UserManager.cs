@@ -4,6 +4,8 @@ using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Manager
 {
@@ -25,11 +27,14 @@ namespace BLL.Manager
         IsAdmin = model.IsAdmin
       };
 
-    public UserProjection GetUserByID(int ID)
+    public UserProjection GetByID(int ID)
     {
       UserModel model = (Repository as IUserRepository).Read(ID);
       return model is null ? null : Project(model);
     }
+
+    public IEnumerable<UserProjection> GetAll()
+      => (Repository as IUserRepository).Read().Select(Project);
 
     public UserProjection Login(UserProjection projection) => Login(projection.Email, projection.Password);
     public UserProjection Login(string Email, string Password)
@@ -37,7 +42,6 @@ namespace BLL.Manager
       UserModel model = (Repository as IUserRepository).Login(Email, Password);
       return model is null ? null : Project(model);
     }
-
 
     public UserProjection Register(UserProjection projection)
       => Register(projection.FName, projection.LName, projection.Email, projection.Password, projection.IsAdmin);

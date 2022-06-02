@@ -4,6 +4,8 @@ using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Manager
 {
@@ -21,6 +23,15 @@ namespace BLL.Manager
         IsResolved = model.IsResolved,
         ResolvedDate = model.ResolvedDate
       };
+
+    public SubscriptionProjection GetByID(int ID)
+    {
+      SubscriptionModel model = (Repository as ISubscriptionRepository).Read(ID);
+      return model is null ? null : Project(model);
+    }
+
+    public IEnumerable<SubscriptionProjection> GetAll()
+      => (Repository as ISubscriptionRepository).Read().Select(Project);
 
     public int Subscribe(SubscriptionProjection projection)
       => Subscribe(projection.BookFK, projection.UserFK);
