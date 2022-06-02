@@ -8,7 +8,7 @@ namespace DAL.Model
     public int BookFK { get; set; }
     public int UserFK { get; set; }
     public int Quantity { get; set; }
-    public double UnitPrice { get; set; }
+    public decimal UnitPrice { get; set; }
     public DateTime PurchaseDate { get; set; }
   }
 }

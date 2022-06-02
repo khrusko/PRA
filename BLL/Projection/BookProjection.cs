@@ -11,8 +11,8 @@ namespace BLL.Projection
     public bool IsNew { get; set; }
     public int PublisherFK { get; set; }
     public int PageCount { get; set; }
-    public double PurchasePrice { get; set; }
-    public double LoanPrice { get; set; }
+    public decimal PurchasePrice { get; set; }
+    public decimal LoanPrice { get; set; }
     public int Quantity { get; set; }
     public string ImagePath { get; set; }
   }
