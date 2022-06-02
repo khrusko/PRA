@@ -1,5 +1,6 @@
 ﻿using BLL.Abstract.Projection;
 using DAL.Abstract.Model;
+using System.Collections.Generic;
 
 namespace BLL.Abstract.Manager.Projection
 {
@@ -8,5 +9,6 @@ namespace BLL.Abstract.Manager.Projection
     where P : class, IProjection<K>
   {
     P Project(M model);
+    IEnumerable<P> GetAll();
   }
 }

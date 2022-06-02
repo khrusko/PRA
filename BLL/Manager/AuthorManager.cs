@@ -26,5 +26,8 @@ namespace BLL.Manager
 
     public IEnumerable<AuthorProjection> GetAuthorsByBookFK(int BookFK)
       => (Repository as IAuthorRepository).ReadByBookFK(BookFK).Select(Project);
+
+    public IEnumerable<AuthorProjection> GetAll()
+      => (Repository as IAuthorRepository).Read().Select(Project);
   }
 }
