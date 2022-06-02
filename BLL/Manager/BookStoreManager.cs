@@ -4,6 +4,7 @@ using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BLL.Manager
@@ -21,6 +22,12 @@ namespace BLL.Manager
         DelayPricePerDay = model.DelayPricePerDay,
         Email = model.Email
       };
+
+    public BookStoreProjection GetByID(int ID)
+      => throw new System.NotImplementedException();
+
+    public IEnumerable<BookStoreProjection> GetAll()
+      => throw new System.NotImplementedException();
 
     public BookStoreProjection GetBookStore()
     {

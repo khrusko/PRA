@@ -5,7 +5,6 @@ namespace BLL.Abstract.Manager.Projection
 {
   public interface IUserManager : IProjectionManager<UserModel, UserProjection, int>
   {
-    UserProjection GetUserByID(int ID);
     UserProjection Login(UserProjection projection);
     UserProjection Login(string Email, string Password);
     UserProjection Register(UserProjection projection);
