@@ -6,6 +6,7 @@ using DAL.Factory;
 using DAL.Model;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BLL.Manager
 {
@@ -24,10 +25,16 @@ namespace BLL.Manager
         Biography = model.Biography
       };
 
-    public IEnumerable<AuthorProjection> GetAuthorsByBookFK(int BookFK)
-      => (Repository as IAuthorRepository).ReadByBookFK(BookFK).Select(Project);
+    public AuthorProjection GetByID(int ID)
+    {
+      AuthorModel model = (Repository as IAuthorRepository).Read(ID);
+      return model is null ? null : Project(model);
+    }
 
     public IEnumerable<AuthorProjection> GetAll()
       => (Repository as IAuthorRepository).Read().Select(Project);
+
+    public IEnumerable<AuthorProjection> GetAuthorsByBookFK(int BookFK)
+      => (Repository as IAuthorRepository).ReadByBookFK(BookFK).Select(Project);
   }
 }

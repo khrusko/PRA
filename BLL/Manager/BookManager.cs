@@ -30,11 +30,14 @@ namespace BLL.Manager
         ImagePath = model.ImagePath,
       };
 
-    public BookProjection GetBookByID(int ID)
+    public BookProjection GetByID(int ID)
     {
       BookModel model = (Repository as IBookRepository).Read(ID);
       return model is null ? null : Project(model);
     }
+
+    public IEnumerable<BookProjection> GetAll()
+      => (Repository as IBookRepository).Read().Select(Project);
 
     public IEnumerable<BookProjection> GetBooksByAuthorFK(int AuthorFK)
       => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);

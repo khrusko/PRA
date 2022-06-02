@@ -5,6 +5,8 @@ using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BLL.Manager
 {
@@ -25,6 +27,15 @@ namespace BLL.Manager
         DelayDays = model.DelayDays,
         DelayPricePerDay = model.DelayPricePerDay
       };
+
+    public LoanProjection GetByID(int ID)
+    {
+      LoanModel model = (Repository as ILoanRepository).Read(ID);
+      return model is null ? null : Project(model);
+    }
+
+    public IEnumerable<LoanProjection> GetAll()
+      => (Repository as ILoanRepository).Read().Select(Project);
 
     public int Loan(LoanProjection projection)
       => Loan(projection.BookFK, projection.UserFK, projection.PlannedReturnDate);
