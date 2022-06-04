@@ -153,6 +153,8 @@
     <Build Include="Programmability\Stored Procedures\Authors\BL\ReadByBookFK.sql" />
     <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\GenerateUserID.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
