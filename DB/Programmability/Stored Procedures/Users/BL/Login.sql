@@ -24,7 +24,8 @@ AS BEGIN
     [ConfirmationDate]
   FROM [dbo].[Users]
   WHERE [Email] = @Email AND 
-        [PasswordHash] = @PasswordHash AND 
+        [PasswordHash] = @PasswordHash AND
+        [ConfirmationIsApproved] = 1 AND
         [DeleteDate] IS NULL
 END
 GO

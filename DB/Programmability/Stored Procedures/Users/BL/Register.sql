@@ -17,7 +17,7 @@ AS BEGIN
             [Email] = @Email
           )
   )
-  IF @IsUnique > 1 BEGIN
+  IF @IsUnique > 0 BEGIN
     RETURN 0
   END
 
