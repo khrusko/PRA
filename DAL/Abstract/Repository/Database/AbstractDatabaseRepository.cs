@@ -105,7 +105,7 @@ namespace DAL.Abstract.Repository.Database
       return reader.Read()
         ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<T>(), (obj, prop) =>
         {
-          typeof(T).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(T).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         })
         : default(T);
