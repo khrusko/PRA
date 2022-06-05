@@ -1,0 +1,22 @@
+﻿@model UI.Models.RegisterVM
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ConfirmationSent</title>
+</head>
+<body>
+    <div> 
+        <h2>Link za potvrdu registracije je poslan na vaš mail </h2>
+    </div>
+    <div>
+        <a href="@Url.Action("Login","User")">Login</a>
+    </div>
+</body>
+</html>
