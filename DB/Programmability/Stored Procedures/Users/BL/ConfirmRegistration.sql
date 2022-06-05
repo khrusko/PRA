@@ -16,7 +16,8 @@ AS BEGIN
     [UpdateDate]              = @ConfirmationDate,
     [ConfirmationIsApproved]  = 1,
     [ConfirmationDate]        = @ConfirmationDate
-  WHERE [ConfirmationGUID] = @ConfirmationGUID AND [DeleteDate] IS NULL
+  WHERE [ConfirmationGUID] = @ConfirmationGUID AND 
+        [DeleteDate] IS NULL
 
   RETURN @@ROWCOUNT
 END

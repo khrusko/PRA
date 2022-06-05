@@ -90,6 +90,7 @@
     <Folder Include="Programmability\Stored Procedures\Users\CRUD" />
     <Folder Include="Programmability\Stored Procedures\Authors\BL" />
     <Folder Include="Programmability\Stored Procedures\Books\BL" />
+    <Folder Include="Programmability\Stored Procedures\Users\Jobs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -155,6 +156,7 @@
     <Build Include="Programmability\Stored Procedures\Users\BL\GenerateUserID.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\Jobs\DeleteTimeoutRegistration.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
