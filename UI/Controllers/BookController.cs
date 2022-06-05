@@ -17,5 +17,10 @@ namespace UI.Controllers
             var allBooks = _bookManager.GetAll().ToList();
             return View(allBooks);
         }
+
+        public ActionResult SearchPage()
+        {
+            return View();
+        }
     }
 }
