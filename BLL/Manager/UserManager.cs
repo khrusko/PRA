@@ -74,16 +74,16 @@ namespace BLL.Manager
       string link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       MailAddress from = new MailAddress("info.knjizarajez@gmail.com", "Knjižara Jež");
-      string password = "Jez@22#Gmail!";
+      //string password = "Jez@22#Gmail!";
       MailAddress to = new MailAddress(Email);
 
       SmtpClient smtp = new SmtpClient();
-      smtp.Host = "smtp.gmail.com";
-      smtp.Port = 587;
+      smtp.Host = "smtp.mailtrap.io";
+      smtp.Port = 2525;
+      smtp.UseDefaultCredentials = false;
       smtp.EnableSsl = true;
       smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-      smtp.UseDefaultCredentials = false;
-      smtp.Credentials = new NetworkCredential(from.Address, password);
+      smtp.Credentials = new NetworkCredential("7dea70ae41e087", "eb25c9613eb47c");
 
       MailMessage message = new MailMessage(from, to);
       message.Subject = "Potvrda registracije";
