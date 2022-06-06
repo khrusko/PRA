@@ -82,6 +82,7 @@
     <Compile Include="Abstract\Repository\Database\IDatabaseRepository.cs" />
     <Compile Include="Abstract\Repository\IIdentifiableRepository.cs" />
     <Compile Include="Abstract\Repository\IRepository.cs" />
+    <Compile Include="Status\RegistrationStatus.cs" />
     <Compile Include="Model\AuthorModel.cs" />
     <Compile Include="Model\BookModel.cs" />
     <Compile Include="Model\BookStoreModel.cs" />

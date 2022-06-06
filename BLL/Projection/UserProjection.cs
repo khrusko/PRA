@@ -1,4 +1,5 @@
 ﻿using BLL.Abstract.Projection;
+using System;
 
 namespace BLL.Projection
 {
@@ -12,5 +13,6 @@ namespace BLL.Projection
     public string ImagePath { get; set; }
     public string Address { get; set; }
     public bool IsAdmin { get; set; }
+    public Guid ConfirmationGUID { get; set; }
   }
 }

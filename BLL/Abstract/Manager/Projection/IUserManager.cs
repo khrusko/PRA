@@ -1,5 +1,7 @@
 ﻿using BLL.Projection;
 using DAL.Model;
+using DAL.Status;
+using System;
 
 namespace BLL.Abstract.Manager.Projection
 {
@@ -9,5 +11,7 @@ namespace BLL.Abstract.Manager.Projection
     UserProjection Login(string Email, string Password);
     UserProjection Register(UserProjection projection);
     UserProjection Register(string FName, string LName, string Email, string Password, bool IsAdmin);
+    RegistrationStatus CheckRegistrationStatus(Guid ConfirmationGUID);
+    void ConfirmRegistration(Guid ConfirmationGUID);
   }
 }

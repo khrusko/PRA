@@ -1,5 +1,6 @@
 ﻿using DAL.Abstract.Repository.Database;
 using DAL.Abstract.Repository.Model;
+using DAL.Status;
 using DAL.Model;
 using Microsoft.ApplicationBlocks.Data;
 using System;
@@ -16,21 +17,24 @@ namespace DAL.Repository.Database
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
       = new Dictionary<string, SqlDbType>()
       {
-        { "ID",             SqlDbType.Int },
-        { "CreateDate",     SqlDbType.DateTime },
-        { "CreatedBy",      SqlDbType.Int },
-        { "UpdateDate",     SqlDbType.DateTime },
-        { "UpdatedBy",      SqlDbType.Int },
-        { "DeleteDate",     SqlDbType.DateTime },
-        { "DeletedBy",      SqlDbType.Int },
-        { "UserID",         SqlDbType.Char },
-        { "FName",          SqlDbType.NVarChar },
-        { "LName",          SqlDbType.NVarChar },
-        { "Email",          SqlDbType.NVarChar },
-        { "PasswordHash",   SqlDbType.NVarChar },
-        { "ImagePath",      SqlDbType.NVarChar },
-        { "Address",        SqlDbType.NVarChar },
-        { "IsAdmin",        SqlDbType.Bit },
+        { "ID",                     SqlDbType.Int },
+        { "CreateDate",             SqlDbType.DateTime },
+        { "CreatedBy",              SqlDbType.Int },
+        { "UpdateDate",             SqlDbType.DateTime },
+        { "UpdatedBy",              SqlDbType.Int },
+        { "DeleteDate",             SqlDbType.DateTime },
+        { "DeletedBy",              SqlDbType.Int },
+        { "UserID",                 SqlDbType.Char },
+        { "FName",                  SqlDbType.NVarChar },
+        { "LName",                  SqlDbType.NVarChar },
+        { "Email",                  SqlDbType.NVarChar },
+        { "PasswordHash",           SqlDbType.NVarChar },
+        { "ImagePath",              SqlDbType.NVarChar },
+        { "Address",                SqlDbType.NVarChar },
+        { "IsAdmin",                SqlDbType.Bit },
+        { "ConfirmationGUID",       SqlDbType.UniqueIdentifier },
+        { "ConfirmationIsApproved", SqlDbType.Bit },
+        { "ConfirmationDate",       SqlDbType.DateTime },
       };
 
     public UserModel Login(string Email, string Password)
@@ -64,7 +68,7 @@ namespace DAL.Repository.Database
         : default(UserModel);
     }
 
-    public UserModel Register(string FName, string LName, string Email, string Password, bool IsAdmin)
+    public int Register(string FName, string LName, string Email, string Password, bool IsAdmin)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -105,15 +109,63 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());
+      SqlParameter returnValue = new SqlParameter()
+      {
+        Direction = ParameterDirection.ReturnValue
+      };
+      parameters.Add(returnValue);
 
-      return reader.Read()
-        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserModel>(), (obj, prop) =>
+      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());
+
+      return int.Parse(returnValue.Value.ToString());
+    }
+
+    public RegistrationStatus CheckRegistrationStatus(Guid ConfirmationGUID)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
         {
-          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop]);
-          return obj;
-        })
-        : default(UserModel);
+          ParameterName = "@ConfirmationGUID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ConfirmationGUID"],
+          Value = ConfirmationGUID,
+        }
+      };
+
+      SqlParameter returnValue = new SqlParameter()
+      {
+        Direction = ParameterDirection.ReturnValue
+      };
+      parameters.Add(returnValue);
+
+      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CheckRegistrationStatus), parameters.ToArray());
+
+      return (RegistrationStatus)Enum.Parse(typeof(RegistrationStatus), returnValue.Value.ToString());
+    }
+
+    public int ConfirmRegistration(Guid ConfirmationGUID)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@ConfirmationGUID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ConfirmationGUID"],
+          Value = ConfirmationGUID,
+        }
+      };
+
+      SqlParameter returnValue = new SqlParameter()
+      {
+        Direction = ParameterDirection.ReturnValue
+      };
+      parameters.Add(returnValue);
+
+      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ConfirmRegistration), parameters.ToArray());
+
+      return int.Parse(returnValue.Value.ToString());
     }
   }
 }
