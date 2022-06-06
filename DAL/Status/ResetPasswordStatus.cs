@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Status
 {
-  public enum RegistrationStatus
+  public enum ResetPasswordStatus
   {
     INVALID   = 0,
     VALID     = 1,

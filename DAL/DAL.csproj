@@ -115,6 +115,7 @@
     <Compile Include="Repository\Database\PurchaseDatabaseRepository.cs" />
     <Compile Include="Repository\Database\SubscriptionDatabaseRepository.cs" />
     <Compile Include="Repository\Database\UserDatabaseRepository.cs" />
+    <Compile Include="Status\ResetPasswordStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

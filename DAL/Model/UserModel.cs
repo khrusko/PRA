@@ -13,8 +13,10 @@ namespace DAL.Model
     public string ImagePath { get; set; }
     public string Address { get; set; }
     public bool IsAdmin { get; set; }
-    public Guid ConfirmationGUID { get; set; }
-    public bool ConfirmationIsApproved { get; set; }
-    public DateTime ConfirmationDate { get; set; }
+    public Guid GUID { get; set; }
+    public bool RegistrationIsApproved { get; set; }
+    public DateTime RegistrationDate { get; set; }
+    public bool ResetPasswordIsApproved { get; set; }
+    public DateTime ResetPasswordDate { get; set; }
   }
 }
