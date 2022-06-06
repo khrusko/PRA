@@ -1,4 +1,7 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using BLL.Abstract.Helper;
+using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
+using BLL.Helper;
 using BLL.Projection;
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
@@ -57,7 +60,7 @@ namespace BLL.Manager
       if (ID == 0) return null;
 
       UserProjection projection = GetByID(ID);
-      SendEmailToUser(projection.Email, projection.ConfirmationGUID);
+      SendRegistrationConfirmationMail(projection);
 
       return projection;
     }
@@ -68,30 +71,17 @@ namespace BLL.Manager
     public void ConfirmRegistration(Guid ConfirmationGUID)
       => (Repository as IUserRepository).ConfirmRegistration(ConfirmationGUID);
 
-    private void SendEmailToUser(string Email, Guid ConfirmationGUID)
+    private void SendRegistrationConfirmationMail(UserProjection projection)
     {
-      string verificationLink = $"/Registration/UserVerification/{ConfirmationGUID}";
+      string verificationLink = $"/Registration/UserVerification/{projection.ConfirmationGUID}";
       string link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
-      MailAddress from = new MailAddress("info.knjizarajez@gmail.com", "Knjižara Jež");
-      //string password = "Jez@22#Gmail!";
-      MailAddress to = new MailAddress(Email);
+      string subject = "Potvrda registracije";
+      string body = $"<br />Uspješno ste se registrirali.<br />Molimo Vas da potvrdite registraciju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
 
-      SmtpClient smtp = new SmtpClient();
-      smtp.Host = "smtp.mailtrap.io";
-      smtp.Port = 2525;
-      smtp.UseDefaultCredentials = false;
-      smtp.EnableSsl = true;
-      smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-      smtp.Credentials = new NetworkCredential("02a38dff59328e", "56143e248ea915");
-
-      MailMessage message = new MailMessage(from, to);
-      message.Subject = "Potvrda registracije";
-      message.Body = "<br/>Uspješno ste se registrirali." +
-                     "<br/>Molimo Vas da potvrdite registraciju klikom na link:" +
-                     "<br/><br/><a href=" + link + ">" + link + "</a>";
-      message.IsBodyHtml = true;
-      smtp.Send(message);
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
+      emailSender.SendEmail(subject, body);
     }
   }
 }
