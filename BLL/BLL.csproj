@@ -76,6 +76,7 @@
     <Compile Include="Abstract\Projection\AbstractProjection.cs" />
     <Compile Include="Abstract\Projection\IProjection.cs" />
     <Compile Include="Abstract\Helper\IEmailSender.cs" />
+    <Compile Include="Factory\EmailSenderFactory.cs" />
     <Compile Include="Helper\AppSettingsHelper.cs" />
     <Compile Include="Helper\EmailSender.cs" />
     <Compile Include="Manager\AuthorManager.cs" />

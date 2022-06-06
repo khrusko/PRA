@@ -10,23 +10,10 @@ namespace BLL.Helper
 {
   public class EmailSender : IEmailSender
   {
-    public MailAddress From { get; set; } = AppSettingsHelper.From;
+    public MailAddress From { get; } = AppSettingsHelper.From;
     public MailAddress To { get; set; }
-    public SmtpClient SmtpClient { get; set; } = AppSettingsHelper.SmtpClient;
+    public SmtpClient SmtpClient { get; } = AppSettingsHelper.SmtpClient;
     public MailMessage Message { get; set; }
-
-    public EmailSender(MailAddress to)
-    {
-      To = to;
-    }
-    public EmailSender(MailAddress to, MailMessage message) : this(to)
-    {
-      Message = message;
-    }
-    public EmailSender(MailAddress from, MailAddress to, MailMessage message) : this(to, message)
-    {
-      From = from;
-    }
 
     public void SendEmail()
     {
