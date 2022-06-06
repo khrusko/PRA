@@ -20,22 +20,25 @@ namespace UI.Controllers
         public ActionResult UserVerification(string id)
         {
             Guid ConfirmationGUID = new Guid(id);
+
             RegistrationStatus status = _userManager.CheckRegistrationStatus(ConfirmationGUID);
             switch (status)
             {
-              case RegistrationStatus.INVALID:
-                break;
-              case RegistrationStatus.VALID:
-                _userManager.ConfirmRegistration(ConfirmationGUID);
-                break;
-              case RegistrationStatus.APPROVED:
-                break;
-              case RegistrationStatus.TIMEOUT:
-                break;
-              default:
-                break;
+                
+                case RegistrationStatus.INVALID:
+                    return Index("Link koji ste koristili nije valjani");
+                    //break;
+                case RegistrationStatus.VALID:
+                    _userManager.ConfirmRegistration(ConfirmationGUID);
+                    break;
+                case RegistrationStatus.APPROVED:
+                    return RedirectToAction("Index", "Login");
+                    //break;
+                case RegistrationStatus.TIMEOUT:
+                    return Index("Link koji ste koristili je istekao");
+                    //break;
             }
-          return RedirectToAction("Index", "Login");
+            return RedirectToAction("Index", "Login");
         }
 
         [HttpGet]
@@ -44,10 +47,16 @@ namespace UI.Controllers
             return View();
         }
 
+        public ActionResult Index(string RegistrationErrorMessage)
+        {
+            ViewBag.RegistrationErrorMessage = RegistrationErrorMessage;
+            return View("Index");
+        }
+
         [HttpPost]
         public ActionResult Index(RegisterVM registerVM)
         {
-            if (!ModelState.IsValid) return Index(registerVM);
+            if (!ModelState.IsValid) return Index();
 
             _userManager.Register(registerVM.FName, registerVM.LName, registerVM.Email, registerVM.Password, false);
 
@@ -59,5 +68,5 @@ namespace UI.Controllers
         {
             return View();
         }
-  }
+    }
 }

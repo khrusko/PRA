@@ -29,8 +29,8 @@ namespace UI.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        [Display(Name = "Zaporka")]
-        [Required(ErrorMessage = "Zaporka je obavezna")]
+        [Display(Name = "Ponovi Zaporku")]
+        [Required(ErrorMessage = "Polje Ponovi Zaporku je obavezno")]
         [Compare("Password", ErrorMessage = "Zaporke se ne podudaraju")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }

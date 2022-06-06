@@ -83,7 +83,7 @@ namespace BLL.Manager
       smtp.UseDefaultCredentials = false;
       smtp.EnableSsl = true;
       smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-      smtp.Credentials = new NetworkCredential("7dea70ae41e087", "eb25c9613eb47c");
+      smtp.Credentials = new NetworkCredential("02a38dff59328e", "56143e248ea915");
 
       MailMessage message = new MailMessage(from, to);
       message.Subject = "Potvrda registracije";
