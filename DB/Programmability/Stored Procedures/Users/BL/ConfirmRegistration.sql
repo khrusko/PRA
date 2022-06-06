@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [dbo].[UserConfirmRegistration] (@ConfirmationGUID AS uniqueidentifier)
+﻿CREATE PROCEDURE [dbo].[UserConfirmRegistration] (@GUID AS uniqueidentifier)
 AS BEGIN
   DECLARE @UpdatedBy AS int = (
     SELECT ALL TOP 1
@@ -8,15 +8,15 @@ AS BEGIN
     ORDER BY [ID] ASC
   )
 
-  DECLARE @ConfirmationDate AS datetime = GETDATE()
+  DECLARE @RegistrationDate AS datetime = GETDATE()
 
   UPDATE [dbo].[Users]
   SET
     [UpdatedBy]               = @UpdatedBy,
-    [UpdateDate]              = @ConfirmationDate,
-    [ConfirmationIsApproved]  = 1,
-    [ConfirmationDate]        = @ConfirmationDate
-  WHERE [ConfirmationGUID] = @ConfirmationGUID AND 
+    [UpdateDate]              = @RegistrationDate,
+    [RegistrationIsApproved]  = 1,
+    [RegistrationDate]        = @RegistrationDate
+  WHERE [GUID] = @GUID AND 
         [DeleteDate] IS NULL
 
   RETURN @@ROWCOUNT

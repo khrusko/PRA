@@ -20,11 +20,14 @@
   [IsAdmin]       bit           NOT NULL
     CONSTRAINT [DF_Users_IsAdmin] DEFAULT 0,
 
-  [ConfirmationGUID]        uniqueidentifier  NOT NULL
-    CONSTRAINT [DF_Users_ConfirmationGUID] DEFAULT NEWID(),
-  [ConfirmationIsApproved]  bit               NOT NULL
-    CONSTRAINT [DF_Users_ConfirmationIsApproved] DEFAULT 0,
-  [ConfirmationDate]        datetime          NULL,
+  [GUID]                    uniqueidentifier  NOT NULL
+    CONSTRAINT [DF_Users_GUID] DEFAULT NEWID(),
+  [RegistrationIsApproved]  bit               NOT NULL
+    CONSTRAINT [DF_Users_RegistrationIsApproved] DEFAULT 0,
+  [RegistrationDate]        datetime          NULL,
+  [ResetPasswordIsApproved] bit               NOT NULL
+    CONSTRAINT [DF_Users_ResetPasswordIsApproved] DEFAULT 0,
+  [ResetPasswordDate]       datetime          NULL,
 
   CONSTRAINT [PK_Users] PRIMARY KEY ([ID]),
   CONSTRAINT [FK_Users_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([ID]),

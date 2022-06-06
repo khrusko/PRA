@@ -19,13 +19,15 @@ AS BEGIN
     [ImagePath],
     [Address],
     [IsAdmin],
-    [ConfirmationGUID],
-    [ConfirmationIsApproved],
-    [ConfirmationDate]
+    [GUID],
+    [RegistrationIsApproved],
+    [RegistrationDate],
+    [ResetPasswordIsApproved],
+    [ResetPasswordDate]
   FROM [dbo].[Users]
   WHERE [Email] = @Email AND 
         [PasswordHash] = @PasswordHash AND
-        [ConfirmationIsApproved] = 1 AND
+        [RegistrationIsApproved] = 1 AND
         [DeleteDate] IS NULL
 END
 GO

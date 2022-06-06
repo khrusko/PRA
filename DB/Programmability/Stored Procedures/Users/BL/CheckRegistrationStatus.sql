@@ -1,10 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[UserCheckRegistrationStatus] (@ConfirmationGUID AS uniqueidentifier)
+﻿CREATE PROCEDURE [dbo].[UserCheckRegistrationStatus] (@GUID AS uniqueidentifier)
 AS BEGIN
   DECLARE @RecordExists AS int = (
     SELECT ALL TOP 1
       COUNT(*)
     FROM [dbo].[Users]
-    WHERE [ConfirmationGUID] = @ConfirmationGUID
+    WHERE [GUID] = @GUID
   )
   
   IF @RecordExists = 0 BEGIN
@@ -12,20 +12,20 @@ AS BEGIN
   END
   ELSE BEGIN
     DECLARE @CreateDate AS datetime
-    DECLARE @ConfirmationIsApproved AS bit
+    DECLARE @RegistrationIsApproved AS bit
 
     SELECT ALL TOP 1
       @CreateDate = [CreateDate],
-      @ConfirmationIsApproved = [ConfirmationIsApproved]
+      @RegistrationIsApproved = [RegistrationIsApproved]
     FROM [dbo].[Users]
-    WHERE [ConfirmationGUID] = @ConfirmationGUID
+    WHERE [GUID] = @GUID
 
     DECLARE @PassedTime AS int = DATEDIFF(MINUTE, @CreateDate, GETDATE())
 
-    IF @PassedTime <= 15 AND @ConfirmationIsApproved = 0 BEGIN
+    IF @PassedTime <= 15 AND @RegistrationIsApproved = 0 BEGIN
       RETURN 1
     END
-    ELSE IF @PassedTime <= 15 AND @ConfirmationIsApproved = 1 BEGIN
+    ELSE IF @PassedTime <= 15 AND @RegistrationIsApproved = 1 BEGIN
       RETURN 2
     END
     ELSE BEGIN

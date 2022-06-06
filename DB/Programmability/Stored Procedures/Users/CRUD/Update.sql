@@ -7,9 +7,11 @@
                                      @ImagePath AS nvarchar(500),
                                      @Address AS nvarchar(200),
                                      @IsAdmin AS bit,
-                                     @ConfirmationGUID AS uniqueidentifier,
-                                     @ConfirmationIsApproved AS bit,
-                                     @ConfirmationDate AS datetime,
+                                     @GUID AS uniqueidentifier,
+                                     @RegistrationIsApproved AS bit,
+                                     @RegistrationDate AS datetime,
+                                     @ResetPasswordIsApproved AS bit,
+                                     @ResetPasswordDate AS datetime,
                                      @UpdatedBy AS int)
 AS BEGIN
   DECLARE @IsUnique AS int = (
@@ -39,9 +41,11 @@ AS BEGIN
     [ImagePath]               = @ImagePath,
     [Address]                 = @Address,
     [IsAdmin]                 = @IsAdmin,
-    [ConfirmationGUID]        = @ConfirmationGUID,
-    [ConfirmationIsApproved]  = @ConfirmationIsApproved,
-    [ConfirmationDate]        = @ConfirmationDate
+    [GUID]                    = @GUID,
+    [RegistrationIsApproved]  = @RegistrationIsApproved,
+    [RegistrationDate]        = @RegistrationDate,
+    [ResetPasswordIsApproved] = @ResetPasswordIsApproved,
+    [ResetPasswordDate]       = @ResetPasswordDate
   WHERE [ID] = @ID AND [DeleteDate] IS NULL
 
   RETURN @@ROWCOUNT
