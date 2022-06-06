@@ -32,7 +32,7 @@ namespace UI.Controllers
                     _userManager.ConfirmRegistration(ConfirmationGUID);
                     break;
                 case RegistrationStatus.APPROVED:
-                    return RedirectToAction("Index", "Login");
+                    return Index("Korisnički račun s danim parametrima već postoji");
                     //break;
                 case RegistrationStatus.TIMEOUT:
                     return Index("Link koji ste koristili je istekao");
@@ -58,10 +58,12 @@ namespace UI.Controllers
         {
             if (!ModelState.IsValid) return Index();
 
-            _userManager.Register(registerVM.FName, registerVM.LName, registerVM.Email, registerVM.Password, false);
+            UserProjection userProjection = _userManager.Register(registerVM.FName, registerVM.LName, registerVM.Email, registerVM.Password, false);
 
-
-            return RedirectToAction("ConfirmationSent");
+            if(userProjection != null)
+            return RedirectToAction("ConfirmationSent",userProjection.ConfirmationGUID);
+            else
+                return RedirectToAction("Index");
         }
 
         public ActionResult ConfirmationSent()
