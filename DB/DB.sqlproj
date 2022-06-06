@@ -157,6 +157,11 @@
     <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
     <Build Include="Programmability\Stored Procedures\Users\Jobs\DeleteTimeoutRegistration.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\RequestResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\CheckResetPasswordStatus.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\Jobs\DisableTimeoutResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ReadByEmail.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />
