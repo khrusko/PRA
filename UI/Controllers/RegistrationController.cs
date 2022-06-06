@@ -19,9 +19,9 @@ namespace UI.Controllers
         [HttpGet]
         public ActionResult UserVerification(string id)
         {
-            Guid ConfirmationGUID = new Guid(id);
+            Guid GUID = new Guid(id);
 
-            RegistrationStatus status = _userManager.CheckRegistrationStatus(ConfirmationGUID);
+            RegistrationStatus status = _userManager.CheckRegistrationStatus(GUID);
             switch (status)
             {
                 
@@ -29,7 +29,7 @@ namespace UI.Controllers
                     return Index("Link koji ste koristili nije valjani");
                     //break;
                 case RegistrationStatus.VALID:
-                    _userManager.ConfirmRegistration(ConfirmationGUID);
+                    _userManager.ConfirmRegistration(GUID);
                     break;
                 case RegistrationStatus.APPROVED:
                     return Index("Korisnički račun s danim parametrima već postoji");
@@ -61,7 +61,7 @@ namespace UI.Controllers
             UserProjection userProjection = _userManager.Register(registerVM.FName, registerVM.LName, registerVM.Email, registerVM.Password, false);
 
             if(userProjection != null)
-            return RedirectToAction("ConfirmationSent",userProjection.ConfirmationGUID);
+                return RedirectToAction("ConfirmationSent",userProjection.GUID);
             else
                 return RedirectToAction("Index");
         }
