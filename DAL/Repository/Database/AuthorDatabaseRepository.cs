@@ -49,7 +49,7 @@ namespace DAL.Repository.Database
       {
         yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<AuthorModel>(), (obj, prop) =>
         {
-          typeof(AuthorModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(AuthorModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         });
       }

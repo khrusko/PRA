@@ -64,7 +64,7 @@ namespace DAL.Repository.Database
       return reader.Read()
         ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserModel>(), (obj, prop) =>
         {
-          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         })
         : default(UserModel);
@@ -188,7 +188,7 @@ namespace DAL.Repository.Database
       return reader.Read()
         ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<UserModel>(), (obj, prop) =>
         {
-          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         })
         : default(UserModel);

@@ -41,7 +41,7 @@ namespace DAL.Repository.Database
       {
         yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<BookStoreModel>(), (obj, prop) =>
         {
-          typeof(BookStoreModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(BookStoreModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         });
       }
