@@ -15,7 +15,7 @@ AS BEGIN
     DECLARE @ResetPasswordIsApproved AS bit
 
     SELECT ALL TOP 1
-      @ResetPasswordDate = [CreateDate],
+      @ResetPasswordDate = [ResetPasswordDate],
       @ResetPasswordIsApproved = [ResetPasswordIsApproved]
     FROM [dbo].[Users]
     WHERE [GUID] = @GUID
