@@ -27,8 +27,8 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'admin@admin.com'
     [Email], 
     [PasswordHash], 
     [IsAdmin],
-    [ConfirmationIsApproved],
-    [ConfirmationDate]
+    [RegistrationIsApproved],
+    [RegistrationDate]
   )
   VALUES 
   (
@@ -57,7 +57,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'azver@gmail.com'
   EXECUTE @ID = [dbo].[UserRegister] 'Andrija', 'Zver', 'azver@gmail.com', 'azverPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -68,7 +68,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'mkos@gmail.com')
   EXECUTE @ID = [dbo].[UserRegister] 'Marija', 'Kos', 'mkos@gmail.com', 'mkosPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -79,7 +79,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'isimic@gmail.com
   EXECUTE @ID = [dbo].[UserRegister] 'Ilija', 'Šimić', 'isimic@gmail.com', 'isimicPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -90,7 +90,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'sambrus@gmail.co
   EXECUTE @ID = [dbo].[UserRegister] 'Stjepan', 'Ambruš', 'sambrus@gmail.com', 'sambrusPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 
@@ -103,7 +103,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'dtopolnjak@gmail
   EXECUTE @ID = [dbo].[UserRegister] 'Dario', 'Topolnjak', 'dtopolnjak@gmail.com', 'dtopolnjakPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -114,7 +114,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'fkocijan@gmail.c
   EXECUTE @ID = [dbo].[UserRegister] 'Filip', 'Kocijan', 'fkocijan@gmail.com', 'fkocijanPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -125,7 +125,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'ljuric@gmail.com
   EXECUTE @ID = [dbo].[UserRegister] 'Lovro', 'Jurić', 'ljuric@gmail.com', 'ljuricPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -136,7 +136,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'nkresoje@gmail.c
   EXECUTE @ID = [dbo].[UserRegister] 'Nikola', 'Kresoje', 'nkresoje@gmail.com', 'nkresojePass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -147,7 +147,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'astunkovic@gmail
   EXECUTE @ID = [dbo].[UserRegister] 'Arjan', 'Stunković', 'astunkovic@gmail.com', 'astunkovicPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -158,7 +158,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'msprajc@gmail.co
   EXECUTE @ID = [dbo].[UserRegister] 'Mihael', 'Šprajc', 'msprajc@gmail.com', 'msprajcPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -169,7 +169,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'bpetko@gmail.com
   EXECUTE @ID = [dbo].[UserRegister] 'Borna', 'Petko', 'bpetko@gmail.com', 'bpetkoPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -180,7 +180,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'jturkovic@gmail.
   EXECUTE @ID = [dbo].[UserRegister] 'Julia', 'Turković', 'jturkovic@gmail.com', 'jturkovicPass', 0
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -193,7 +193,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'mmatic@racunarst
   EXECUTE @ID = [dbo].[UserRegister] 'Mihael', 'Matić', 'mmatic@racunarstvo.com', 'mmaticPass', 1
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -204,7 +204,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'jtatare@racunars
   EXECUTE @ID = [dbo].[UserRegister] 'Jan', 'Tatarević', 'jtatare@racunarstvo.com', 'jtatarePass', 1
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -215,7 +215,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'khrusko@racunars
   EXECUTE @ID = [dbo].[UserRegister] 'Karlo', 'Hruškovec', 'khrusko@racunarstvo.com', 'khruskoPass', 1
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
@@ -226,7 +226,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = 'mvujnov@racunars
   EXECUTE @ID = [dbo].[UserRegister] 'Mario', 'Vujnović', 'mvujnov@racunarstvo.com', 'mvujnovPass', 1
   
   DECLARE @GUID AS uniqueidentifier
-  SELECT ALL @GUID = [ConfirmationGUID] FROM [dbo].[Users] WHERE [ID] = @ID
+  SELECT ALL @GUID = [GUID] FROM [dbo].[Users] WHERE [ID] = @ID
 
   EXECUTE [dbo].[UserConfirmRegistration] @GUID
 END
