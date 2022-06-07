@@ -1,15 +1,16 @@
-﻿using BLL.Abstract.Projection;
-using System;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class MessageProjection : AbstractProjection<int>
+  public class MessageProjection : AbstractProjection<Int32>
   {
-    public int SenderUserFK { get; set; }
+    public Int32 SenderUserFK { get; set; }
     public DateTime SenderDate { get; set; }
-    public string SenderMessage { get; set; }
-    public int ResponderUserFK { get; set; }
+    public String SenderMessage { get; set; }
+    public Int32 ResponderUserFK { get; set; }
     public DateTime ResponderDate { get; set; }
-    public string ResponderMessage { get; set; }
+    public String ResponderMessage { get; set; }
   }
 }

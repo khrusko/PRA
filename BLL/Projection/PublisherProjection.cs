@@ -1,9 +1,11 @@
-﻿using BLL.Abstract.Projection;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class PublisherProjection : AbstractProjection<int>
+  public class PublisherProjection : AbstractProjection<Int32>
   {
-    public string Name { get; set; }
+    public String Name { get; set; }
   }
 }

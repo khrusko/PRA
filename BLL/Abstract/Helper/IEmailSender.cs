@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System;
+using System.Net.Mail;
 
 namespace BLL.Abstract.Helper
 {
@@ -9,6 +10,6 @@ namespace BLL.Abstract.Helper
     SmtpClient SmtpClient { get; }
     MailMessage Message { get; set; }
     void SendEmail();
-    void SendEmail(string subject, string body);
+    void SendEmail(String subject, String body);
   }
 }

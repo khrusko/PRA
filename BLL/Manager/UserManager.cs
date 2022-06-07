@@ -1,18 +1,20 @@
-﻿using BLL.Abstract.Helper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Mail;
+using System.Web;
+
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
 using BLL.Factory;
 using BLL.Projection;
 using BLL.Status;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
 using DAL.Status;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Web;
 
 namespace BLL.Manager
 {
@@ -35,13 +37,13 @@ namespace BLL.Manager
         GUID = model.GUID
       };
 
-    public UserProjection GetByID(int ID)
+    public UserProjection GetByID(Int32 ID)
     {
       UserModel model = (Repository as IUserRepository).Read(ID);
       return model is null ? null : Project(model);
     }
 
-    public UserProjection GetByEmail(string Email)
+    public UserProjection GetByEmail(String Email)
     {
       UserModel model = (Repository as IUserRepository).ReadByEmail(Email);
       return model is null ? null : Project(model);
@@ -51,7 +53,7 @@ namespace BLL.Manager
       => (Repository as IUserRepository).Read().Select(Project);
 
     public UserProjection Login(UserProjection projection) => Login(projection.Email, projection.Password);
-    public UserProjection Login(string Email, string Password)
+    public UserProjection Login(String Email, String Password)
     {
       UserModel model = (Repository as IUserRepository).Login(Email, Password);
       return model is null ? null : Project(model);
@@ -59,9 +61,9 @@ namespace BLL.Manager
 
     public UserProjection Register(UserProjection projection)
       => Register(projection.FName, projection.LName, projection.Email, projection.Password, projection.IsAdmin);
-    public UserProjection Register(string FName, string LName, string Email, string Password, bool IsAdmin)
+    public UserProjection Register(String FName, String LName, String Email, String Password, Boolean IsAdmin)
     {
-      int ID = (Repository as IUserRepository).Register(FName, LName, Email, Password, IsAdmin);
+      Int32 ID = (Repository as IUserRepository).Register(FName, LName, Email, Password, IsAdmin);
       if (ID == 0) return null;
 
       UserProjection projection = GetByID(ID);
@@ -70,20 +72,24 @@ namespace BLL.Manager
       return projection;
     }
 
+    public RegistrationStatus CheckRegistrationStatus(UserProjection projection)
+      => CheckRegistrationStatus(projection.GUID);
     public RegistrationStatus CheckRegistrationStatus(Guid GUID)
       => (Repository as IUserRepository).CheckRegistrationStatus(GUID);
 
-    public int ConfirmRegistration(Guid GUID)
+    public Int32 ConfirmRegistration(UserProjection projection)
+      => ConfirmRegistration(projection.GUID);
+    public Int32 ConfirmRegistration(Guid GUID)
       => (Repository as IUserRepository).ConfirmRegistration(GUID);
 
     public RequestResetPasswordStatus RequestResetPassword(UserProjection projection)
       => RequestResetPassword(projection.Email);
-    public RequestResetPasswordStatus RequestResetPassword(string Email)
+    public RequestResetPasswordStatus RequestResetPassword(String Email)
     {
       UserProjection projection = GetByEmail(Email);
       if (projection == null) return RequestResetPasswordStatus.INVALID_EMAIL;
 
-      int resetCount = (Repository as IUserRepository).RequestResetPassword(Email);
+      Int32 resetCount = (Repository as IUserRepository).RequestResetPassword(Email);
       if (resetCount == 0) return RequestResetPasswordStatus.RESET_PENDING;
 
       SendResetPasswordMail(projection);
@@ -91,21 +97,23 @@ namespace BLL.Manager
       return RequestResetPasswordStatus.SUCCESS;
     }
 
+    public ResetPasswordStatus CheckResetPasswordStatus(UserProjection projection)
+      => CheckResetPasswordStatus(projection.GUID);
     public ResetPasswordStatus CheckResetPasswordStatus(Guid GUID)
       => (Repository as IUserRepository).CheckResetPasswordStatus(GUID);
 
-    public int ResetPassword(UserProjection projection)
+    public Int32 ResetPassword(UserProjection projection)
       => ResetPassword(projection.GUID, projection.Password);
-    public int ResetPassword(Guid GUID, string Password)
+    public Int32 ResetPassword(Guid GUID, String Password)
       => (Repository as IUserRepository).ResetPassword(GUID, Password);
 
     private void SendRegistrationConfirmationMail(UserProjection projection)
     {
-      string verificationLink = $"/Registration/UserVerification/{projection.GUID}";
-      string link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
+      String verificationLink = $"/Registration/UserVerification/{projection.GUID}";
+      String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
-      string subject = "Potvrda registracije";
-      string body = $"<br />Uspješno ste se registrirali.<br />Molimo Vas da potvrdite registraciju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+      String subject = "Potvrda registracije";
+      String body = $"<br />Uspješno ste se registrirali.<br />Molimo Vas da potvrdite registraciju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
@@ -114,11 +122,11 @@ namespace BLL.Manager
 
     private void SendResetPasswordMail(UserProjection projection)
     {
-      string verificationLink = $"/User/ResetPassword/{projection.GUID}";
-      string link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
+      String verificationLink = $"/User/ResetPassword/{projection.GUID}";
+      String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
-      string subject = "Obnova zaporke";
-      string body = $"<br />Zahtjev za obnovu zaporke odobren.<br />Molimo Vas da obnovite zaporuku klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+      String subject = "Obnova zaporke";
+      String body = $"<br />Zahtjev za obnovu zaporke odobren.<br />Molimo Vas da obnovite zaporuku klikom na link:<br /><br /><a href='{link}'>{link}</a>";
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");

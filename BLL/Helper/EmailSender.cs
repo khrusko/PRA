@@ -1,5 +1,7 @@
-﻿using BLL.Abstract.Helper;
+﻿using System;
 using System.Net.Mail;
+
+using BLL.Abstract.Helper;
 
 namespace BLL.Helper
 {
@@ -14,7 +16,7 @@ namespace BLL.Helper
     {
       SmtpClient.Send(Message);
     }
-    public void SendEmail(string subject, string body)
+    public void SendEmail(String subject, String body)
     {
       Message = new MailMessage(From, To)
       {

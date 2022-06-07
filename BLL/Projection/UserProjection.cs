@@ -1,18 +1,19 @@
-﻿using BLL.Abstract.Projection;
-using System;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class UserProjection : AbstractProjection<int>
+  public class UserProjection : AbstractProjection<Int32>
   {
-    public string UserID { get; set; }
-    public string FName { get; set; }
-    public string LName { get; set; }
-    public string Email { get; set; }
-    public string Password { get; set; }
-    public string ImagePath { get; set; }
-    public string Address { get; set; }
-    public bool IsAdmin { get; set; }
+    public String UserID { get; set; }
+    public String FName { get; set; }
+    public String LName { get; set; }
+    public String Email { get; set; }
+    public String Password { get; set; }
+    public String ImagePath { get; set; }
+    public String Address { get; set; }
+    public Boolean IsAdmin { get; set; }
     public Guid GUID { get; set; }
   }
 }

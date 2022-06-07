@@ -13,10 +13,13 @@ namespace BLL.Abstract.Manager.Projection
     UserProjection Login(string Email, string Password);
     UserProjection Register(UserProjection projection);
     UserProjection Register(string FName, string LName, string Email, string Password, bool IsAdmin);
+    RegistrationStatus CheckRegistrationStatus(UserProjection projection);
     RegistrationStatus CheckRegistrationStatus(Guid GUID);
+    int ConfirmRegistration(UserProjection projection);
     int ConfirmRegistration(Guid GUID);
     RequestResetPasswordStatus RequestResetPassword(UserProjection projection);
     RequestResetPasswordStatus RequestResetPassword(string Email);
+    ResetPasswordStatus CheckResetPasswordStatus(UserProjection projection);
     ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
     int ResetPassword(UserProjection projection);
     int ResetPassword(Guid GUID, string Password);

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 
@@ -14,7 +15,7 @@ namespace BLL.Helper
       = new SmtpClient
       {
         Host = ConfigurationManager.AppSettings["Email.SmtpClient.Host"],
-        Port = int.Parse(ConfigurationManager.AppSettings["Email.SmtpClient.Port"]),
+        Port = Int32.Parse(ConfigurationManager.AppSettings["Email.SmtpClient.Port"]),
         EnableSsl = true,
         DeliveryMethod = SmtpDeliveryMethod.Network,
         Credentials = new NetworkCredential

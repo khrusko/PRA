@@ -1,11 +1,14 @@
-﻿using BLL.Projection;
+﻿using System;
+
+using BLL.Projection;
+
 using DAL.Model;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface ISubscriptionManager : IProjectionManager<SubscriptionModel, SubscriptionProjection, int>
+  public interface ISubscriptionManager : IProjectionManager<SubscriptionModel, SubscriptionProjection, Int32>
   {
-    int Subscribe(SubscriptionProjection projection);
-    int Subscribe(int BookFK, int UserFK);
+    Int32 Subscribe(SubscriptionProjection projection);
+    Int32 Subscribe(Int32 BookFK, Int32 UserFK);
   }
 }
