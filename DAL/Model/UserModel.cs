@@ -1,22 +1,23 @@
-﻿using DAL.Abstract.Model;
-using System;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Model
 {
-  public class UserModel : AbstractModel<int>
+  public class UserModel : AbstractModel<Int32>
   {
-    public string UserID { get; set; }
-    public string FName { get; set; }
-    public string LName { get; set; }
-    public string Email { get; set; }
-    public string PasswordHash { get; set; }
-    public string ImagePath { get; set; }
-    public string Address { get; set; }
-    public bool IsAdmin { get; set; }
+    public String UserID { get; set; }
+    public String FName { get; set; }
+    public String LName { get; set; }
+    public String Email { get; set; }
+    public String PasswordHash { get; set; }
+    public String ImagePath { get; set; }
+    public String Address { get; set; }
+    public Boolean IsAdmin { get; set; }
     public Guid GUID { get; set; }
-    public bool RegistrationIsApproved { get; set; }
+    public Boolean RegistrationIsApproved { get; set; }
     public DateTime RegistrationDate { get; set; }
-    public bool ResetPasswordIsApproved { get; set; }
+    public Boolean ResetPasswordIsApproved { get; set; }
     public DateTime ResetPasswordDate { get; set; }
   }
 }

@@ -1,21 +1,23 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Status;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+using DAL.Status;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class UserDatabaseRepository : AbstractDatabaseRepository<UserModel, int>, IUserRepository
+  internal class UserDatabaseRepository : AbstractDatabaseRepository<UserModel, Int32>, IUserRepository
   {
-    public override string EntityName => "User";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "User";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",                       SqlDbType.Int },
         { "CreateDate",               SqlDbType.DateTime },
@@ -39,7 +41,7 @@ namespace DAL.Repository.Database
         { "ResetPasswordDate",        SqlDbType.DateTime },
       };
 
-    public UserModel Login(string Email, string Password)
+    public UserModel Login(String Email, String Password)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -67,10 +69,10 @@ namespace DAL.Repository.Database
           typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         })
-        : default(UserModel);
+        : default;
     }
 
-    public int Register(string FName, string LName, string Email, string Password, bool IsAdmin)
+    public Int32 Register(String FName, String LName, String Email, String Password, Boolean IsAdmin)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -111,15 +113,15 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Register), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
     public RegistrationStatus CheckRegistrationStatus(Guid GUID)
@@ -135,18 +137,18 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CheckRegistrationStatus), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CheckRegistrationStatus), parameters.ToArray());
 
       return (RegistrationStatus)Enum.Parse(typeof(RegistrationStatus), returnValue.Value.ToString());
     }
 
-    public int ConfirmRegistration(Guid GUID)
+    public Int32 ConfirmRegistration(Guid GUID)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -159,18 +161,18 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ConfirmRegistration), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ConfirmRegistration), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public UserModel ReadByEmail(string Email)
+    public UserModel ReadByEmail(String Email)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -191,10 +193,10 @@ namespace DAL.Repository.Database
           typeof(UserModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         })
-        : default(UserModel);
+        : default;
     }
 
-    public int RequestResetPassword(string Email)
+    public Int32 RequestResetPassword(String Email)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -207,15 +209,15 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(RequestResetPassword), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(RequestResetPassword), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
     public ResetPasswordStatus CheckResetPasswordStatus(Guid GUID)
@@ -231,18 +233,18 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CheckResetPasswordStatus), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CheckResetPasswordStatus), parameters.ToArray());
 
       return (ResetPasswordStatus)Enum.Parse(typeof(ResetPasswordStatus), returnValue.Value.ToString());
     }
 
-    public int ResetPassword(Guid GUID, string Password)
+    public Int32 ResetPassword(Guid GUID, String Password)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -262,15 +264,15 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ResetPassword), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ResetPassword), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
   }
 }

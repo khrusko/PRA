@@ -1,12 +1,14 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
 namespace DAL.Repository.Database
 {
-  internal class BranchOfficeDatabaseRepository : AbstractDatabaseRepository<BranchOfficeModel, int>, IBranchOfficeRepository
+  internal class BranchOfficeDatabaseRepository : AbstractDatabaseRepository<BranchOfficeModel, Int32>, IBranchOfficeRepository
   {
     public override string EntityName => "BranchOffice";
     public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }

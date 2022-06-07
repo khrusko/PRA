@@ -1,22 +1,24 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Factory;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Factory;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class BookStoreDatabaseRepository : IDatabaseRepository<BookStoreModel, int>, IBookStoreRepository
+  internal class BookStoreDatabaseRepository : IDatabaseRepository<BookStoreModel, Int32>, IBookStoreRepository
   {
-    public string ConnectionString => ConnectionStringFactory.GetConnectionString();
-    public string EntityName => "BookStore";
-    public IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public String ConnectionString => ConnectionStringFactory.GetConnectionString();
+    public String EntityName => "BookStore";
+    public IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",               SqlDbType.Int },
         { "CreateDate",       SqlDbType.DateTime },
@@ -47,14 +49,14 @@ namespace DAL.Repository.Database
       }
     }
 
-    public int Update(BookStoreModel entity) => Update(entity.ID, entity, entity.UpdatedBy);
-    public int Update(int ID, BookStoreModel entity) => Update(ID, entity, entity.UpdatedBy);
-    public int Update(int ID, BookStoreModel entity, int UpdatedBy)
+    public Int32 Update(BookStoreModel entity) => Update(entity.ID, entity, entity.UpdatedBy);
+    public Int32 Update(Int32 ID, BookStoreModel entity) => Update(ID, entity, entity.UpdatedBy);
+    public Int32 Update(Int32 ID, BookStoreModel entity, Int32 UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(BookStoreModel).GetProperties().Select(x => x.Name).ToArray();
+      String[] unusedProperties = typeof(BookStoreModel).GetProperties().Select(x => x.Name).ToArray();
 
-      foreach (var item in DbKeyTypePairs)
+      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
       {
         if (unusedProperties.Contains(item.Key)) continue;
         parameters.Add(new SqlParameter()
@@ -82,22 +84,22 @@ namespace DAL.Repository.Database
         Value = UpdatedBy,
       });
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public int Create(BookStoreModel entity) => throw new NotImplementedException();
-    public int Create(BookStoreModel entity, int CreatedBy) => throw new NotImplementedException();
-    public int Delete(int ID, BookStoreModel entity) => throw new NotImplementedException();
-    public int Delete(BookStoreModel entity) => throw new NotImplementedException();
-    public int Delete(int ID, int DeletedBy) => throw new NotImplementedException();
-    public BookStoreModel Read(int ID) => throw new NotImplementedException();
+    public Int32 Create(BookStoreModel entity) => throw new NotImplementedException();
+    public Int32 Create(BookStoreModel entity, Int32 CreatedBy) => throw new NotImplementedException();
+    public Int32 Delete(Int32 ID, BookStoreModel entity) => throw new NotImplementedException();
+    public Int32 Delete(BookStoreModel entity) => throw new NotImplementedException();
+    public Int32 Delete(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public BookStoreModel Read(Int32 ID) => throw new NotImplementedException();
   }
 }

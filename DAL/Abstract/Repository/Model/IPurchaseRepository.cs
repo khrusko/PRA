@@ -1,11 +1,13 @@
-﻿using DAL.Model;
+﻿using System;
+
+using DAL.Model;
 
 namespace DAL.Abstract.Repository.Model
 {
-  public interface IPurchaseRepository : IModelRepository<PurchaseModel, int>
+  public interface IPurchaseRepository : IModelRepository<PurchaseModel, Int32>
   {
-    int Purchase(PurchaseModel entity);
-    int Purchase(PurchaseModel entity, int CreatedBy);
-    int Purchase(int BookFK, int UserFK, int Quantity, int CreatedBy);
+    Int32 Purchase(PurchaseModel entity);
+    Int32 Purchase(PurchaseModel entity, Int32 CreatedBy);
+    Int32 Purchase(Int32 BookFK, Int32 UserFK, Int32 Quantity, Int32 CreatedBy);
   }
 }
