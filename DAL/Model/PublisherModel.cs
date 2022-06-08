@@ -1,9 +1,11 @@
-﻿using DAL.Abstract.Model;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Model
 {
-  public class PublisherModel : AbstractModel<int>
+  public class PublisherModel : AbstractModel<Int32>
   {
-    public string Name { get; set; }
+    public String Name { get; set; }
   }
 }

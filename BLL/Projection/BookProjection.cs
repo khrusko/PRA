@@ -1,19 +1,21 @@
-﻿using BLL.Abstract.Projection;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class BookProjection : AbstractProjection<int>
+  public class BookProjection : AbstractProjection<Int32>
   {
-    public string ISBN { get; set; }
-    public string Title { get; set; }
-    public string Summary { get; set; }
-    public string Description { get; set; }
-    public bool IsNew { get; set; }
-    public int PublisherFK { get; set; }
-    public int PageCount { get; set; }
-    public double PurchasePrice { get; set; }
-    public double LoanPrice { get; set; }
-    public int Quantity { get; set; }
-    public string ImagePath { get; set; }
+    public String ISBN { get; set; }
+    public String Title { get; set; }
+    public String Summary { get; set; }
+    public String Description { get; set; }
+    public Boolean IsNew { get; set; }
+    public Int32 PublisherFK { get; set; }
+    public Int32 PageCount { get; set; }
+    public Decimal PurchasePrice { get; set; }
+    public Decimal LoanPrice { get; set; }
+    public Int32 Quantity { get; set; }
+    public String ImagePath { get; set; }
   }
 }

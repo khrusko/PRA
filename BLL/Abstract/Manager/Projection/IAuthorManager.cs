@@ -1,11 +1,14 @@
-﻿using BLL.Projection;
-using DAL.Model;
+﻿using System;
 using System.Collections.Generic;
+
+using BLL.Projection;
+
+using DAL.Model;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface IAuthorManager : IProjectionManager<AuthorModel, AuthorProjection, int>
+  public interface IAuthorManager : IProjectionManager<AuthorModel, AuthorProjection, Int32>
   {
-    IEnumerable<AuthorProjection> GetAuthorsByBookFK(int BookFK);
+    IEnumerable<AuthorProjection> GetAuthorsByBookFK(Int32 BookFK);
   }
 }

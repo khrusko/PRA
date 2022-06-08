@@ -1,11 +1,14 @@
-﻿using BLL.Projection;
+﻿using System;
+
+using BLL.Projection;
+
 using DAL.Model;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface IPurchaseManager : IProjectionManager<PurchaseModel, PurchaseProjection, int>
+  public interface IPurchaseManager : IProjectionManager<PurchaseModel, PurchaseProjection, Int32>
   {
-    int Purchase(PurchaseProjection projection);
-    int Purchase(int BookFK, int UserFK, int Quantity);
+    Int32 Purchase(PurchaseProjection projection);
+    Int32 Purchase(Int32 BookFK, Int32 UserFK, Int32 Quantity);
   }
 }

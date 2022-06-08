@@ -1,14 +1,15 @@
-﻿using BLL.Abstract.Projection;
-using System;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class PurchaseProjection : AbstractProjection<int>
+  public class PurchaseProjection : AbstractProjection<Int32>
   {
-    public int BookFK { get; set; }
-    public int UserFK { get; set; }
-    public int Quantity { get; set; }
-    public double UnitPrice { get; set; }
+    public Int32 BookFK { get; set; }
+    public Int32 UserFK { get; set; }
+    public Int32 Quantity { get; set; }
+    public Decimal UnitPrice { get; set; }
     public DateTime PurchaseDate { get; set; }
   }
 }

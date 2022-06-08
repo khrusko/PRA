@@ -1,15 +1,16 @@
-﻿using DAL.Model;
-using System;
+﻿using System;
+
+using DAL.Model;
 
 namespace DAL.Abstract.Repository.Model
 {
-  public interface ILoanRepository : IModelRepository<LoanModel, int>
+  public interface ILoanRepository : IModelRepository<LoanModel, Int32>
   {
-    int Loan(LoanModel entity);
-    int Loan(LoanModel entity, int CreatedBy);
-    int Loan(int BookFK, int UserFK, DateTime PlannedReturnDate, int CreatedBy);
-    int Return(LoanModel entity);
-    int Return(LoanModel entity, int UpdatedBy);
-    int Return(int ID, int UpdatedBy);
+    Int32 Loan(LoanModel entity);
+    Int32 Loan(LoanModel entity, Int32 CreatedBy);
+    Int32 Loan(Int32 BookFK, Int32 UserFK, DateTime PlannedReturnDate, Int32 CreatedBy);
+    Int32 Return(LoanModel entity);
+    Int32 Return(LoanModel entity, Int32 UpdatedBy);
+    Int32 Return(Int32 ID, Int32 UpdatedBy);
   }
 }

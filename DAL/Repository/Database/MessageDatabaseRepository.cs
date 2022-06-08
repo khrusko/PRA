@@ -1,19 +1,22 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class MessageDatabaseRepository : AbstractDatabaseRepository<MessageModel, int>, IMessageRepository
+  internal class MessageDatabaseRepository : AbstractDatabaseRepository<MessageModel, Int32>, IMessageRepository
   {
-    public override string EntityName => "Message";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Message";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",               SqlDbType.Int },
         { "CreateDate",       SqlDbType.DateTime },
@@ -30,9 +33,9 @@ namespace DAL.Repository.Database
         { "ResponderMessage", SqlDbType.NVarChar },
       };
 
-    public int Send(MessageModel entity) => Send(entity, entity.CreatedBy);
-    public int Send(MessageModel entity, int CreatedBy) => Send(entity.SenderUserFK, entity.SenderMessage, CreatedBy);
-    public int Send(int SenderUserFK, string SenderMessage, int CreatedBy)
+    public Int32 Send(MessageModel entity) => Send(entity, entity.CreatedBy);
+    public Int32 Send(MessageModel entity, Int32 CreatedBy) => Send(entity.SenderUserFK, entity.SenderMessage, CreatedBy);
+    public Int32 Send(Int32 SenderUserFK, String SenderMessage, Int32 CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -59,20 +62,20 @@ namespace DAL.Repository.Database
         },
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Send), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Send), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public int Respond(MessageModel entity) => Respond(entity, entity.UpdatedBy);
-    public int Respond(MessageModel entity, int UpdatedBy) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage, UpdatedBy);
-    public int Respond(int ID, int ResponderUserFK, string ResponderMessage, int UpdatedBy)
+    public Int32 Respond(MessageModel entity) => Respond(entity, entity.UpdatedBy);
+    public Int32 Respond(MessageModel entity, Int32 UpdatedBy) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage, UpdatedBy);
+    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage, Int32 UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -106,15 +109,15 @@ namespace DAL.Repository.Database
         },
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Send), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Send), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
   }
 }

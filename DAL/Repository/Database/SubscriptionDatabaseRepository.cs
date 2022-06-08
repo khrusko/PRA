@@ -1,19 +1,22 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class SubscriptionDatabaseRepository : AbstractDatabaseRepository<SubscriptionModel, int>, ISubscriptionRepository
+  internal class SubscriptionDatabaseRepository : AbstractDatabaseRepository<SubscriptionModel, Int32>, ISubscriptionRepository
   {
-    public override string EntityName => "Subscription";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Subscription";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",               SqlDbType.Int },
         { "CreateDate",       SqlDbType.DateTime },
@@ -29,9 +32,9 @@ namespace DAL.Repository.Database
         { "ResolvedDate",     SqlDbType.DateTime },
       };
 
-    public int Subscribe(SubscriptionModel entity) => Subscribe(entity, entity.CreatedBy);
-    public int Subscribe(SubscriptionModel entity, int CreatedBy) => Subscribe(entity.BookFK, entity.UserFK, CreatedBy);
-    public int Subscribe(int BookFK, int UserFK, int CreatedBy)
+    public Int32 Subscribe(SubscriptionModel entity) => Subscribe(entity, entity.CreatedBy);
+    public Int32 Subscribe(SubscriptionModel entity, Int32 CreatedBy) => Subscribe(entity.BookFK, entity.UserFK, CreatedBy);
+    public Int32 Subscribe(Int32 BookFK, Int32 UserFK, Int32 CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -58,15 +61,15 @@ namespace DAL.Repository.Database
         },
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Subscribe), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Subscribe), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
   }
 }

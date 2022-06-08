@@ -1,9 +1,12 @@
-﻿using BLL.Projection;
+﻿using System;
+
+using BLL.Projection;
+
 using DAL.Model;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface IBranchOfficeManager : IProjectionManager<BranchOfficeModel, BranchOfficeProjection, int>
+  public interface IBranchOfficeManager : IProjectionManager<BranchOfficeModel, BranchOfficeProjection, Int32>
   {
   }
 }

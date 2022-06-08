@@ -1,14 +1,15 @@
-﻿using DAL.Abstract.Model;
-using System;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Model
 {
-  public class PurchaseModel : AbstractModel<int>
+  public class PurchaseModel : AbstractModel<Int32>
   {
-    public int BookFK { get; set; }
-    public int UserFK { get; set; }
-    public int Quantity { get; set; }
-    public double UnitPrice { get; set; }
+    public Int32 BookFK { get; set; }
+    public Int32 UserFK { get; set; }
+    public Int32 Quantity { get; set; }
+    public Decimal UnitPrice { get; set; }
     public DateTime PurchaseDate { get; set; }
   }
 }

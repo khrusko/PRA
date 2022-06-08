@@ -1,4 +1,8 @@
-﻿using BLL.Abstract.Projection;
+﻿using System;
+using System.Collections.Generic;
+
+using BLL.Abstract.Projection;
+
 using DAL.Abstract.Model;
 
 namespace BLL.Abstract.Manager.Projection
@@ -8,5 +12,7 @@ namespace BLL.Abstract.Manager.Projection
     where P : class, IProjection<K>
   {
     P Project(M model);
+    P GetByID(Int32 ID);
+    IEnumerable<P> GetAll();
   }
 }

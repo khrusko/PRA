@@ -1,10 +1,12 @@
-﻿using BLL.Projection;
+﻿using System;
+
+using BLL.Projection;
+
 using DAL.Model;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface IPublisherManager : IProjectionManager<PublisherModel, PublisherProjection, int>
+  public interface IPublisherManager : IProjectionManager<PublisherModel, PublisherProjection, Int32>
   {
-    PublisherProjection GetPublisherByID(int ID);
   }
 }

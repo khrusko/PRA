@@ -90,6 +90,7 @@
     <Folder Include="Programmability\Stored Procedures\Users\CRUD" />
     <Folder Include="Programmability\Stored Procedures\Authors\BL" />
     <Folder Include="Programmability\Stored Procedures\Books\BL" />
+    <Folder Include="Programmability\Stored Procedures\Users\Jobs" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
@@ -153,6 +154,14 @@
     <Build Include="Programmability\Stored Procedures\Authors\BL\ReadByBookFK.sql" />
     <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\GenerateUserID.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\Jobs\DeleteTimeoutRegistration.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\RequestResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\CheckResetPasswordStatus.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\Jobs\DisableTimeoutResetPassword.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\ReadByEmail.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

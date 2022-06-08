@@ -1,14 +1,15 @@
-﻿using BLL.Abstract.Projection;
-using System;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class AuthorProjection : AbstractProjection<int>
+  public class AuthorProjection : AbstractProjection<Int32>
   {
-    public string FName { get; set; }
-    public string LName { get; set; }
+    public String FName { get; set; }
+    public String LName { get; set; }
     public DateTime BirthDate { get; set; }
-    public string ImagePath { get; set; }
-    public string Biography { get; set; }
+    public String ImagePath { get; set; }
+    public String Biography { get; set; }
   }
 }

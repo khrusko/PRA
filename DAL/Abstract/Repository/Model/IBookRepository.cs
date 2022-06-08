@@ -1,13 +1,15 @@
-﻿using DAL.Model;
+﻿using System;
 using System.Collections.Generic;
+
+using DAL.Model;
 
 namespace DAL.Abstract.Repository.Model
 {
-  public interface IBookRepository : IModelRepository<BookModel, int>
+  public interface IBookRepository : IModelRepository<BookModel, Int32>
   {
-    int Create(BookModel entity, IEnumerable<int> Authors, int CreatedBy);
-    int Update(BookModel entity, IEnumerable<int> Authors, int UpdatedBy);
-    int Update(int ID, BookModel entity, IEnumerable<int> Authors, int UpdatedBy);
-    IEnumerable<BookModel> ReadByAuthorFK(int AuthorFK);
+    Int32 Create(BookModel entity, IEnumerable<Int32> Authors, Int32 CreatedBy);
+    Int32 Update(BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy);
+    Int32 Update(Int32 ID, BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy);
+    IEnumerable<BookModel> ReadByAuthorFK(Int32 AuthorFK);
   }
 }

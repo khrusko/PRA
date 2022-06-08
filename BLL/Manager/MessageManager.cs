@@ -1,5 +1,10 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
@@ -23,14 +28,23 @@ namespace BLL.Manager
         ResponderMessage = model.ResponderMessage
       };
 
-    public int Send(MessageProjection projection)
+    public MessageProjection GetByID(Int32 ID)
+    {
+      MessageModel model = (Repository as IMessageRepository).Read(ID);
+      return model is null ? null : Project(model);
+    }
+
+    public IEnumerable<MessageProjection> GetAll()
+      => (Repository as IMessageRepository).Read().Select(Project);
+
+    public Int32 Send(MessageProjection projection)
       => Send(projection.SenderUserFK, projection.SenderMessage);
-    public int Send(int SenderUserFK, string SenderMessage)
+    public Int32 Send(Int32 SenderUserFK, String SenderMessage)
       => (Repository as IMessageRepository).Send(SenderUserFK, SenderMessage, SenderUserFK);
 
-    public int Respond(MessageProjection projection)
+    public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
-    public int Respond(int ID, int ResponderUserFK, string ResponderMessage)
+    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
       => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage, ResponderUserFK);
   }
 }

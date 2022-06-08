@@ -1,11 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BLL.Manager
 {
@@ -30,13 +33,16 @@ namespace BLL.Manager
         ImagePath = model.ImagePath,
       };
 
-    public BookProjection GetBookByID(int ID)
+    public BookProjection GetByID(Int32 ID)
     {
       BookModel model = (Repository as IBookRepository).Read(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<BookProjection> GetBooksByAuthorFK(int AuthorFK)
+    public IEnumerable<BookProjection> GetAll()
+      => (Repository as IBookRepository).Read().Select(Project);
+
+    public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 AuthorFK)
       => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);
   }
 }

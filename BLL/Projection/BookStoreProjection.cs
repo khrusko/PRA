@@ -1,12 +1,14 @@
-﻿using BLL.Abstract.Projection;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class BookStoreProjection : AbstractProjection<int>
+  public class BookStoreProjection : AbstractProjection<Int32>
   {
-    public string Name { get; set; }
-    public string OIB { get; set; }
-    public double DelayPricePerDay { get; set; }
-    public string Email { get; set; }
+    public String Name { get; set; }
+    public String OIB { get; set; }
+    public Decimal DelayPricePerDay { get; set; }
+    public String Email { get; set; }
   }
 }
