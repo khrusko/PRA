@@ -17,7 +17,9 @@ AS BEGIN
     [RegistrationIsApproved]  = 1,
     [RegistrationDate]        = @RegistrationDate
   WHERE [GUID] = @GUID AND 
-        [DeleteDate] IS NULL
+        [DeleteDate] IS NULL AND
+        RegistrationIsApproved = 0 AND
+        DATEDIFF(MINUTE, [CreateDate], GETDATE()) <= 15
 
   RETURN @@ROWCOUNT
 END

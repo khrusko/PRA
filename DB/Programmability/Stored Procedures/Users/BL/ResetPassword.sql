@@ -20,7 +20,9 @@ AS BEGIN
     [PasswordHash]            = @PasswordHash,
     [ResetPasswordIsApproved] = 0
   WHERE [DeleteDate] IS NULL AND
-        [GUID] = @GUID
+        [GUID] = @GUID AND
+        [ResetPasswordIsApproved] = 1 AND
+        DATEDIFF(MINUTE, [ResetPasswordDate], GETDATE()) <= 5
 
   RETURN @@ROWCOUNT
 END
