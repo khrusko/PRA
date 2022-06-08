@@ -1,11 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BLL.Manager
 {
@@ -24,7 +27,7 @@ namespace BLL.Manager
         PurchaseDate = model.PurchaseDate
       };
 
-    public PurchaseProjection GetByID(int ID)
+    public PurchaseProjection GetByID(Int32 ID)
     {
       PurchaseModel model = (Repository as IPurchaseRepository).Read(ID);
       return model is null ? null : Project(model);
@@ -33,9 +36,9 @@ namespace BLL.Manager
     public IEnumerable<PurchaseProjection> GetAll()
       => (Repository as IPurchaseRepository).Read().Select(Project);
 
-    public int Purchase(PurchaseProjection projection)
+    public Int32 Purchase(PurchaseProjection projection)
       => Purchase(projection.BookFK, projection.UserFK, projection.Quantity);
-    public int Purchase(int BookFK, int UserFK, int Quantity)
+    public Int32 Purchase(Int32 BookFK, Int32 UserFK, Int32 Quantity)
       => (Repository as IPurchaseRepository).Purchase(BookFK, UserFK, Quantity, UserFK);
   }
 }

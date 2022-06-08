@@ -1,11 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BLL.Manager
 {
@@ -24,7 +27,7 @@ namespace BLL.Manager
         ResolvedDate = model.ResolvedDate
       };
 
-    public SubscriptionProjection GetByID(int ID)
+    public SubscriptionProjection GetByID(Int32 ID)
     {
       SubscriptionModel model = (Repository as ISubscriptionRepository).Read(ID);
       return model is null ? null : Project(model);
@@ -33,9 +36,9 @@ namespace BLL.Manager
     public IEnumerable<SubscriptionProjection> GetAll()
       => (Repository as ISubscriptionRepository).Read().Select(Project);
 
-    public int Subscribe(SubscriptionProjection projection)
+    public Int32 Subscribe(SubscriptionProjection projection)
       => Subscribe(projection.BookFK, projection.UserFK);
-    public int Subscribe(int BookFK, int UserFK)
+    public Int32 Subscribe(Int32 BookFK, Int32 UserFK)
       => (Repository as ISubscriptionRepository).Subscribe(BookFK, UserFK, UserFK);
   }
 }

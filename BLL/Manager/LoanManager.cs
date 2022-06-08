@@ -1,12 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BLL.Manager
 {
@@ -28,7 +30,7 @@ namespace BLL.Manager
         DelayPricePerDay = model.DelayPricePerDay
       };
 
-    public LoanProjection GetByID(int ID)
+    public LoanProjection GetByID(Int32 ID)
     {
       LoanModel model = (Repository as ILoanRepository).Read(ID);
       return model is null ? null : Project(model);
@@ -37,12 +39,12 @@ namespace BLL.Manager
     public IEnumerable<LoanProjection> GetAll()
       => (Repository as ILoanRepository).Read().Select(Project);
 
-    public int Loan(LoanProjection projection)
+    public Int32 Loan(LoanProjection projection)
       => Loan(projection.BookFK, projection.UserFK, projection.PlannedReturnDate);
-    public int Loan(int BookFK, int UserFK, DateTime PlannedReturnDate)
+    public Int32 Loan(Int32 BookFK, Int32 UserFK, DateTime PlannedReturnDate)
       => (Repository as ILoanRepository).Loan(BookFK, UserFK, PlannedReturnDate, UserFK);
 
-    public int Return(int ID, int UpdatedBy)
+    public Int32 Return(Int32 ID, Int32 UpdatedBy)
       => (Repository as ILoanRepository).Return(ID, UpdatedBy);
   }
 }

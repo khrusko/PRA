@@ -16,7 +16,12 @@ AS BEGIN
       [PasswordHash], 
       [ImagePath],
       [Address],
-      [IsAdmin]
+      [IsAdmin],
+      [GUID],
+      [RegistrationIsApproved],
+      [RegistrationDate],
+      [ResetPasswordIsApproved],
+      [ResetPasswordDate]
     FROM [dbo].[Users]
     WHERE [DeleteDate] IS NULL
     ORDER BY [FName] ASC, [LName] ASC
@@ -37,7 +42,12 @@ AS BEGIN
       [PasswordHash], 
       [ImagePath],
       [Address],
-      [IsAdmin]
+      [IsAdmin],
+      [GUID],
+      [RegistrationIsApproved],
+      [RegistrationDate],
+      [ResetPasswordIsApproved],
+      [ResetPasswordDate]
     FROM [dbo].[Users]
     WHERE [ID] = @ID AND [DeleteDate] IS NULL
   END

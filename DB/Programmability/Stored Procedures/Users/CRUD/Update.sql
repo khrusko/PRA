@@ -7,6 +7,11 @@
                                      @ImagePath AS nvarchar(500),
                                      @Address AS nvarchar(200),
                                      @IsAdmin AS bit,
+                                     @GUID AS uniqueidentifier,
+                                     @RegistrationIsApproved AS bit,
+                                     @RegistrationDate AS datetime,
+                                     @ResetPasswordIsApproved AS bit,
+                                     @ResetPasswordDate AS datetime,
                                      @UpdatedBy AS int)
 AS BEGIN
   DECLARE @IsUnique AS int = (
@@ -26,16 +31,21 @@ AS BEGIN
 
   UPDATE [dbo].[Users]
   SET
-    [UpdatedBy]     = @UpdatedBy,
-    [UpdateDate]    = GETDATE(),
-    [UserID]        = @UserID,
-    [FName]         = @FName,
-    [LName]         = @LName,
-    [Email]         = @Email,
-    [PasswordHash]  = @PasswordHash,
-    [ImagePath]     = @ImagePath,
-    [Address]       = @Address,
-    [IsAdmin]       = @IsAdmin
+    [UpdatedBy]               = @UpdatedBy,
+    [UpdateDate]              = GETDATE(),
+    [UserID]                  = @UserID,
+    [FName]                   = @FName,
+    [LName]                   = @LName,
+    [Email]                   = @Email,
+    [PasswordHash]            = @PasswordHash,
+    [ImagePath]               = @ImagePath,
+    [Address]                 = @Address,
+    [IsAdmin]                 = @IsAdmin,
+    [GUID]                    = @GUID,
+    [RegistrationIsApproved]  = @RegistrationIsApproved,
+    [RegistrationDate]        = @RegistrationDate,
+    [ResetPasswordIsApproved] = @ResetPasswordIsApproved,
+    [ResetPasswordDate]       = @ResetPasswordDate
   WHERE [ID] = @ID AND [DeleteDate] IS NULL
 
   RETURN @@ROWCOUNT

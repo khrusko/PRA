@@ -1,14 +1,16 @@
-﻿using DAL.Abstract.Model;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Abstract.Repository.Database
 {
   internal interface IDatabaseRepository<T, K> : IIdentifiableRepository<T, K>
     where T : class, IIdentifiable<K>
   {
-    string ConnectionString { get; }
-    string EntityName { get; }
-    IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
+    String ConnectionString { get; }
+    String EntityName { get; }
+    IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
   }
 }

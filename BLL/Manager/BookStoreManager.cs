@@ -1,11 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Projection;
+
 using DAL.Abstract.Repository;
 using DAL.Abstract.Repository.Model;
 using DAL.Factory;
 using DAL.Model;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BLL.Manager
 {
@@ -23,7 +26,7 @@ namespace BLL.Manager
         Email = model.Email
       };
 
-    public BookStoreProjection GetByID(int ID)
+    public BookStoreProjection GetByID(Int32 ID)
       => throw new System.NotImplementedException();
 
     public IEnumerable<BookStoreProjection> GetAll()

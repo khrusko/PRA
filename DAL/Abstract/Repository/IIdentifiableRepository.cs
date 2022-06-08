@@ -1,12 +1,15 @@
-﻿using DAL.Abstract.Model;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Abstract.Repository
 {
   public interface IIdentifiableRepository<T, K> : IRepository<T>
     where T : class, IIdentifiable<K>
   {
+    K Create(T entity);
     T Read(K ID);
-    int Update(K ID, T entity);
-    int Delete(K ID, T entity);
+    Int32 Update(K ID, T entity);
+    Int32 Delete(K ID, T entity);
   }
 }

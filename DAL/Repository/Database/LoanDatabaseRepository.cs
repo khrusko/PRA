@@ -1,20 +1,22 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class LoanDatabaseRepository : AbstractDatabaseRepository<LoanModel, int>, ILoanRepository
+  internal class LoanDatabaseRepository : AbstractDatabaseRepository<LoanModel, Int32>, ILoanRepository
   {
-    public override string EntityName => "Loan";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Loan";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",                 SqlDbType.Int },
         { "CreateDate",         SqlDbType.DateTime },
@@ -33,9 +35,9 @@ namespace DAL.Repository.Database
         { "DelayPricePerDay",   SqlDbType.Decimal },
       };
 
-    public int Loan(LoanModel entity) => Loan(entity, entity.CreatedBy);
-    public int Loan(LoanModel entity, int CreatedBy) => Loan(entity.BookFK, entity.UserFK, entity.PlannedReturnDate, entity.CreatedBy);
-    public int Loan(int BookFK, int UserFK, DateTime PlannedReturnDate, int CreatedBy)
+    public Int32 Loan(LoanModel entity) => Loan(entity, entity.CreatedBy);
+    public Int32 Loan(LoanModel entity, Int32 CreatedBy) => Loan(entity.BookFK, entity.UserFK, entity.PlannedReturnDate, entity.CreatedBy);
+    public Int32 Loan(Int32 BookFK, Int32 UserFK, DateTime PlannedReturnDate, Int32 CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -69,20 +71,20 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Loan), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Loan), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public int Return(LoanModel entity) => Return(entity, entity.UpdatedBy);
-    public int Return(LoanModel entity, int UpdatedBy) => Return(entity.ID, UpdatedBy);
-    public int Return(int ID, int UpdatedBy)
+    public Int32 Return(LoanModel entity) => Return(entity, entity.UpdatedBy);
+    public Int32 Return(LoanModel entity, Int32 UpdatedBy) => Return(entity.ID, UpdatedBy);
+    public Int32 Return(Int32 ID, Int32 UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -102,15 +104,15 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Return), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Return), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
   }
 }

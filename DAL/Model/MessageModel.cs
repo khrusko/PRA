@@ -1,15 +1,16 @@
-﻿using DAL.Abstract.Model;
-using System;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Model
 {
-  public class MessageModel : AbstractModel<int>
+  public class MessageModel : AbstractModel<Int32>
   {
-    public int SenderUserFK { get; set; }
+    public Int32 SenderUserFK { get; set; }
     public DateTime SenderDate { get; set; }
-    public string SenderMessage { get; set; }
-    public int ResponderUserFK { get; set; }
+    public String SenderMessage { get; set; }
+    public Int32 ResponderUserFK { get; set; }
     public DateTime ResponderDate { get; set; }
-    public string ResponderMessage { get; set; }
+    public String ResponderMessage { get; set; }
   }
 }

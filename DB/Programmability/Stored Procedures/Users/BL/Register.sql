@@ -17,7 +17,7 @@ AS BEGIN
             [Email] = @Email
           )
   )
-  IF @IsUnique > 1 BEGIN
+  IF @IsUnique > 0 BEGIN
     RETURN 0
   END
 
@@ -54,25 +54,6 @@ AS BEGIN
     @IsAdmin
   )
 
-  DECLARE @ID AS int = SCOPE_IDENTITY()
-
-  SELECT ALL TOP 1
-    [ID],
-    [CreateDate],
-    [CreatedBy],
-    [UpdateDate],
-    [UpdatedBy],
-    [DeleteDate],
-    [DeletedBy],
-    [UserID], 
-    [FName], 
-    [LName], 
-    [Email], 
-    [PasswordHash], 
-    [ImagePath],
-    [Address],
-    [IsAdmin]
-  FROM [dbo].[Users]
-  WHERE [ID] = @ID AND [DeleteDate] IS NULL
+  RETURN SCOPE_IDENTITY()
 END
 GO
