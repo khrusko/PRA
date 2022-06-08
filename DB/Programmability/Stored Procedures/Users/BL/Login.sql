@@ -18,8 +18,16 @@ AS BEGIN
     [PasswordHash], 
     [ImagePath],
     [Address],
-    [IsAdmin]
+    [IsAdmin],
+    [GUID],
+    [RegistrationIsApproved],
+    [RegistrationDate],
+    [ResetPasswordIsApproved],
+    [ResetPasswordDate]
   FROM [dbo].[Users]
-  WHERE [Email] = @Email AND [PasswordHash] = @PasswordHash AND [DeleteDate] IS NULL
+  WHERE [Email] = @Email AND 
+        [PasswordHash] = @PasswordHash AND
+        [RegistrationIsApproved] = 1 AND
+        [DeleteDate] IS NULL
 END
 GO

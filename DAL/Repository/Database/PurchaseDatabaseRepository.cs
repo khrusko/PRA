@@ -1,19 +1,22 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class PurchaseDatabaseRepository : AbstractDatabaseRepository<PurchaseModel, int>, IPurchaseRepository
+  internal class PurchaseDatabaseRepository : AbstractDatabaseRepository<PurchaseModel, Int32>, IPurchaseRepository
   {
-    public override string EntityName => "Purchase";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Purchase";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",             SqlDbType.Int },
         { "CreateDate",     SqlDbType.DateTime },
@@ -29,9 +32,9 @@ namespace DAL.Repository.Database
         { "PurchaseDate",   SqlDbType.DateTime },
       };
 
-    public int Purchase(PurchaseModel entity) => Purchase(entity, entity.CreatedBy);
-    public int Purchase(PurchaseModel entity, int CreatedBy) => Purchase(entity.BookFK, entity.UserFK, entity.Quantity, CreatedBy);
-    public int Purchase(int BookFK, int UserFK, int Quantity, int CreatedBy)
+    public Int32 Purchase(PurchaseModel entity) => Purchase(entity, entity.CreatedBy);
+    public Int32 Purchase(PurchaseModel entity, Int32 CreatedBy) => Purchase(entity.BookFK, entity.UserFK, entity.Quantity, CreatedBy);
+    public Int32 Purchase(Int32 BookFK, Int32 UserFK, Int32 Quantity, Int32 CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -65,15 +68,15 @@ namespace DAL.Repository.Database
         },
       };
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Purchase), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Purchase), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
   }
 }

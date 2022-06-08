@@ -1,16 +1,18 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
 namespace DAL.Repository.Database
 {
-  internal class PublisherDatabaseRepository : AbstractDatabaseRepository<PublisherModel, int>, IPublisherRepository
+  internal class PublisherDatabaseRepository : AbstractDatabaseRepository<PublisherModel, Int32>, IPublisherRepository
   {
-    public override string EntityName => "Publisher";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Publisher";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",             SqlDbType.Int },
         { "CreateDate",     SqlDbType.DateTime },

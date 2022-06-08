@@ -1,12 +1,14 @@
-﻿using DAL.Abstract.Model;
+﻿using System;
+
+using DAL.Abstract.Model;
 
 namespace DAL.Abstract.Repository.Model
 {
   public interface IModelRepository<T, K> : IIdentifiableRepository<T, K>
     where T : class, IModel<K>
   {
-    int Create(T entity, K CreatedBy);
-    int Update(K ID, T entity, K UpdatedBy);
-    int Delete(K ID, K DeletedBy);
+    K Create(T entity, K CreatedBy);
+    Int32 Update(K ID, T entity, K UpdatedBy);
+    Int32 Delete(K ID, K DeletedBy);
   }
 }

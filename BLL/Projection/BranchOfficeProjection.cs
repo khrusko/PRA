@@ -1,12 +1,14 @@
-﻿using BLL.Abstract.Projection;
+﻿using System;
+
+using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
-  public class BranchOfficeProjection : AbstractProjection<int>
+  public class BranchOfficeProjection : AbstractProjection<Int32>
   {
-    public string Name { get; set; }
-    public string Address { get; set; }
-    public string Telephone { get; set; }
-    public string Email { get; set; }
+    public String Name { get; set; }
+    public String Address { get; set; }
+    public String Telephone { get; set; }
+    public String Email { get; set; }
   }
 }

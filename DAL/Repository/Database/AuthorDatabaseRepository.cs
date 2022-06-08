@@ -1,20 +1,22 @@
-﻿using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class AuthorDatabaseRepository : AbstractDatabaseRepository<AuthorModel, int>, IAuthorRepository
+  internal class AuthorDatabaseRepository : AbstractDatabaseRepository<AuthorModel, Int32>, IAuthorRepository
   {
-    public override string EntityName => "Author";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Author";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",             SqlDbType.Int },
         { "CreateDate",     SqlDbType.DateTime },
@@ -30,7 +32,7 @@ namespace DAL.Repository.Database
         { "Biography",      SqlDbType.NVarChar },
       };
 
-    public IEnumerable<AuthorModel> ReadByBookFK(int BookFK)
+    public IEnumerable<AuthorModel> ReadByBookFK(Int32 BookFK)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -49,7 +51,7 @@ namespace DAL.Repository.Database
       {
         yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<AuthorModel>(), (obj, prop) =>
         {
-          typeof(AuthorModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(AuthorModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         });
       }

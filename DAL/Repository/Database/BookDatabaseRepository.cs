@@ -1,21 +1,23 @@
-﻿using DAL.Abstract.Model;
-using DAL.Abstract.Repository.Database;
-using DAL.Abstract.Repository.Model;
-using DAL.Model;
-using Microsoft.ApplicationBlocks.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
+using DAL.Abstract.Model;
+using DAL.Abstract.Repository.Database;
+using DAL.Abstract.Repository.Model;
+using DAL.Model;
+
+using Microsoft.ApplicationBlocks.Data;
+
 namespace DAL.Repository.Database
 {
-  internal class BookDatabaseRepository : AbstractDatabaseRepository<BookModel, int>, IBookRepository
+  internal class BookDatabaseRepository : AbstractDatabaseRepository<BookModel, Int32>, IBookRepository
   {
-    public override string EntityName => "Book";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "Book";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",             SqlDbType.Int },
         { "CreateDate",     SqlDbType.DateTime },
@@ -37,14 +39,14 @@ namespace DAL.Repository.Database
         { "ImagePath",      SqlDbType.NVarChar },
       };
 
-    public override int Create(BookModel entity) => throw new NotImplementedException();
-    public override int Create(BookModel entity, int CreatedBy) => throw new NotImplementedException();
-    public int Create(BookModel entity, IEnumerable<int> Authors, int CreatedBy)
+    public override Int32 Create(BookModel entity) => throw new NotImplementedException();
+    public override Int32 Create(BookModel entity, Int32 CreatedBy) => throw new NotImplementedException();
+    public Int32 Create(BookModel entity, IEnumerable<Int32> Authors, Int32 CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IModel<int>).GetProperties().Select(x => x.Name).ToArray();
+      String[] unusedProperties = typeof(IModel<Int32>).GetProperties().Select(x => x.Name).ToArray();
 
-      foreach (var item in DbKeyTypePairs)
+      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
       {
         if (unusedProperties.Contains(item.Key)) continue;
         parameters.Add(new SqlParameter()
@@ -72,27 +74,27 @@ namespace DAL.Repository.Database
         Value = CreatedBy,
       });
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Create), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Create), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public override int Update(BookModel entity) => throw new NotImplementedException();
-    public override int Update(int ID, BookModel entity) => throw new NotImplementedException();
-    public override int Update(int ID, BookModel entity, int UpdatedBy) => throw new NotImplementedException();
-    public int Update(BookModel entity, IEnumerable<int> Authors, int UpdatedBy) => Update(entity.ID, entity, Authors, UpdatedBy);
-    public int Update(int ID, BookModel entity, IEnumerable<int> Authors, int UpdatedBy)
+    public override Int32 Update(BookModel entity) => throw new NotImplementedException();
+    public override Int32 Update(Int32 ID, BookModel entity) => throw new NotImplementedException();
+    public override Int32 Update(Int32 ID, BookModel entity, Int32 UpdatedBy) => throw new NotImplementedException();
+    public Int32 Update(BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy) => Update(entity.ID, entity, Authors, UpdatedBy);
+    public Int32 Update(Int32 ID, BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      string[] unusedProperties = typeof(IModel<int>).GetProperties().Select(x => x.Name).ToArray();
+      String[] unusedProperties = typeof(IModel<Int32>).GetProperties().Select(x => x.Name).ToArray();
 
-      foreach (var item in DbKeyTypePairs)
+      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
       {
         if (unusedProperties.Contains(item.Key)) continue;
         parameters.Add(new SqlParameter()
@@ -128,18 +130,18 @@ namespace DAL.Repository.Database
         Value = UpdatedBy,
       });
 
-      SqlParameter returnValue = new SqlParameter()
+      var returnValue = new SqlParameter()
       {
         Direction = ParameterDirection.ReturnValue
       };
       parameters.Add(returnValue);
 
-      SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
 
-      return int.Parse(returnValue.Value.ToString());
+      return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public IEnumerable<BookModel> ReadByAuthorFK(int AuthorFK)
+    public IEnumerable<BookModel> ReadByAuthorFK(Int32 AuthorFK)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -158,7 +160,7 @@ namespace DAL.Repository.Database
       {
         yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<BookModel>(), (obj, prop) =>
         {
-          typeof(BookModel).GetProperty(prop).SetValue(obj, reader[prop]);
+          typeof(BookModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
           return obj;
         });
       }

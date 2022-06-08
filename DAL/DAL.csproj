@@ -82,6 +82,7 @@
     <Compile Include="Abstract\Repository\Database\IDatabaseRepository.cs" />
     <Compile Include="Abstract\Repository\IIdentifiableRepository.cs" />
     <Compile Include="Abstract\Repository\IRepository.cs" />
+    <Compile Include="Status\RegistrationStatus.cs" />
     <Compile Include="Model\AuthorModel.cs" />
     <Compile Include="Model\BookModel.cs" />
     <Compile Include="Model\BookStoreModel.cs" />
@@ -114,8 +115,8 @@
     <Compile Include="Repository\Database\PurchaseDatabaseRepository.cs" />
     <Compile Include="Repository\Database\SubscriptionDatabaseRepository.cs" />
     <Compile Include="Repository\Database\UserDatabaseRepository.cs" />
+    <Compile Include="Status\ResetPasswordStatus.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

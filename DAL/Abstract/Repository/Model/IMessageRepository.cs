@@ -1,14 +1,16 @@
-﻿using DAL.Model;
+﻿using System;
+
+using DAL.Model;
 
 namespace DAL.Abstract.Repository.Model
 {
-  public interface IMessageRepository : IModelRepository<MessageModel, int>
+  public interface IMessageRepository : IModelRepository<MessageModel, Int32>
   {
-    int Send(MessageModel entity);
-    int Send(MessageModel entity, int CreatedBy);
-    int Send(int SenderUserFK, string SenderMessage, int CreatedBy);
-    int Respond(MessageModel entity);
-    int Respond(MessageModel entity, int UpdatedBy);
-    int Respond(int ID, int ResponderUserFK, string ResponderMessage, int UpdatedBy);
+    Int32 Send(MessageModel entity);
+    Int32 Send(MessageModel entity, Int32 CreatedBy);
+    Int32 Send(Int32 SenderUserFK, String SenderMessage, Int32 CreatedBy);
+    Int32 Respond(MessageModel entity);
+    Int32 Respond(MessageModel entity, Int32 UpdatedBy);
+    Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage, Int32 UpdatedBy);
   }
 }

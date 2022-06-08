@@ -1,10 +1,19 @@
-﻿using DAL.Model;
+﻿using System;
+
+using DAL.Model;
+using DAL.Status;
 
 namespace DAL.Abstract.Repository.Model
 {
-  public interface IUserRepository : IModelRepository<UserModel, int>
+  public interface IUserRepository : IModelRepository<UserModel, Int32>
   {
-    UserModel Login(string Email, string Password);
-    UserModel Register(string FName, string LName, string Email, string Password, bool IsAdmin);
+    UserModel Login(String Email, String Password);
+    Int32 Register(String FName, String LName, String Email, String Password, Boolean IsAdmin);
+    RegistrationStatus CheckRegistrationStatus(Guid GUID);
+    Int32 ConfirmRegistration(Guid GUID);
+    UserModel ReadByEmail(String Email);
+    Int32 RequestResetPassword(String Email);
+    ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
+    Int32 ResetPassword(Guid GUID, String Password);
   }
 }

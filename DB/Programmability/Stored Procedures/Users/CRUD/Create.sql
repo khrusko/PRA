@@ -6,6 +6,11 @@
                                      @ImagePath AS nvarchar(500),
                                      @Address AS nvarchar(200),
                                      @IsAdmin AS bit,
+                                     @GUID AS uniqueidentifier,
+                                     @RegistrationIsApproved AS bit,
+                                     @RegistrationDate AS datetime,
+                                     @ResetPasswordIsApproved AS bit,
+                                     @ResetPasswordDate AS datetime,
                                      @CreatedBy AS int)
 AS BEGIN
   DECLARE @IsUnique AS int = (
@@ -33,7 +38,12 @@ AS BEGIN
     [PasswordHash], 
     [ImagePath],
     [Address],
-    [IsAdmin]
+    [IsAdmin],
+    [GUID],
+    [RegistrationIsApproved],
+    [RegistrationDate],
+    [ResetPasswordIsApproved],
+    [ResetPasswordDate]
   )
   VALUES 
   (
@@ -46,7 +56,12 @@ AS BEGIN
     @PasswordHash,
     @ImagePath,
     @Address,
-    @IsAdmin
+    @IsAdmin,
+    @GUID,
+    @RegistrationIsApproved,
+    @RegistrationDate,
+    @ResetPasswordIsApproved,
+    @ResetPasswordDate
   )
 
   RETURN SCOPE_IDENTITY()
