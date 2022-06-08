@@ -20,7 +20,6 @@ namespace UI.Models
 
         [Display(Name = "E-mail")]
         [Required(ErrorMessage = "E-mail je obavezan")]
-        [StringLength(maximumLength: 100, ErrorMessage = "Mora sadržavati barem 1 slovo i najviše 100 slova", MinimumLength = 1)]
         [EmailAddress (ErrorMessage ="Nije valjani E-mail")]
         public string Email { get; set; }
 
