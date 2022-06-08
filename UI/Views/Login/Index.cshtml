@@ -1,10 +1,8 @@
 ﻿@model UI.Models.LoginVM
 
 @{
-    ViewBag.Title = "Login page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
+}
 
 <!--
         Djelatnik
@@ -18,43 +16,108 @@
 
 <!DOCTYPE html>
 
-<div class="row">
-    <div class="col-md-6 offset-3">
-        <p>
-            <h4>Ulogirajte se u svoj račun</h4>
-        </p>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+</head>
+<body>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Content/css")
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-        @if (TempData["Error"] != null)
-        {
-            <div class="col-md-12 alert alert-danger">
-                <span><b>Sorry!</b> - @TempData["Error"] </span>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Login</h4>
+            <p class="text-danger">@ViewBag.LoginErrorMessage</p>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
             </div>
-        }
 
-        <div class="row">
-            <div class="col-md-8 offset-2">
-                <form asp-action="Login">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
 
-                    <div class="form-group">
-                        <label asp-for="EmailAddress" class="control-label"></label>
-                        <input asp-for="EmailAddress" class="form-control" />
-                        <span asp-validation-for="EmailAddress" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
+                </div>
+            </div>
 
-                    <div class="form-group">
-                        <input class="btn btn-outline-success float-right" type="submit" value="Log in" />
-                        <a class="btn btn-outline-secondary" asp-controller="Movies" asp-action="Index">Cancel</a>
-                    </div>
-                </form>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Login" />
+                    |
+                    <input type="button" value="Obnova zaporke" href="javascript:void(0);" class="anchorDetail">
+                </div>
+                <br />
+
+                <p class="text-secondary">Nemaš korisnički račun? <input type="button" value="Registriraj se" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");" /></p>
+            </div>
+        </div>
+    }
+
+    @* -----------------------Modal popup window-------------------------  *@
+    <div id='myModal' class="modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
             </div>
         </div>
     </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <div>
+        <br />
+        @Html.ActionLink("Natrag na početnu", "Index", "Book")
+    </div>
+
+    @section scripts
+        {
+            <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+            <script src="~/Scripts/bootstrap.js"></script>
+            <script src="~/Scripts/bootstrap.min.js"></script>
+            <script>
+                var ForgotPasswordPostback = '/Login/Modal';
+                $(function () {
+                    $(".anchorDetail").click(function () {
+                        var $buttonClicked = $(this);
+                        var options = { backdrop: "static", keyboard: true};
+                        $.ajax({
+                            type: "GET",
+                            url: ForgotPasswordPostback,
+                            success: function (data) {
+                                $('#myModalContent').html(data);
+                                $('#myModal').modal(options);
+                                $('#myModal').modal('show');
+                            },
+                            error: function () {
+                                alert("Dynamic content load failed.");
+                            }
+                        });
+                    });
+                    $("#close").click(function () {
+                        $('#myModal').modal('hide');
+                       
+                    });
+                    $(document).keydown(function (event) {
+                        if (event.keyCode == 27) {
+                            
+                        }
+                    });
+
+                   
+                });
+            </script>
+        }
+</body>
+</html>

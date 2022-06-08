@@ -122,7 +122,7 @@ namespace BLL.Manager
 
     private void SendResetPasswordMail(UserProjection projection)
     {
-      String verificationLink = $"/User/ResetPassword/{projection.GUID}";
+      String verificationLink = $"/Login/ResetPassword/{projection.GUID}";
       String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       String subject = "Obnova zaporke";

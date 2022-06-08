@@ -167,6 +167,8 @@
     <Content Include="Scripts\jquery-3.6.0.slim.js" />
     <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -183,8 +185,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ForgotPasswordInputVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
     <Compile Include="Models\RegisterVM.cs" />
+    <Compile Include="Models\ResetPasswordVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -221,6 +225,11 @@
     <Content Include="Views\Registration\Index.cshtml" />
     <Content Include="Views\Registration\ConfirmationSent.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\_ForgotPasswordModal.cshtml" />
+    <Content Include="Views\Login\RequestResetPassword.cshtml" />
+    <Content Include="Views\Login\ConfirmationSent.cshtml" />
+    <Content Include="Views\Login\ResetPassword.cshtml" />
+    <Content Include="Views\Login\ResetPasswordError.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
