@@ -27,11 +27,24 @@ namespace BLL.Manager
         PurchaseDate = model.PurchaseDate
       };
 
+    public PurchaseModel Model(PurchaseProjection projection)
+      => new PurchaseModel
+      {
+        ID = projection.ID,
+        BookFK = projection.BookFK,
+        UserFK = projection.UserFK,
+        Quantity = projection.Quantity,
+        UnitPrice = projection.UnitPrice,
+        PurchaseDate = projection.PurchaseDate
+      };
+
     public PurchaseProjection GetByID(Int32 ID)
     {
       PurchaseModel model = (Repository as IPurchaseRepository).Read(ID);
       return model is null ? null : Project(model);
     }
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public IEnumerable<PurchaseProjection> GetAll()
       => (Repository as IPurchaseRepository).Read().Select(Project);

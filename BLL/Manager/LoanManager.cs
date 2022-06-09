@@ -30,6 +30,20 @@ namespace BLL.Manager
         DelayPricePerDay = model.DelayPricePerDay
       };
 
+    public LoanModel Model(LoanProjection projection)
+      => new LoanModel
+      {
+        ID = projection.ID,
+        BookFK = projection.BookFK,
+        UserFK = projection.UserFK,
+        LoanPrice = projection.LoanPrice,
+        LoanDate = projection.LoanDate,
+        PlannedReturnDate = projection.PlannedReturnDate,
+        ReturnDate = projection.ReturnDate,
+        DelayDays = projection.DelayDays,
+        DelayPricePerDay = projection.DelayPricePerDay
+      };
+
     public LoanProjection GetByID(Int32 ID)
     {
       LoanModel model = (Repository as ILoanRepository).Read(ID);
@@ -38,6 +52,8 @@ namespace BLL.Manager
 
     public IEnumerable<LoanProjection> GetAll()
       => (Repository as ILoanRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Loan(LoanProjection projection)
       => Loan(projection.BookFK, projection.UserFK, projection.PlannedReturnDate);

@@ -28,6 +28,18 @@ namespace BLL.Manager
         ResponderMessage = model.ResponderMessage
       };
 
+    public MessageModel Model(MessageProjection projection)
+      => new MessageModel
+      {
+        ID = projection.ID,
+        SenderUserFK = projection.SenderUserFK,
+        SenderDate = projection.SenderDate,
+        SenderMessage = projection.SenderMessage,
+        ResponderUserFK = projection.ResponderUserFK,
+        ResponderDate = projection.ResponderDate,
+        ResponderMessage = projection.ResponderMessage
+      };
+
     public MessageProjection GetByID(Int32 ID)
     {
       MessageModel model = (Repository as IMessageRepository).Read(ID);
@@ -36,6 +48,8 @@ namespace BLL.Manager
 
     public IEnumerable<MessageProjection> GetAll()
       => (Repository as IMessageRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Send(MessageProjection projection)
       => Send(projection.SenderUserFK, projection.SenderMessage);

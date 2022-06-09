@@ -27,6 +27,17 @@ namespace BLL.Manager
         Biography = model.Biography
       };
 
+    public AuthorModel Model(AuthorProjection projection)
+      => new AuthorModel
+      { 
+        ID = projection.ID,
+        FName = projection.FName,
+        LName = projection.LName,
+        BirthDate = projection.BirthDate,
+        ImagePath = projection.ImagePath,
+        Biography = projection.Biography
+      };
+
     public AuthorProjection GetByID(Int32 ID)
     {
       AuthorModel model = (Repository as IAuthorRepository).Read(ID);
@@ -35,6 +46,9 @@ namespace BLL.Manager
 
     public IEnumerable<AuthorProjection> GetAll()
       => (Repository as IAuthorRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy)
+      => (Repository as IAuthorRepository).Delete(ID, DeletedBy);
 
     public IEnumerable<AuthorProjection> GetAuthorsByBookFK(Int32 BookFK)
       => (Repository as IAuthorRepository).ReadByBookFK(BookFK).Select(Project);

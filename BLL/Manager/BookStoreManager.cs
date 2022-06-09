@@ -26,11 +26,23 @@ namespace BLL.Manager
         Email = model.Email
       };
 
+    public BookStoreModel Model(BookStoreProjection projection)
+      => new BookStoreModel
+      {
+        ID = projection.ID,
+        Name = projection.Name,
+        OIB = projection.OIB,
+        DelayPricePerDay = projection.DelayPricePerDay,
+        Email = projection.Email
+      };
+
     public BookStoreProjection GetByID(Int32 ID)
       => throw new System.NotImplementedException();
 
     public IEnumerable<BookStoreProjection> GetAll()
       => throw new System.NotImplementedException();
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public BookStoreProjection GetBookStore()
     {

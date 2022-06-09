@@ -23,6 +23,13 @@ namespace BLL.Manager
         Name = model.Name
       };
 
+    public PublisherModel Model(PublisherProjection projection)
+      => new PublisherModel
+      {
+        ID = projection.ID,
+        Name = projection.Name
+      };
+
     public PublisherProjection GetByID(Int32 ID)
     {
       PublisherModel model = (Repository as IPublisherRepository).Read(ID);
@@ -31,5 +38,8 @@ namespace BLL.Manager
 
     public IEnumerable<PublisherProjection> GetAll()
       => (Repository as IPublisherRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy)
+      => (Repository as IPublisherRepository).Delete(ID, DeletedBy);
   }
 }

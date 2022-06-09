@@ -37,20 +37,38 @@ namespace BLL.Manager
         GUID = model.GUID
       };
 
+    public UserModel Model(UserProjection projection)
+      => new UserModel
+      {
+        ID = projection.ID,
+        UserID = projection.UserID,
+        FName = projection.FName,
+        LName = projection.LName,
+        Email = projection.Email,
+        PasswordHash = projection.Password,
+        ImagePath = projection.ImagePath,
+        Address = projection.Address,
+        IsAdmin = projection.IsAdmin,
+        GUID = projection.GUID
+      };
+
     public UserProjection GetByID(Int32 ID)
     {
       UserModel model = (Repository as IUserRepository).Read(ID);
       return model is null ? null : Project(model);
     }
 
+    public IEnumerable<UserProjection> GetAll()
+      => (Repository as IUserRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy)
+      => (Repository as IUserRepository).Delete(ID, DeletedBy);
+
     public UserProjection GetByEmail(String Email)
     {
       UserModel model = (Repository as IUserRepository).ReadByEmail(Email);
       return model is null ? null : Project(model);
     }
-
-    public IEnumerable<UserProjection> GetAll()
-      => (Repository as IUserRepository).Read().Select(Project);
 
     public UserProjection Login(UserProjection projection) => Login(projection.Email, projection.Password);
     public UserProjection Login(String Email, String Password)

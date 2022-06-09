@@ -26,6 +26,16 @@ namespace BLL.Manager
         Email = model.Email
       };
 
+    public BranchOfficeModel Model(BranchOfficeProjection projection)
+      => new BranchOfficeModel
+      {
+        ID = projection.ID,
+        Name = projection.Name,
+        Address = projection.Address,
+        Telephone = projection.Telephone,
+        Email = projection.Email
+      };
+
     public BranchOfficeProjection GetByID(Int32 ID)
     {
       BranchOfficeModel model = (Repository as IBranchOfficeRepository).Read(ID);
@@ -34,5 +44,8 @@ namespace BLL.Manager
 
     public IEnumerable<BranchOfficeProjection> GetAll()
       => (Repository as IBranchOfficeRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy)
+      => (Repository as IBranchOfficeRepository).Delete(ID, DeletedBy);
   }
 }

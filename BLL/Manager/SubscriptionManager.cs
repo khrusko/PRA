@@ -27,6 +27,17 @@ namespace BLL.Manager
         ResolvedDate = model.ResolvedDate
       };
 
+    public SubscriptionModel Model(SubscriptionProjection projection)
+      => new SubscriptionModel
+      {
+        ID = projection.ID,
+        BookFK = projection.BookFK,
+        UserFK = projection.UserFK,
+        SubscriptionDate = projection.SubscriptionDate,
+        IsResolved = projection.IsResolved,
+        ResolvedDate = projection.ResolvedDate
+      };
+
     public SubscriptionProjection GetByID(Int32 ID)
     {
       SubscriptionModel model = (Repository as ISubscriptionRepository).Read(ID);
@@ -35,6 +46,8 @@ namespace BLL.Manager
 
     public IEnumerable<SubscriptionProjection> GetAll()
       => (Repository as ISubscriptionRepository).Read().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Subscribe(SubscriptionProjection projection)
       => Subscribe(projection.BookFK, projection.UserFK);
