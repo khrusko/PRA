@@ -21,7 +21,6 @@ namespace DAL.Repository.Database
         { "UpdatedBy",      SqlDbType.Int },
         { "DeleteDate",     SqlDbType.DateTime },
         { "DeletedBy",      SqlDbType.Int },
-        { "BookStoreFK",    SqlDbType.Int },
         { "Name",           SqlDbType.NVarChar },
         { "Address",        SqlDbType.NVarChar },
         { "Telephone",      SqlDbType.NVarChar },
