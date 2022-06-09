@@ -6,22 +6,22 @@ using System;
 
 namespace BLL.Abstract.Manager.Projection
 {
-  public interface IUserManager : IProjectionManager<UserModel, UserProjection, int>
+  public interface IUserManager : IProjectionManager<UserModel, UserProjection, Int32>
   {
-    UserProjection GetByEmail(string Email);
+    UserProjection GetByEmail(String Email);
     UserProjection Login(UserProjection projection);
-    UserProjection Login(string Email, string Password);
+    UserProjection Login(String Email, String Password);
     UserProjection Register(UserProjection projection);
-    UserProjection Register(string FName, string LName, string Email, string Password, bool IsAdmin);
+    UserProjection Register(String FName, String LName, String Email, String Password, Boolean IsAdmin);
     RegistrationStatus CheckRegistrationStatus(UserProjection projection);
     RegistrationStatus CheckRegistrationStatus(Guid GUID);
-    int ConfirmRegistration(UserProjection projection);
-    int ConfirmRegistration(Guid GUID);
+    Int32 ConfirmRegistration(UserProjection projection);
+    Int32 ConfirmRegistration(Guid GUID);
     RequestResetPasswordStatus RequestResetPassword(UserProjection projection);
-    RequestResetPasswordStatus RequestResetPassword(string Email);
+    RequestResetPasswordStatus RequestResetPassword(String Email);
     ResetPasswordStatus CheckResetPasswordStatus(UserProjection projection);
     ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
-    int ResetPassword(UserProjection projection);
-    int ResetPassword(Guid GUID, string Password);
+    Int32 ResetPassword(UserProjection projection);
+    Int32 ResetPassword(Guid GUID, String Password);
   }
 }
