@@ -179,12 +179,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\GenericController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ContactFormVM.cs" />
     <Compile Include="Models\ForgotPasswordInputVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
     <Compile Include="Models\RegisterVM.cs" />
@@ -230,6 +232,9 @@
     <Content Include="Views\Login\ConfirmationSent.cshtml" />
     <Content Include="Views\Login\ResetPassword.cshtml" />
     <Content Include="Views\Login\ResetPasswordError.cshtml" />
+    <Content Include="Views\Generic\Privacy.cshtml" />
+    <Content Include="Views\Generic\TermsOfService.cshtml" />
+    <Content Include="Views\Generic\Contact.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

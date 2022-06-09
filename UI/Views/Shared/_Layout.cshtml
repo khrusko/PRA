@@ -48,8 +48,8 @@
                 </ul>
 
                 <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2" onclick="@("window.location.href='" + @Url.Action("Index", "Login") + "'");">Login</button>
-                    <button type="button" class="btn btn-light" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");">Sign-up</button>
+                    <button type="button" class="btn btn-outline-light me-2" onclick="@("window.location.href='" + @Url.Action("Index", "Login") + "'");">Prijava</button>
+                    <button type="button" class="btn btn-light" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");">Registracija</button>
                 </div>
             </div>
         </div>
@@ -60,12 +60,12 @@
     </div>
 
     <!-- FOOTER BEGIN -->
-    <footer class="px-5 d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <footer class="px-6 d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <ul class="nav col-md-4">
             <li class="nav-item"><a href="@Url.Action("Index","Book")" class="nav-link px-2 text-muted">Naslovna</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Kontakt</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pravila korištenja</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Izjava o privatnosti</a></li>
+            <li class="nav-item"><a href="@Url.Action("Contact","Generic")" class="nav-link px-2 text-muted">Kontakt</a></li>
+            <li class="nav-item"><a href="@Url.Action("TermsOfService","Generic")" class="nav-link px-2 text-muted">Opći uvjeti poslovanja</a></li>
+            <li class="nav-item"><a href="@Url.Action("Privacy","Generic")" class="nav-link px-2 text-muted">Izjava o privatnosti</a></li>
         </ul>
 
         <p class="col-md-4 mb-0 d-flex justify-content-center text-muted me-auto">&copy; 2022 Bookstore</p>

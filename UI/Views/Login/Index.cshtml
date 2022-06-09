@@ -19,7 +19,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
+    <title>Prijava</title>
 </head>
 <body>
     @Scripts.Render("~/bundles/jquery")
@@ -33,7 +33,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
-            <h4>Login</h4>
+            <h4>Prijava</h4>
             <p class="text-danger">@ViewBag.LoginErrorMessage</p>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -56,7 +56,7 @@
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Login" />
+                    <input type="submit" value="Prijava" />
                     |
                     <input type="button" value="Obnova zaporke" href="javascript:void(0);" class="anchorDetail">
                 </div>
