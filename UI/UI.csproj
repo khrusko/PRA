@@ -180,6 +180,7 @@
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\GenericController.cs" />
+    <Compile Include="Controllers\HttpErrorsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Models\ContactFormVM.cs" />
     <Compile Include="Models\ForgotPasswordInputVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
+    <Compile Include="Models\NotifyMeVM.cs" />
     <Compile Include="Models\RegisterVM.cs" />
     <Compile Include="Models\ResetPasswordVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -235,6 +237,9 @@
     <Content Include="Views\Generic\Privacy.cshtml" />
     <Content Include="Views\Generic\TermsOfService.cshtml" />
     <Content Include="Views\Generic\Contact.cshtml" />
+    <Content Include="Views\Book\Details.cshtml" />
+    <Content Include="Views\HttpErrors\NotFound.cshtml" />
+    <Content Include="Views\HttpErrors\BadRequest.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

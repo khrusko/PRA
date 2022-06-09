@@ -87,14 +87,14 @@
             <script src="~/Scripts/bootstrap.js"></script>
             <script src="~/Scripts/bootstrap.min.js"></script>
             <script>
-                var ForgotPasswordPostback = '/Login/Modal';
+                var url = '/Login/Modal';
                 $(function () {
                     $(".anchorDetail").click(function () {
                         var $buttonClicked = $(this);
                         var options = { backdrop: "static", keyboard: true};
                         $.ajax({
                             type: "GET",
-                            url: ForgotPasswordPostback,
+                            url: url,
                             success: function (data) {
                                 $('#myModalContent').html(data);
                                 $('#myModal').modal(options);

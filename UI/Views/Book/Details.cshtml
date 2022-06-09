@@ -1,0 +1,130 @@
+﻿@model BLL.Projection.BookProjection
+
+
+@{
+    ViewBag.Title = "Details";
+
+}
+
+<h2>Detalji knjige</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            ISBN
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+
+        <dt>
+            Naziv
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @* Summary *@
+            Kratki sadržaj
+        </dt>
+
+        <dd>
+            @if (Model.Summary.IsEmpty())
+            {
+                <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
+            }
+            @Html.DisplayFor(model => model.Summary)
+        </dd>
+
+        <dt>
+            @* Description *@
+            Opis
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            Stanje
+        </dt>
+
+        <dd>
+            @if (Model.IsNew)
+            {
+                <span>Novo</span>
+            }
+            else
+            {
+                <span>Rabljeno</span>
+            }
+        </dd>
+
+        <dt>
+            Izdavač
+        </dt>
+
+        <dd>
+            @ViewBag.Publisher
+        </dd>
+
+        <dt>
+            Broj stranica
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PageCount)
+        </dd>
+
+        <dt>
+            Cijena kupovine
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PurchasePrice) kn
+        </dd>
+
+        <dt>
+            Cijena posudbe
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LoanPrice) kn
+        </dd>
+
+        <dt>
+            Količina
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            Slika
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ImagePath)
+        </dd>
+
+    </dl>
+</div>
+
+
+
+<p>
+    @* Add buttons to buy and loan but disable them *@
+<p class="text-secondary">Za kupnju i posudbu knjiga, te slanja obavijesti o dostupnosti potrebno se prijaviti/registrirati</p>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Kupi</button>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Posudi</button>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Obavijesti me</button>
+<br />
+@*<p>
+@Html.ActionLink("Početna", "Index")
+</p>*@
+

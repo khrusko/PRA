@@ -8,25 +8,25 @@
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Naziv
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.IsNew)
+            Stanje
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PublisherFK)
+            Izdavač
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PageCount)
+            Broj stranica
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PurchasePrice)
+            Cijena kupovine
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LoanPrice)
+            Cijena posudbe
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Quantity)
+            Količina
         </th>
     </tr>
 
@@ -37,7 +37,16 @@
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsNew)
+                @if (@item.IsNew)
+                {
+                    <span>Novo</span>
+                }
+                else
+                {
+                    <span>Rabljeno</span>
+                }
+
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PublisherFK)
@@ -46,16 +55,16 @@
                 @Html.DisplayFor(modelItem => item.PageCount)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PurchasePrice)
+                @Html.DisplayFor(modelItem => item.PurchasePrice) kn
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LoanPrice)
+                @Html.DisplayFor(modelItem => item.LoanPrice) kn
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ID })
+                @Html.ActionLink("Detalji", "Details", new { id = item.ID })
             </td>
         </tr>
     }
