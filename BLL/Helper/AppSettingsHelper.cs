@@ -24,5 +24,11 @@ namespace BLL.Helper
           Password = ConfigurationManager.AppSettings["Email.SmtpClient.Credentials.Password"]
         }
       };
+
+    public static String[] ImageAllowedExtensions { get; }
+      = ConfigurationManager.AppSettings["File.Image.AllowedExtensions"].Split('|');
+
+    public static String ImageDirPath { get; }
+      = ConfigurationManager.AppSettings["File.Image.DirPath"];
   }
 }
