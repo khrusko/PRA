@@ -33,11 +33,11 @@ namespace DAL.Repository.Database
         { "Email",            SqlDbType.NVarChar },
       };
 
-    public IEnumerable<BookStoreModel> Read()
+    public IEnumerable<BookStoreModel> ReadAll()
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
 
-      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Read));
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + "Read");
 
       while (reader.Read())
       {
@@ -100,6 +100,8 @@ namespace DAL.Repository.Database
     public Int32 Delete(Int32 ID, BookStoreModel entity) => throw new NotImplementedException();
     public Int32 Delete(BookStoreModel entity) => throw new NotImplementedException();
     public Int32 Delete(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
-    public BookStoreModel Read(Int32 ID) => throw new NotImplementedException();
+    public IEnumerable<BookStoreModel> ReadAllAvailable() => throw new NotImplementedException();
+    public BookStoreModel ReadByID(Int32 ID) => throw new NotImplementedException();
+    public BookStoreModel ReadByIDAvailable(Int32 ID) => throw new NotImplementedException();
   }
 }
