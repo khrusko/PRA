@@ -44,14 +44,18 @@ namespace BLL.Manager
         DelayPricePerDay = projection.DelayPricePerDay
       };
 
-    public LoanProjection GetByID(Int32 ID)
+    public LoanProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      LoanModel model = (Repository as ILoanRepository).Read(ID);
+      LoanModel model = availabilityCheck
+        ? (Repository as ILoanRepository).ReadByIDAvailable(ID)
+        : (Repository as ILoanRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<LoanProjection> GetAll()
-      => (Repository as ILoanRepository).Read().Select(Project);
+    public IEnumerable<LoanProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as ILoanRepository).ReadAllAvailable().Select(Project)
+      : (Repository as ILoanRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 

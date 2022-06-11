@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
-using BLL.Helper;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -17,8 +17,6 @@ namespace BLL.Manager
 {
   public class BookManager : IBookManager
   {
-    private static readonly String _dirPath = $"{AppSettingsHelper.ImageDirPath}/Books/";
-    private static readonly String[] _allowedExtensions = AppSettingsHelper.ImageAllowedExtensions;
 
     public IRepository<BookModel> Repository { get; } = BookRepositoryFactory.GetRepository();
 
@@ -56,14 +54,18 @@ namespace BLL.Manager
         ImagePath = projection.ImagePath
       };
 
-    public BookProjection GetByID(Int32 ID)
+    public BookProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      BookModel model = (Repository as IBookRepository).Read(ID);
+      BookModel model = availabilityCheck
+        ? (Repository as IBookRepository).ReadByIDAvailable(ID)
+        : (Repository as IBookRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<BookProjection> GetAll()
-      => (Repository as IBookRepository).Read().Select(Project);
+    public IEnumerable<BookProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IBookRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IBookRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy)
       => (Repository as IBookRepository).Delete(ID, DeletedBy);
@@ -71,35 +73,50 @@ namespace BLL.Manager
     public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 AuthorFK)
       => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);
 
-    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 CreatedBy) 
+    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 CreatedBy)
     {
-      if (!_allowedExtensions.Contains(Path.GetExtension(Image.FileName))) return 0;
+      if (!(Image is null))
+      {
+        try
+        {
+          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+          imageSaver.File = Image;
+          imageSaver.SaveImageAs();
 
-      projection.ImagePath = SaveImageAs(Image, projection.ID);
+          projection.ImagePath = imageSaver.RelativePath;
+        }
+        catch (ArgumentException)
+        {
+          return 0;
+        }
+      }
+      else
+      {
+        projection.ImagePath = "";
+      }
+
       return (Repository as IBookRepository).Create(Model(projection), Authors, CreatedBy);
     }
 
     public Int32 Update(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 UpdatedBy)
     {
-      if (!_allowedExtensions.Contains(Path.GetExtension(Image.FileName))) return 0;
+      if (!(Image is null))
+      {
+        try
+        {
+          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+          imageSaver.File = Image;
+          imageSaver.SaveImageAs();
 
-      projection.ImagePath = SaveImageAs(Image, projection.ID);
+          projection.ImagePath = imageSaver.RelativePath;
+        }
+        catch (ArgumentException)
+        {
+          return 0;
+        }
+      }
+
       return (Repository as IBookRepository).Update(projection.ID, Model(projection), Authors, UpdatedBy);
-    }
-
-    private String GetImagePath(Int32 ID, String FileName)
-    {
-      String dirPath = $"{_dirPath}/{ID}";
-      _ = Directory.CreateDirectory(dirPath);
-
-      return $"{dirPath}/{Path.GetFileName(FileName)}.{Path.GetExtension(FileName)}";
-    }
-
-    private String SaveImageAs(HttpPostedFileBase Image, Int32 ID)
-    {
-      String imagePath = GetImagePath(ID, Image.FileName);
-      Image.SaveAs(HttpContext.Current.Server.MapPath(imagePath));
-      return imagePath;
     }
   }
 }

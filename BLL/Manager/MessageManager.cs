@@ -40,14 +40,18 @@ namespace BLL.Manager
         ResponderMessage = projection.ResponderMessage
       };
 
-    public MessageProjection GetByID(Int32 ID)
+    public MessageProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      MessageModel model = (Repository as IMessageRepository).Read(ID);
+      MessageModel model = availabilityCheck
+        ? (Repository as IMessageRepository).ReadByIDAvailable(ID)
+        : (Repository as IMessageRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<MessageProjection> GetAll()
-      => (Repository as IMessageRepository).Read().Select(Project);
+    public IEnumerable<MessageProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IMessageRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IMessageRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 

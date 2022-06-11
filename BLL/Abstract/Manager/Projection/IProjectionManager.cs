@@ -13,8 +13,8 @@ namespace BLL.Abstract.Manager.Projection
   {
     P Project(M model);
     M Model(P projection);
-    P GetByID(Int32 ID);
-    IEnumerable<P> GetAll();
+    P GetByID(K ID, Boolean availabilityCheck = true);
+    IEnumerable<P> GetAll(Boolean availabilityCheck = true);
     Int32 Remove(K ID, K DeletedBy);
   }
 }

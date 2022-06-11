@@ -52,14 +52,18 @@ namespace BLL.Manager
         GUID = projection.GUID
       };
 
-    public UserProjection GetByID(Int32 ID)
+    public UserProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      UserModel model = (Repository as IUserRepository).Read(ID);
+      UserModel model = availabilityCheck
+        ? (Repository as IUserRepository).ReadByIDAvailable(ID)
+        : (Repository as IUserRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<UserProjection> GetAll()
-      => (Repository as IUserRepository).Read().Select(Project);
+    public IEnumerable<UserProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IUserRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IUserRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy)
       => (Repository as IUserRepository).Delete(ID, DeletedBy);

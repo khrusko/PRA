@@ -38,16 +38,20 @@ namespace BLL.Manager
         PurchaseDate = projection.PurchaseDate
       };
 
-    public PurchaseProjection GetByID(Int32 ID)
+    public PurchaseProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      PurchaseModel model = (Repository as IPurchaseRepository).Read(ID);
+      PurchaseModel model = availabilityCheck
+        ? (Repository as IPurchaseRepository).ReadByIDAvailable(ID)
+        : (Repository as IPurchaseRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public IEnumerable<PurchaseProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IPurchaseRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IPurchaseRepository).ReadAll().Select(Project);
 
-    public IEnumerable<PurchaseProjection> GetAll()
-      => (Repository as IPurchaseRepository).Read().Select(Project);
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Purchase(PurchaseProjection projection)
       => Purchase(projection.BookFK, projection.UserFK, projection.Quantity);

@@ -36,14 +36,18 @@ namespace BLL.Manager
         Email = projection.Email
       };
 
-    public BranchOfficeProjection GetByID(Int32 ID)
+    public BranchOfficeProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      BranchOfficeModel model = (Repository as IBranchOfficeRepository).Read(ID);
+      BranchOfficeModel model = availabilityCheck
+        ? (Repository as IBranchOfficeRepository).ReadByIDAvailable(ID)
+        : (Repository as IBranchOfficeRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<BranchOfficeProjection> GetAll()
-      => (Repository as IBranchOfficeRepository).Read().Select(Project);
+    public IEnumerable<BranchOfficeProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IBranchOfficeRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IBranchOfficeRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy)
       => (Repository as IBranchOfficeRepository).Delete(ID, DeletedBy);

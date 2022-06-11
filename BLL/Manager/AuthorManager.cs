@@ -38,14 +38,18 @@ namespace BLL.Manager
         Biography = projection.Biography
       };
 
-    public AuthorProjection GetByID(Int32 ID)
+    public AuthorProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      AuthorModel model = (Repository as IAuthorRepository).Read(ID);
+      AuthorModel model = availabilityCheck 
+        ? (Repository as IAuthorRepository).ReadByIDAvailable(ID)
+        : (Repository as IAuthorRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<AuthorProjection> GetAll()
-      => (Repository as IAuthorRepository).Read().Select(Project);
+    public IEnumerable<AuthorProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IAuthorRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IAuthorRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy)
       => (Repository as IAuthorRepository).Delete(ID, DeletedBy);

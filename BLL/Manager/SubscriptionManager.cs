@@ -38,14 +38,18 @@ namespace BLL.Manager
         ResolvedDate = projection.ResolvedDate
       };
 
-    public SubscriptionProjection GetByID(Int32 ID)
+    public SubscriptionProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      SubscriptionModel model = (Repository as ISubscriptionRepository).Read(ID);
+      SubscriptionModel model = availabilityCheck
+        ? (Repository as ISubscriptionRepository).ReadByIDAvailable(ID)
+        : (Repository as ISubscriptionRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<SubscriptionProjection> GetAll()
-      => (Repository as ISubscriptionRepository).Read().Select(Project);
+    public IEnumerable<SubscriptionProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as ISubscriptionRepository).ReadAllAvailable().Select(Project)
+      : (Repository as ISubscriptionRepository).ReadAll().Select(Project);
 
     public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
