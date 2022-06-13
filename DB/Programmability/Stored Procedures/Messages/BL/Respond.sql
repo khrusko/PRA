@@ -1,13 +1,12 @@
 ﻿CREATE PROCEDURE [dbo].[MessageRespond] (@ID AS int,
                                          @ResponderUserFK AS int,
-                                         @ResponderMessage AS nvarchar(MAX),
-                                         @UpdatedBy AS int)
+                                         @ResponderMessage AS nvarchar(MAX))
 AS BEGIN
   DECLARE @ResponderDate AS datetime = GETDATE()
 
   UPDATE [dbo].[Messages]
   SET
-    [UpdatedBy]         = @UpdatedBy,
+    [UpdatedBy]         = @ResponderUserFK,
     [UpdateDate]        = @ResponderDate,
     [ResponderUserFK]   = @ResponderUserFK,
     [ResponderDate]     = @ResponderDate,
