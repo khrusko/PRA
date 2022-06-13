@@ -20,7 +20,9 @@ namespace BLL.Manager
       => new MessageProjection
       {
         ID = model.ID,
-        SenderUserFK = model.SenderUserFK,
+        SenderFName = model.SenderFName,
+        SenderLName = model.SenderLName,
+        SenderEmail = model.SenderEmail,
         SenderDate = model.SenderDate,
         SenderMessage = model.SenderMessage,
         ResponderUserFK = model.ResponderUserFK,
@@ -32,7 +34,9 @@ namespace BLL.Manager
       => new MessageModel
       {
         ID = projection.ID,
-        SenderUserFK = projection.SenderUserFK,
+        SenderFName = projection.SenderFName,
+        SenderLName = projection.SenderLName,
+        SenderEmail = projection.SenderEmail,
         SenderDate = projection.SenderDate,
         SenderMessage = projection.SenderMessage,
         ResponderUserFK = projection.ResponderUserFK,
@@ -56,13 +60,13 @@ namespace BLL.Manager
     public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Send(MessageProjection projection)
-      => Send(projection.SenderUserFK, projection.SenderMessage);
-    public Int32 Send(Int32 SenderUserFK, String SenderMessage)
-      => (Repository as IMessageRepository).Send(SenderUserFK, SenderMessage, SenderUserFK);
+      => Send(projection.SenderFName, projection.SenderLName, projection.SenderEmail, projection.SenderMessage);
+    public Int32 Send(String SenderFName, String SenderLName, String SenderEmail, String SenderMessage)
+      => (Repository as IMessageRepository).Send(SenderFName, SenderLName, SenderEmail, SenderMessage);
 
     public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
     public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
-      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage, ResponderUserFK);
+      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage);
   }
 }
