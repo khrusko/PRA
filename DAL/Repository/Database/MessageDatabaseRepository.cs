@@ -25,7 +25,9 @@ namespace DAL.Repository.Database
         { "UpdatedBy",        SqlDbType.Int },
         { "DeleteDate",       SqlDbType.DateTime },
         { "DeletedBy",        SqlDbType.Int },
-        { "SenderUserFK",     SqlDbType.Int },
+        { "SenderFName",      SqlDbType.NVarChar },
+        { "SenderLName",      SqlDbType.NVarChar },
+        { "SenderEmail",      SqlDbType.NVarChar },
         { "SenderDate",       SqlDbType.DateTime },
         { "SenderMessage",    SqlDbType.NVarChar },
         { "ResponderUserFK",  SqlDbType.Int },
@@ -33,18 +35,31 @@ namespace DAL.Repository.Database
         { "ResponderMessage", SqlDbType.NVarChar },
       };
 
-    public Int32 Send(MessageModel entity) => Send(entity, entity.CreatedBy);
-    public Int32 Send(MessageModel entity, Int32 CreatedBy) => Send(entity.SenderUserFK, entity.SenderMessage, CreatedBy);
-    public Int32 Send(Int32 SenderUserFK, String SenderMessage, Int32 CreatedBy)
+    public Int32 Send(MessageModel entity) => Send(entity.SenderFName, entity.SenderLName, entity.SenderEmail, entity.SenderMessage);
+    public Int32 Send(String SenderFName, String SenderLName, String SenderEmail, String SenderMessage)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
         new SqlParameter()
         {
-          ParameterName = "@SenderUserFK",
+          ParameterName = "@SenderFName",
           Direction = ParameterDirection.Input,
-          SqlDbType = DbKeyTypePairs["SenderUserFK"],
-          Value = SenderUserFK,
+          SqlDbType = DbKeyTypePairs["SenderFName"],
+          Value = SenderFName,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@SenderLName",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["SenderLName"],
+          Value = SenderLName,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@SenderEmail",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["SenderEmail"],
+          Value = SenderEmail,
         },
         new SqlParameter()
         {
@@ -52,13 +67,6 @@ namespace DAL.Repository.Database
           Direction = ParameterDirection.Input,
           SqlDbType = DbKeyTypePairs["SenderMessage"],
           Value = SenderMessage,
-        },
-        new SqlParameter()
-        {
-          ParameterName = "@CreatedBy",
-          Direction = ParameterDirection.Input,
-          SqlDbType = DbKeyTypePairs["CreatedBy"],
-          Value = CreatedBy,
         },
       };
 
@@ -73,9 +81,8 @@ namespace DAL.Repository.Database
       return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public Int32 Respond(MessageModel entity) => Respond(entity, entity.UpdatedBy);
-    public Int32 Respond(MessageModel entity, Int32 UpdatedBy) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage, UpdatedBy);
-    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage, Int32 UpdatedBy)
+    public Int32 Respond(MessageModel entity) => Respond(entity.ID, entity.ResponderUserFK, entity.ResponderMessage);
+    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>()
       {
@@ -99,13 +106,6 @@ namespace DAL.Repository.Database
           Direction = ParameterDirection.Input,
           SqlDbType = DbKeyTypePairs["ResponderMessage"],
           Value = ResponderMessage,
-        },
-        new SqlParameter()
-        {
-          ParameterName = "@UpdatedBy",
-          Direction = ParameterDirection.Input,
-          SqlDbType = DbKeyTypePairs["UpdatedBy"],
-          Value = UpdatedBy,
         },
       };
 
