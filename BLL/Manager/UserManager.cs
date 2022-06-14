@@ -75,17 +75,17 @@ namespace BLL.Manager
     }
 
     public UserProjection Login(UserProjection projection) => Login(projection.Email, projection.Password);
-    public UserProjection Login(String Email, String Password)
+    public UserProjection Login(String email, String password)
     {
-      UserModel model = (Repository as IUserRepository).Login(Email, Password);
+      UserModel model = (Repository as IUserRepository).Login(email, password);
       return model is null ? null : Project(model);
     }
 
     public UserProjection Register(UserProjection projection)
       => Register(projection.FName, projection.LName, projection.Email, projection.Password, projection.IsAdmin);
-    public UserProjection Register(String FName, String LName, String Email, String Password, Boolean IsAdmin)
+    public UserProjection Register(String fName, String lName, String email, String password, Boolean isAdmin)
     {
-      Int32 ID = (Repository as IUserRepository).Register(FName, LName, Email, Password, IsAdmin);
+      Int32 ID = (Repository as IUserRepository).Register(fName, lName, email, password, isAdmin);
       if (ID == 0) return null;
 
       UserProjection projection = GetByID(ID);
@@ -106,12 +106,12 @@ namespace BLL.Manager
 
     public RequestResetPasswordStatus RequestResetPassword(UserProjection projection)
       => RequestResetPassword(projection.Email);
-    public RequestResetPasswordStatus RequestResetPassword(String Email)
+    public RequestResetPasswordStatus RequestResetPassword(String email)
     {
-      UserProjection projection = GetByEmail(Email);
+      UserProjection projection = GetByEmail(email);
       if (projection == null) return RequestResetPasswordStatus.INVALID_EMAIL;
 
-      Int32 resetCount = (Repository as IUserRepository).RequestResetPassword(Email);
+      Int32 resetCount = (Repository as IUserRepository).RequestResetPassword(email);
       if (resetCount == 0) return RequestResetPasswordStatus.RESET_PENDING;
 
       SendResetPasswordMail(projection);
@@ -126,12 +126,12 @@ namespace BLL.Manager
 
     public Int32 ResetPassword(UserProjection projection)
       => ResetPassword(projection.GUID, projection.Password);
-    public Int32 ResetPassword(Guid GUID, String Password)
-      => (Repository as IUserRepository).ResetPassword(GUID, Password);
+    public Int32 ResetPassword(Guid GUID, String password)
+      => (Repository as IUserRepository).ResetPassword(GUID, password);
 
     private void SendRegistrationConfirmationMail(UserProjection projection)
     {
-      String verificationLink = $"/Registration/UserVerification/{projection.GUID}";
+      String verificationLink = $"/Account/UserVerification/{projection.GUID}";
       String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       String subject = "Potvrda registracije";
@@ -144,7 +144,7 @@ namespace BLL.Manager
 
     private void SendResetPasswordMail(UserProjection projection)
     {
-      String verificationLink = $"/Login/ResetPassword/{projection.GUID}";
+      String verificationLink = $"/Account/ResetPassword/{projection.GUID}";
       String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       String subject = "Obnova zaporke";

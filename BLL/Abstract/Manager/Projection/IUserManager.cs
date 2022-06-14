@@ -8,20 +8,20 @@ namespace BLL.Abstract.Manager.Projection
 {
   public interface IUserManager : IProjectionManager<UserModel, UserProjection, Int32>
   {
-    UserProjection GetByEmail(String Email);
+    UserProjection GetByEmail(String email);
     UserProjection Login(UserProjection projection);
-    UserProjection Login(String Email, String Password);
+    UserProjection Login(String email, String password);
     UserProjection Register(UserProjection projection);
-    UserProjection Register(String FName, String LName, String Email, String Password, Boolean IsAdmin);
+    UserProjection Register(String fName, String lName, String email, String password, Boolean isAdmin);
     RegistrationStatus CheckRegistrationStatus(UserProjection projection);
     RegistrationStatus CheckRegistrationStatus(Guid GUID);
     Int32 ConfirmRegistration(UserProjection projection);
     Int32 ConfirmRegistration(Guid GUID);
     RequestResetPasswordStatus RequestResetPassword(UserProjection projection);
-    RequestResetPasswordStatus RequestResetPassword(String Email);
+    RequestResetPasswordStatus RequestResetPassword(String email);
     ResetPasswordStatus CheckResetPasswordStatus(UserProjection projection);
     ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
     Int32 ResetPassword(UserProjection projection);
-    Int32 ResetPassword(Guid GUID, String Password);
+    Int32 ResetPassword(Guid GUID, String password);
   }
 }
