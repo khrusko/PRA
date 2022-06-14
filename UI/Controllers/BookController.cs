@@ -45,16 +45,10 @@ namespace UI.Controllers
     }
 
     [HttpPost]
-    public ActionResult SearchPage(bool checkbox)
+    public ActionResult SearchPage(bool isAvailable, string searchByAuthor, string searchbyBook)
     {
-      var allPublishers = _publisherManager.GetAll();
-      var allBooks = _bookManager.GetAll();
-      IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM { Book = x, Publisher = y });
-      if (checkbox) return View(enumerable.Where(x => x.Book.Quantity > 0));
-      else return View(enumerable);
+      return View();
     }
-
-
 
   }
 }

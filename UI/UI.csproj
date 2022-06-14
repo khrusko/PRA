@@ -240,6 +240,7 @@
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\HttpErrors\NotFound.cshtml" />
     <Content Include="Views\HttpErrors\BadRequest.cshtml" />
+    <Content Include="Views\Book\FormFilled.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
