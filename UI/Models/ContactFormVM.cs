@@ -18,9 +18,6 @@ namespace UI.Models
         public string Email { get; set; }
 
 
-        [Display(Name = "Naziv tvrtke")]
-        public string CompanyName { get; set; }
-
         [Display(Name = "Upit*")]
         [Required(ErrorMessage = "Upit je obavezan*")]
         public string Question { get; set; }

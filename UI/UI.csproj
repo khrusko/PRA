@@ -187,10 +187,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\BookPublisherVM.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
     <Compile Include="Models\ForgotPasswordInputVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
-    <Compile Include="Models\NotifyMeVM.cs" />
     <Compile Include="Models\RegisterVM.cs" />
     <Compile Include="Models\ResetPasswordVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

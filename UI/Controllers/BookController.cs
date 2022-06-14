@@ -17,13 +17,11 @@ namespace UI.Controllers
         private readonly IPublisherManager _publisherManager = new PublisherManager();
         public ActionResult Index()
         {
-            var allBooks = _bookManager.GetAll().ToList();
-            return View(allBooks);
-        }
-        public ActionResult HomePage()
-        {
-            var allBooks = _bookManager.GetAll().ToList();
-            return View(allBooks);
+            var allPublishers = _publisherManager.GetAll();
+            var allBooks = _bookManager.GetAll();
+            IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM{ Book = x, Publisher = y });
+
+            return View(enumerable);
         }
 
         public ActionResult Details(int id)
@@ -34,6 +32,26 @@ namespace UI.Controllers
             ViewBag.Publisher = _publisherManager.GetByID(publisherFKTemp).Name;
             return View(specificBook);
         }
+
+        [HttpGet]
+        public ActionResult SearchPage()
+        {
+            var allPublishers = _publisherManager.GetAll();
+            var allBooks = _bookManager.GetAll();
+            IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM { Book = x, Publisher = y });
+            return View(enumerable);
+        }
+
+        [HttpPost]
+        public ActionResult SearchPage(bool checkbox)
+        {
+            var allPublishers = _publisherManager.GetAll();
+            var allBooks = _bookManager.GetAll();
+            IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM { Book = x, Publisher = y });
+            if (checkbox) return View(enumerable.Where(x => x.Book.Quantity > 0));
+            else return View(enumerable);
+        }
+
 
 
     }
