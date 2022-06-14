@@ -7,18 +7,18 @@ using System.Web.Routing;
 
 namespace UI
 {
-    public class RouteConfig
+  public class RouteConfig
+  {
+    public static void RegisterRoutes(RouteCollection routes)
     {
-        public static void RegisterRoutes(RouteCollection routes)
-        {
-            routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+      routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                //LandingPage -> Homepage
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Book", action = "Index", id = UrlParameter.Optional }
-            );
-        }
+      routes.MapRoute(
+          //LandingPage -> Homepage
+          name: "Default",
+          url: "{controller}/{action}/{id}",
+          defaults: new { controller = "Book", action = "Index", id = UrlParameter.Optional }
+      );
     }
+  }
 }

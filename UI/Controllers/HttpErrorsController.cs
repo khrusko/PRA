@@ -6,19 +6,19 @@ using System.Web.Mvc;
 
 namespace UI.Controllers
 {
-    public class HttpErrorsController : Controller
+  public class HttpErrorsController : Controller
+  {
+    // GET: HttpErrors
+    public ActionResult NotFound()
     {
-        // GET: HttpErrors
-        public ActionResult NotFound()
-        {
-            Response.StatusCode = 404;
-            return View();
-        }
-
-        public ActionResult BadRequest()
-        {
-            Response.StatusCode = 400;
-            return View();
-        }
+      Response.StatusCode = 404;
+      return View();
     }
+
+    public ActionResult BadRequest()
+    {
+      Response.StatusCode = 400;
+      return View();
+    }
+  }
 }

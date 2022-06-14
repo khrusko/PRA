@@ -1,75 +1,71 @@
 ﻿@model IEnumerable<UI.Models.BookPublisherVM>
 @{
-    ViewBag.Title = "Pretraživanje";
+  ViewBag.Title = "Pretraživanje";
 }
 
 
 
 <div align="center" style="height:auto; width:100%" class="">
-    <h1 style="font-size:30px">Pretraživanje</h1>
+  <h1 style="font-size:30px">Pretraživanje</h1>
 </div>
 <hr />
-@using (Html.BeginForm("Book","SearchPage",FormMethod.Post))
-{
-    <div class="form-check d-flex offset-1">
-        <input class="form-check-input" type="checkbox" id="showOnlyAvailable" value='0' name="checkbox">
-        <label class="form-check-label" for="showOnlyAvailable">
-            Prikaži samo dostupne knjige
-        </label>
-    </div>
+@using (Html.BeginForm("Book", "SearchPage", FormMethod.Post)) {
+  <div class="form-check d-flex offset-1">
+    <input class="form-check-input" type="checkbox" id="showOnlyAvailable" value='0' name="checkbox">
+    <label class="form-check-label" for="showOnlyAvailable">
+      Prikaži samo dostupne knjige
+    </label>
+  </div>
 }
 
 <div class="container col-7">
-    <div class="row" style="height:auto; ">
-        @foreach (var item in Model)
-        {
-            <div class="col-4 mt-3">
-                <div class="card" style="width: 20rem; height: 23rem; background-color: burlywood">
+  <div class="row" style="height:auto; ">
+    @foreach (var item in Model) {
+      <div class="col-4 mt-3">
+        <div class="card" style="width: 20rem; height: 23rem; background-color: burlywood">
 
-                    <div class="card-body">
-                        <h5 class="card-title text-center" style="height:3rem;">@Html.DisplayFor(modelItem => item.Book.Title)</h5>
-                        <hr />
-                        <p>
-                            <span class="fw-bold">Stanje: </span>
-                            @if (@item.Book.IsNew)
-                            {
-                                <span>Novo</span>
-                            }
-                            else
-                            {
-                                <span>Rabljeno</span>
-                            }
-                        </p>
+          <div class="card-body">
+            <h5 class="card-title text-center" style="height:3rem;">@Html.DisplayFor(modelItem => item.Book.Title)</h5>
+            <hr />
+            <p>
+              <span class="fw-bold">Stanje: </span>
+              @if (@item.Book.IsNew) {
+                <span>Novo</span>
+              }
+              else {
+                <span>Rabljeno</span>
+              }
+            </p>
 
-                        <p><span class="fw-bold">Izdavač: </span>@Html.DisplayFor(modelItem => item.Publisher.Name)</p>
+            <p><span class="fw-bold">Izdavač: </span>@Html.DisplayFor(modelItem => item.Publisher.Name)</p>
 
-                        <p> <span class="fw-bold">Broj stranica: </span> @Html.DisplayFor(modelItem => item.Book.PageCount)</p>
+            <p> <span class="fw-bold">Broj stranica: </span> @Html.DisplayFor(modelItem => item.Book.PageCount)</p>
 
-                        <p><span class="fw-bold">Cijena za kupovinu: </span> @Html.DisplayFor(modelItem => item.Book.PurchasePrice) kn</p>
+            <p><span class="fw-bold">Cijena za kupovinu: </span> @Html.DisplayFor(modelItem => item.Book.PurchasePrice) kn</p>
 
-                        <p><span class="fw-bold">Cijena za posudbu: </span> @Html.DisplayFor(modelItem => item.Book.LoanPrice) kn</p>
+            <p><span class="fw-bold">Cijena za posudbu: </span> @Html.DisplayFor(modelItem => item.Book.LoanPrice) kn</p>
 
-                        <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(modelItem => item.Book.Quantity) kom</p>
+            <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(modelItem => item.Book.Quantity) kom</p>
 
-                    </div>
-                    <a href="@Url.Action("Details", "Book")/@item.Book.ID" class="stretched-link"></a>
-                </div>
-            </div>
+          </div>
+          <a href="@Url.Action("Details", "Book")/@item.Book.ID" class="stretched-link"></a>
+        </div>
+      </div>
 
-        }
-    </div>
+    }
+  </div>
 </div>
 
 <script>
-    $('#showOnlyAvailable').on('change', function () {
-        // …
-    });
+  $('#showOnlyAvailable').on('change', function () {
+    // …
+  });
 
 
 
-    $(':checkbox').checkboxpicker().on('change', function () {
-        // …
-    });
+  $(':checkbox').checkboxpicker().on('change', function () {
+    // …
+  });
 
 
 </script>

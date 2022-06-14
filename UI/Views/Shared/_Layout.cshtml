@@ -1,160 +1,159 @@
 ﻿
 @{
-    var contactForm = new UI.Models.ContactFormVM();
+  var contactForm = new UI.Models.ContactFormVM();
 }
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @RenderSection("styles", required: false)
+  <meta name="viewport" content="width=device-width" />
+  <title>@ViewBag.Title</title>
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+  @RenderSection("styles", required: false)
 
 </head>
 <body>
-    <header>
-        <div class="px-5 py-2 bg-dark text-white">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-5 text-white text-decoration-none">
-                    <svg class="bi" width="32" height="32" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#book" />
-                    </svg>
-                </a>
+  <header>
+    <div class="px-5 py-2 bg-dark text-white">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-5 text-white text-decoration-none">
+          <svg class="bi" width="32" height="32" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#book" />
+          </svg>
+        </a>
 
-                <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small">
-                    <li>
-                        <a href="@Url.Action("Index","Book")" class="nav-link text-white">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#house" />
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("SearchPage","Book")" class="nav-link text-white">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#search" />
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#contactForm">
-                            <svg width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
+        <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small">
+          <li>
+            <a href="@Url.Action("Index","Book")" class="nav-link text-white">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#house" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="@Url.Action("SearchPage","Book")" class="nav-link text-white">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#search" />
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link text-white" data-bs-toggle="modal" data-bs-target="#contactForm">
+              <svg width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
+              </svg>
+            </a>
+          </li>
+        </ul>
 
-                <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2" onclick="@("window.location.href='" + @Url.Action("Index", "Login") + "'");">Prijava</button>
-                    <button type="button" class="btn btn-light" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");">Registracija</button>
-                </div>
-            </div>
+        <div class="text-end">
+          <button type="button" class="btn btn-outline-light me-2" onclick="@("window.location.href='" + @Url.Action("Index", "Login") + "'");">Prijava</button>
+          <button type="button" class="btn btn-light" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");">Registracija</button>
         </div>
-    </header>
-
-    <div>
-        @RenderBody()
+      </div>
     </div>
+  </header>
 
-    <!-- FOOTER BEGIN -->
-    <footer class="px-6 d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <ul class="nav col-md-4">
-            <li class="nav-item"><a href="@Url.Action("Index","Book")" class="nav-link px-2 text-muted">Naslovna</a></li>
-            <li class="nav-item"><a href="@Url.Action("Contact","Generic")" class="nav-link px-2 text-muted">Kontakt</a></li>
-            <li class="nav-item"><a href="@Url.Action("TermsOfService","Generic")" class="nav-link px-2 text-muted">Opći uvjeti poslovanja</a></li>
-            <li class="nav-item"><a href="@Url.Action("Privacy","Generic")" class="nav-link px-2 text-muted">Izjava o privatnosti</a></li>
-        </ul>
+  <div>
+    @RenderBody()
+  </div>
 
-        <p class="col-md-4 mb-0 d-flex justify-content-center text-muted me-auto">&copy; 2022 Bookstore</p>
+  <!-- FOOTER BEGIN -->
+  <footer class="px-6 d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <ul class="nav col-md-4">
+      <li class="nav-item"><a href="@Url.Action("Index","Book")" class="nav-link px-2 text-muted">Naslovna</a></li>
+      <li class="nav-item"><a href="@Url.Action("Contact","Generic")" class="nav-link px-2 text-muted">Kontakt</a></li>
+      <li class="nav-item"><a href="@Url.Action("TermsOfService","Generic")" class="nav-link px-2 text-muted">Opći uvjeti poslovanja</a></li>
+      <li class="nav-item"><a href="@Url.Action("Privacy","Generic")" class="nav-link px-2 text-muted">Izjava o privatnosti</a></li>
+    </ul>
 
-        <ul class="nav col-md-4 d-flex justify-content-end">
-            <li class="nav-item px-2 text-muted mb-0">Zapratite nas:</li>
-            <li>
-                <a href="https://facebook.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#facebook" />
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="https://instagram.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#instagram" />
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="https://twitter.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#twitter" />
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </footer>
-    <!-- FOOTER END -->
+    <p class="col-md-4 mb-0 d-flex justify-content-center text-muted me-auto">&copy; 2022 Bookstore</p>
+
+    <ul class="nav col-md-4 d-flex justify-content-end">
+      <li class="nav-item px-2 text-muted mb-0">Zapratite nas:</li>
+      <li>
+        <a href="https://facebook.com" class="nav-link text-muted">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#facebook" />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a href="https://instagram.com" class="nav-link text-muted">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#instagram" />
+          </svg>
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.com" class="nav-link text-muted">
+          <svg class="bi" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#twitter" />
+          </svg>
+        </a>
+      </li>
+    </ul>
+  </footer>
+  <!-- FOOTER END -->
 
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @RenderSection("scripts", required: false)
 
-    @* Modal popup *@
+  @* Modal popup *@
 
-    <div class="modal fade" id="contactForm" tabindex="-1" aria-labelledby="contactFormLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title" id="contactFormLabel">Kontaktirajte nas</h3>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm())
-                    {
-                        @Html.AntiForgeryToken()
-
-                        <div class="form-horizontal">
-                            <p class="text-danger">@ViewBag.ContactFormErrorMessage</p>
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                            <div class="form-group ">
-                                @Html.LabelFor(model => contactForm.FullName, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-6">
-                                    @Html.EditorFor(model => contactForm.FullName, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => contactForm.FullName, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => contactForm.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-6">
-                                    @Html.EditorFor(model => contactForm.Email, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => contactForm.Email, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                @Html.LabelFor(model => contactForm.Question, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div class="col-md-6">
-                                    @Html.EditorFor(model => contactForm.Question, new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => contactForm.Question, "", new { @class = "text-danger" })
-                                </div>
-                            </div>
-
-                            <div class="form-group modal-footer">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <button type="submit"class="btn btn-primary">Pošalji</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    </div>
-                </div>
-            </div>
+  <div class="modal fade" id="contactForm" tabindex="-1" aria-labelledby="contactFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="contactFormLabel">Kontaktirajte nas</h3>
         </div>
+        <div class="modal-body">
+          @using (Html.BeginForm()) {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+              <p class="text-danger">@ViewBag.ContactFormErrorMessage</p>
+              @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+              <div class="form-group ">
+                @Html.LabelFor(model => contactForm.FullName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                  @Html.EditorFor(model => contactForm.FullName, new { htmlAttributes = new { @class = "form-control" } })
+                  @Html.ValidationMessageFor(model => contactForm.FullName, "", new { @class = "text-danger" })
+                </div>
+              </div>
+
+              <div class="form-group">
+                @Html.LabelFor(model => contactForm.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                  @Html.EditorFor(model => contactForm.Email, new { htmlAttributes = new { @class = "form-control" } })
+                  @Html.ValidationMessageFor(model => contactForm.Email, "", new { @class = "text-danger" })
+                </div>
+              </div>
+
+              <div class="form-group">
+                @Html.LabelFor(model => contactForm.Question, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                  @Html.EditorFor(model => contactForm.Question, new { htmlAttributes = new { @class = "form-control" } })
+                  @Html.ValidationMessageFor(model => contactForm.Question, "", new { @class = "text-danger" })
+                </div>
+              </div>
+
+              <div class="form-group modal-footer">
+                <div class="col-md-offset-2 col-md-10">
+                  <button type="submit" class="btn btn-primary">Pošalji</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Odustani</button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

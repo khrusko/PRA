@@ -18,106 +18,105 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Prijava</title>
+  <meta name="viewport" content="width=device-width" />
+  <title>Prijava</title>
 </head>
 <body>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Content/css")
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/jqueryval")
+  @Scripts.Render("~/Content/css")
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+  @using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
 
-        <div class="form-horizontal">
-            <h4>Prijava</h4>
-            <p class="text-danger">@ViewBag.LoginErrorMessage</p>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Prijava" />
-                    |
-                    <input type="button" value="Obnova zaporke" href="javascript:void(0);" class="anchorDetail">
-                </div>
-                <br />
-
-                <p class="text-secondary">Nemaš korisnički račun? <input type="button" value="Registriraj se" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");" /></p>
-            </div>
+    <div class="form-horizontal">
+      <h4>Prijava</h4>
+      <p class="text-danger">@ViewBag.LoginErrorMessage</p>
+      <hr />
+      @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+      <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+          @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
         </div>
-    }
+      </div>
 
-    @* -----------------------Modal popup window-------------------------  *@
-    <div id='myModal' class="modal">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div id='myModalContent'></div>
-            </div>
+      <div class="form-group">
+        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-2">
+          @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+          @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
         </div>
-    </div>
+      </div>
 
-    <div>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <input type="submit" value="Prijava" />
+          |
+          <input type="button" value="Obnova zaporke" href="javascript:void(0);" class="anchorDetail">
+        </div>
         <br />
-        @Html.ActionLink("Natrag na početnu", "Index", "Book")
+
+        <p class="text-secondary">Nemaš korisnički račun? <input type="button" value="Registriraj se" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");" /></p>
+      </div>
     </div>
+  }
 
-    @section scripts
+  @* -----------------------Modal popup window-------------------------  *@
+  <div id='myModal' class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div id='myModalContent'></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <br />
+    @Html.ActionLink("Natrag na početnu", "Index", "Book")
+  </div>
+
+  @section scripts
         {
-            <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-            <script src="~/Scripts/bootstrap.js"></script>
-            <script src="~/Scripts/bootstrap.min.js"></script>
-            <script>
-                var url = '/Login/Modal';
-                $(function () {
-                    $(".anchorDetail").click(function () {
-                        var $buttonClicked = $(this);
-                        var options = { backdrop: "static", keyboard: true};
-                        $.ajax({
-                            type: "GET",
-                            url: url,
-                            success: function (data) {
-                                $('#myModalContent').html(data);
-                                $('#myModal').modal(options);
-                                $('#myModal').modal('show');
-                            },
-                            error: function () {
-                                alert("Dynamic content load failed.");
-                            }
-                        });
-                    });
-                    $("#close").click(function () {
-                        $('#myModal').modal('hide');
-                       
-                    });
-                    $(document).keydown(function (event) {
-                        if (event.keyCode == 27) {
-                            
-                        }
-                    });
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+      var url = '/Login/Modal';
+      $(function () {
+        $(".anchorDetail").click(function () {
+          var $buttonClicked = $(this);
+          var options = { backdrop: "static", keyboard: true };
+          $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+              $('#myModalContent').html(data);
+              $('#myModal').modal(options);
+              $('#myModal').modal('show');
+            },
+            error: function () {
+              alert("Dynamic content load failed.");
+            }
+          });
+        });
+        $("#close").click(function () {
+          $('#myModal').modal('hide');
 
-                   
-                });
-            </script>
-        }
+        });
+        $(document).keydown(function (event) {
+          if (event.keyCode == 27) {
+
+          }
+        });
+
+
+      });
+    </script>
+  }
 </body>
 </html>
