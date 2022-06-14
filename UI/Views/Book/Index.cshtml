@@ -1,87 +1,38 @@
-﻿@model IEnumerable<UI.Models.BookPublisherVM>
+﻿@using UI.Models
+@model IEnumerable<BookPublisherVM>
+
 @{
   ViewBag.Title = "Početna";
-  var top5New = Model.Where(x => x.Book.IsNew && x.Book.Quantity > 0).Take(5);
-  var top5Available = Model.Where(x => x.Book.Quantity > 0).Take(5);
+
+  IEnumerable<BookPublisherVM> top5NewBooks = Model.Where(predicate: book => book.Book.IsNew && book.Book.Quantity > 0)
+                                                   .Take(count: 5);
+
+  IEnumerable<BookPublisherVM> top5AvailableBooks = Model.Where(predicate: book => book.Book.Quantity > 0)
+                                                         .Take(count: 5);
 }
 
-<div align="center" style="height:auto; width:100%" class="">
-  <h1 style="font-size:100px">Knjižara Jež Zagreb</h1>
+<div class="text-center">
+  <h1 class="h1">Knjižara Jež Zagreb</h1>
 </div>
 <hr />
 
-<h3 class="offset-1">Nove knjige</h3>
+<h3 class="h2 ms-5 mt-5">Nove knjige</h3>
 <table align="center">
   <tr>
-    @foreach (var item in top5New) {
-      <td>
-        <div class="card" style="width: 18rem; height: 23rem; background-color: burlywood">
+    @foreach (var book in top5NewBooks) {
 
-          <div class="card-body">
-            <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(modelItem => item.Book.Title)</h5>
-            <hr />
-            <p>
-              <span class="fw-bold">Stanje: </span>
-              @if (@item.Book.IsNew) {
-                <span>Novo</span>
-              }
-              else {
-                <span>Rabljeno</span>
-              }
-            </p>
+      @Html.Partial(partialViewName: "_BookCard", model: book)
 
-            <p><span class="fw-bold">Izdavač: </span>@Html.DisplayFor(modelItem => item.Publisher.Name)</p>
-
-            <p> <span class="fw-bold">Broj stranica: </span> @Html.DisplayFor(modelItem => item.Book.PageCount)</p>
-
-            <p><span class="fw-bold">Cijena za kupovinu: </span> @Html.DisplayFor(modelItem => item.Book.PurchasePrice) kn</p>
-
-            <p><span class="fw-bold">Cijena za posudbu: </span> @Html.DisplayFor(modelItem => item.Book.LoanPrice) kn</p>
-
-            <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(modelItem => item.Book.Quantity) kom</p>
-            <a href="@Url.Action("Details","Book")/@item.Book.ID" class="stretched-link"></a>
-          </div>
-        </div>
-      </td>
     }
   </tr>
 </table>
-<br />
-<br />
-<h3 class="offset-1">Dostupne knjige</h3>
+
+<h3 class="h2 ms-5 mt-5">Dostupne knjige</h3>
 <table align="center">
   <tr>
-    @foreach (var item in top5Available) {
+    @foreach (var book in top5AvailableBooks) {
 
-      <td>
-        <div class="card" style="width: 18rem; height: 23rem; background-color:burlywood">
-
-          <div class="card-body">
-            <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(modelItem => item.Book.Title)</h5>
-            <hr />
-            <p>
-              <span class="fw-bold">Stanje: </span>
-              @if (@item.Book.IsNew) {
-                <span>Novo</span>
-              }
-              else {
-                <span>Rabljeno</span>
-              }
-            </p>
-
-            <p><span class="fw-bold">Izdavač: </span>@Html.DisplayFor(modelItem => item.Publisher.Name)</p>
-
-            <p> <span class="fw-bold">Broj stranica: </span> @Html.DisplayFor(modelItem => item.Book.PageCount)</p>
-
-            <p><span class="fw-bold">Cijena za kupovinu: </span> @Html.DisplayFor(modelItem => item.Book.PurchasePrice) kn</p>
-
-            <p><span class="fw-bold">Cijena za posudbu: </span> @Html.DisplayFor(modelItem => item.Book.LoanPrice) kn</p>
-
-            <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(modelItem => item.Book.Quantity) kom</p>
-            <a href="@Url.Action("Details","Book")/@item.Book.ID" class="stretched-link"></a>
-          </div>
-        </div>
-      </td>
+      @Html.Partial(partialViewName: "_BookCard", model: book)
 
     }
   </tr>

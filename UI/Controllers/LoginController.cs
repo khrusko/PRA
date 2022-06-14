@@ -1,14 +1,15 @@
-﻿using BLL.Abstract.Manager.Projection;
-using BLL.Manager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 using System.Web.Mvc;
-using UI.Models;
+
+using BLL.Abstract.Manager.Projection;
+using BLL.Manager;
 using BLL.Projection;
 using BLL.Status;
+
 using DAL.Status;
+
+using UI.Models;
+using UI.Models.Concrete;
 
 namespace UI.Controllers
 {
@@ -16,103 +17,99 @@ namespace UI.Controllers
   {
     private readonly IUserManager _userManager = new UserManager();
 
-
     [HttpGet]
-    public ActionResult Index(string LoginErrorMessage)
-    {
-      ViewBag.LoginErrorMessage = LoginErrorMessage;
-      return View();
-    }
-    public ActionResult Modal()
-    {
-      return PartialView("_ForgotPasswordModal");
-    }
-    [HttpPost]
-    public ActionResult RequestResetPassword(string email)
-    {
+    public ViewResult Index() => View(viewName: nameof(Index));
 
-      RequestResetPasswordStatus status = _userManager.RequestResetPassword(email);
+    [HttpPost]
+    public ActionResult Index(LoginVM model)
+    {
+      if (!ModelState.IsValid)
+      {
+        TempData["message"] = new AlertMessage(message: "Unesite ispravne podatke za login");
+        return View(viewName: nameof(Index), model: model);
+      }
+
+      UserProjection projection = _userManager.Login(email: model.Email, password: model.Password);
+      if (!(projection is null))
+      {
+        TempData["message"] = new InfoMessage(message: $"Pozdrav, {projection.FName} {projection.LName}");
+
+        // TODO: redirect admin and user to dashborad -> replace "Book" with "Dashboard"
+        return RedirectToAction(actionName: "Index", controllerName: "Book");
+      }
+
+      TempData["message"] = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Emaila i Zaporke");
+      return View(viewName: nameof(Index), model: model);
+    }
+
+    [HttpPost]
+    public ViewResult RequestResetPassword(String email)
+    {
+      if (String.IsNullOrWhiteSpace(email))
+      {
+        TempData["message"] = new AlertMessage(message: "Email nije važeći");
+        return View(viewName: "Index");
+      }
+
+      RequestResetPasswordStatus status = _userManager.RequestResetPassword(email: email);
       switch (status)
       {
         case RequestResetPasswordStatus.SUCCESS:
-          return RedirectToAction(actionName: "ConfirmationSent", controllerName: "Login");
-        //break;
+          TempData["message"] = new InfoMessage(message: "Zahtjev za promijenu lozinke poslan je na Vaš E-mail");
+          break;
         case RequestResetPasswordStatus.INVALID_EMAIL:
-          return RedirectToAction(actionName: "ResetPasswordError", controllerName: "Login", new { errorMessage = "Ne postoji korisnički račun sa unesenim E - mailom" });
-        //break;
+          TempData["message"] = new AlertMessage(message: "Ne postoji korisnički račun sa unesenim E-mailom");
+          break;
         case RequestResetPasswordStatus.RESET_PENDING:
-          return RedirectToAction(actionName: "ResetPasswordError", controllerName: "Login", new { errorMessage = "Već je zatražena obnova zaporke" });
-          // break;
+          TempData["message"] = new AlertMessage(message: "Već je zatražena obnova zaporke");
+          break;
+        default:
+          throw new InvalidOperationException();
       }
-      return Index("");
+
+      return View(viewName: "Index");
     }
 
     [HttpGet]
-    public ActionResult ConfirmationSent()
+    public ActionResult ResetPassword(String id)
     {
-      return View();
-    }
-    [HttpGet]
-    public ActionResult ResetPassword(string id)
-    {
+      if (id is null)
+        return RedirectToAction(actionName: "Index", controllerName: "Login");
 
-      //if (!ModelState.IsValid) return RedirectToAction(actionName: "Index", controllerName: "Login");
-      ResetPasswordVM resetPasswordVM = new ResetPasswordVM();
-
-      //Handle null exception
-      if (id == null) return RedirectToAction(actionName: "Index", controllerName: "Login");
-      resetPasswordVM.GUID = new Guid(id);
-      ResetPasswordStatus status = _userManager.CheckResetPasswordStatus(resetPasswordVM.GUID);
+      var resetPasswordVM = new ResetPasswordVM
+      {
+        GUID = new Guid(id)
+      };
+      ResetPasswordStatus status = _userManager.CheckResetPasswordStatus(GUID: resetPasswordVM.GUID);
 
       switch (status)
       {
         case ResetPasswordStatus.INVALID:
-          return RedirectToAction(actionName: "ResetPasswordError", controllerName: "Login", new { errorMessage = "Link koji ste koristili nije valjani" });
+          TempData["message"] = new AlertMessage(message: "Link koji ste koristili nije valjani");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
         case ResetPasswordStatus.VALID:
-          return View(resetPasswordVM);
+          return View(viewName: "ResetPassword", model: resetPasswordVM);
         case ResetPasswordStatus.APPROVED:
-          return RedirectToAction(actionName: "ResetPasswordError", controllerName: "Login", new { errorMessage = "Link koji ste koristili je već iskorišten za obnovu zaporke" });
+          TempData["message"] = new AlertMessage(message: "Link koji ste koristili je već iskorišten za obnovu zaporke");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
         case ResetPasswordStatus.TIMEOUT:
-          return RedirectToAction(actionName: "ResetPasswordError", controllerName: "Login", new { errorMessage = "Link koji ste koristili je istekao" });
+          TempData["message"] = new AlertMessage(message: "Link koji ste koristili je istekao");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
+        default:
+          throw new InvalidOperationException();
       }
-
-
-      return View(resetPasswordVM);
-    }
-
-    [HttpGet]
-    public ActionResult ResetPasswordError(string errorMessage)
-    {
-      ViewBag.ErrorMessage = errorMessage;
-      return View();
     }
 
     [HttpPost]
-    public ActionResult ResetPassword(ResetPasswordVM resetPasswordVM)
+    public ActionResult ResetPassword(ResetPasswordVM model)
     {
-      if (!ModelState.IsValid) return View(resetPasswordVM);
-      _userManager.ResetPassword(resetPasswordVM.GUID, resetPasswordVM.Password);
+      if (!ModelState.IsValid)
+        return View(viewName: nameof(ResetPassword), model: model);
 
-      return RedirectToAction(actionName: "Index", controllerName: "Login", new { LoginErrorMessage = "Uspješno ste promijenili zaporku" });
+      _ = _userManager.ResetPassword(GUID: model.GUID, password: model.Password);
 
-    }
-    [HttpPost]
-    public ActionResult Index(LoginVM loginVM)
-    {
-      if (!ModelState.IsValid) return Index("");
-      UserProjection userProjection = _userManager.Login(loginVM.Email, loginVM.Password);
-      if (userProjection != null)
-      {
-        //Successful login - User
-        if (userProjection.IsAdmin == false)
-          return RedirectToAction("Index", "Book");
-        //Successful login - Admin
-        if (userProjection.IsAdmin == true)
-          return RedirectToAction("Index", "Registration");
-      }
-
-      //Login failed
-      return Index("Unijeli ste pogrešnu kombinaciju Emaila i Zaporke");
+      TempData["message"] = new InfoMessage(message: "Uspješno ste promijenili zaporku");
+      return RedirectToAction(actionName: "Index", controllerName: "Login");
     }
   }
 }

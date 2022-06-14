@@ -1,16 +1,14 @@
-﻿using BLL.Abstract.Manager.Projection;
+﻿using System;
+using System.Web.Mvc;
+
+using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
 using BLL.Projection;
 
 using DAL.Status;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
 using UI.Models;
+using UI.Models.Concrete;
 
 namespace UI.Controllers
 {
@@ -18,60 +16,52 @@ namespace UI.Controllers
   {
     private readonly IUserManager _userManager = new UserManager();
 
-
     [HttpGet]
-    public ActionResult UserVerification(string id)
-    {
-      Guid GUID = new Guid(id);
-
-      RegistrationStatus status = _userManager.CheckRegistrationStatus(GUID);
-      switch (status)
-      {
-
-        case RegistrationStatus.INVALID:
-          return Index("Link koji ste koristili nije valjani");
-        //break;
-        case RegistrationStatus.VALID:
-          _userManager.ConfirmRegistration(GUID);
-          break;
-        case RegistrationStatus.APPROVED:
-          return Index("Korisnički račun s danim parametrima već postoji");
-        //break;
-        case RegistrationStatus.TIMEOUT:
-          return Index("Link koji ste koristili je istekao");
-          //break;
-      }
-      return RedirectToAction("Index", "Login");
-    }
-
-    [HttpGet]
-    public ActionResult Index()
-    {
-      return View();
-    }
-
-    public ActionResult Index(string RegistrationErrorMessage)
-    {
-      ViewBag.RegistrationErrorMessage = RegistrationErrorMessage;
-      return View("Index");
-    }
+    public ViewResult Index() => View(viewName: nameof(Index));
 
     [HttpPost]
-    public ActionResult Index(RegisterVM registerVM)
+    public ViewResult Index(RegisterVM model)
     {
-      if (!ModelState.IsValid) return Index();
+      if (!ModelState.IsValid) return View(nameof(Index), model: model);
 
-      UserProjection userProjection = _userManager.Register(registerVM.FName, registerVM.LName, registerVM.Email, registerVM.Password, false);
+      UserProjection projection = _userManager.Register(fName: model.FName,
+                                                        lName: model.LName,
+                                                        email: model.Email,
+                                                        password: model.Password,
+                                                        isAdmin: false);
+      TempData["message"] = !(projection is null)
+        ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na E-Mail: {projection.Email}")
+        : (Object)new AlertMessage(message: $"Registracija nije uspjela, pokušajte ponovo");
 
-      if (userProjection != null)
-        return RedirectToAction("ConfirmationSent", userProjection.GUID);
-      else
-        return RedirectToAction("Index");
+      return View(viewName: nameof(Index));
     }
 
-    public ActionResult ConfirmationSent()
+    [HttpGet]
+    public RedirectToRouteResult UserVerification(String id)
     {
-      return View();
+      if (id is null)
+        return RedirectToAction(actionName: "Index", controllerName: "Registration");
+
+      var GUID = new Guid(id);
+      RegistrationStatus status = _userManager.CheckRegistrationStatus(GUID: GUID);
+      switch (status)
+      {
+        case RegistrationStatus.INVALID:
+          TempData["message"] = new AlertMessage(message: "Link koji ste koristili nije valjani");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
+        case RegistrationStatus.VALID:
+          TempData["message"] = new InfoMessage(message: "Registracija uspješna, molimo Vas da se ulogirate");
+          _ = _userManager.ConfirmRegistration(GUID: GUID);
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
+        case RegistrationStatus.APPROVED:
+          TempData["message"] = new AlertMessage(message: "Korisnički račun s danim parametrima već postoji");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
+        case RegistrationStatus.TIMEOUT:
+          TempData["message"] = new AlertMessage(message: "Link koji ste koristili je istekao");
+          return RedirectToAction(actionName: "Index", controllerName: "Login");
+        default:
+          throw new InvalidOperationException();
+      }
     }
   }
 }

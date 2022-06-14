@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 namespace UI.Controllers
 {
   public class HttpErrorsController : Controller
   {
-    // GET: HttpErrors
-    public ActionResult NotFound()
+    public ViewResult NotFound()
     {
       Response.StatusCode = 404;
-      return View();
+      return View(viewName: nameof(NotFound));
     }
 
-    public ActionResult BadRequest()
+    public ViewResult BadRequest()
     {
       Response.StatusCode = 400;
-      return View();
+      return View(viewName: nameof(BadRequest));
     }
   }
 }

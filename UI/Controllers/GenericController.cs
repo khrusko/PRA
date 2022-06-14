@@ -12,21 +12,11 @@ namespace UI.Controllers
   public class GenericController : Controller
   {
     readonly BranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
-    // GET: Generic
-    public ActionResult Privacy()
-    {
-      return View();
-    }
 
-    public ActionResult TermsOfService()
-    {
-      return View();
-    }
+    public ViewResult Privacy() => View(viewName: nameof(Privacy));
 
-    public ActionResult Contact()
-    {
-      BranchOfficeProjection branchOfficeDetails = _branchOfficeManager.GetByID(1);
-      return View(branchOfficeDetails);
-    }
+    public ViewResult TermsOfService() => View(viewName: nameof(TermsOfService));
+
+    public ViewResult Contact() => View(viewName: nameof(Contact), model: _branchOfficeManager.GetByID(1));
   }
 }

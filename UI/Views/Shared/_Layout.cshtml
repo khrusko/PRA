@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+  IMessage message = TempData["message"] as IMessage;
+}
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -10,6 +13,18 @@
 
 </head>
 <body>
+  @if (!(message is null)) {
+    <div class="row justify-content-center fixed-top mt-3">
+      <div class="col-4 alert alert-@message.Color alert-dismissible fade show align-items-center" role="alert">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="~/Content/bootstrap-icons.svg#@message.Icon" />
+        </svg>
+        <span>@message.Message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  }
+
   <header>
     <div class="px-5 py-2 bg-dark text-white">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -51,7 +66,7 @@
     </div>
   </header>
 
-  <div>
+  <div class="container mt-5 mb-5">
     @RenderBody()
   </div>
 

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
+using BLL.Projection;
 
 using UI.Models;
 
@@ -13,35 +12,42 @@ namespace UI.Controllers
 {
   public class BookController : Controller
   {
-
-    // GET: Book
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
-    public ActionResult Index()
-    {
-      var allPublishers = _publisherManager.GetAll();
-      var allBooks = _bookManager.GetAll();
-      IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM { Book = x, Publisher = y });
 
-      return View(enumerable);
-    }
-
-    public ActionResult Details(int id)
+    [HttpGet]
+    public ViewResult Index()
     {
-      if (id == 0) RedirectToAction(actionName: "BadRequest", controllerName: "HttpErrors");
-      var specificBook = _bookManager.GetByID(id);
-      int publisherFKTemp = specificBook.PublisherFK;
-      ViewBag.Publisher = _publisherManager.GetByID(publisherFKTemp).Name;
-      return View(specificBook);
+      IEnumerable<BookPublisherVM> bookPublishers = from book in _bookManager.GetAll()
+                                                    join publisher in _publisherManager.GetAll()
+                                                      on book.PublisherFK equals publisher.ID
+                                                    select new BookPublisherVM { Book = book, Publisher = publisher };
+
+      return View(viewName: nameof(Index), model: bookPublishers);
     }
 
     [HttpGet]
-    public ActionResult SearchPage()
+    public ViewResult Details(int id)
     {
-      var allPublishers = _publisherManager.GetAll();
-      var allBooks = _bookManager.GetAll();
-      IEnumerable<BookPublisherVM> enumerable = allBooks.Join(allPublishers, x => x.PublisherFK, x => x.ID, (x, y) => new BookPublisherVM { Book = x, Publisher = y });
-      return View(enumerable);
+      BookProjection book = _bookManager.GetByID(ID: id);
+      PublisherProjection publisher = _publisherManager.GetByID(ID: book.PublisherFK);
+      return View(viewName: nameof(Details),
+                  model: new BookPublisherVM
+                  {
+                    Book = book,
+                    Publisher = publisher
+                  });
+    }
+
+    [HttpGet]
+    public ViewResult SearchPage()
+    {
+      IEnumerable<BookPublisherVM> bookPublishers = from book in _bookManager.GetAll()
+                                                    join publisher in _publisherManager.GetAll()
+                                                      on book.PublisherFK equals publisher.ID
+                                                    select new BookPublisherVM { Book = book, Publisher = publisher };
+
+      return View(viewName: nameof(SearchPage), model: bookPublishers);
     }
 
     [HttpPost]

@@ -1,22 +1,22 @@
-﻿@model BLL.Projection.BookProjection
+﻿@using UI.Models
+@model BookPublisherVM
 
 
 @{
   ViewBag.Title = "Details";
-
 }
 
 <h2>Detalji knjige</h2>
+<hr />
 
 <div>
-  <hr />
   <dl class="dl-horizontal">
     <dt>
       ISBN
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.ISBN)
+      @Model.Book.ISBN
     </dd>
 
     <dt>
@@ -24,28 +24,28 @@
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.Title)
+      @Model.Book.Title
     </dd>
 
     <dt>
-      @* Summary *@
       Kratki sadržaj
     </dt>
 
     <dd>
-      @if (Model.Summary.IsEmpty()) {
+      @if (Model.Book.Summary.IsEmpty()) {
         <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
       }
-      @Html.DisplayFor(model => model.Summary)
+      else {
+        <span>@Model.Book.Summary</span>
+      }
     </dd>
 
     <dt>
-      @* Description *@
       Opis
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.Description)
+      @Model.Book.Description
     </dd>
 
     <dt>
@@ -53,7 +53,7 @@
     </dt>
 
     <dd>
-      @if (Model.IsNew) {
+      @if (Model.Book.IsNew) {
         <span>Novo</span>
       }
       else {
@@ -66,7 +66,7 @@
     </dt>
 
     <dd>
-      @ViewBag.Publisher
+      @Model.Publisher.Name
     </dd>
 
     <dt>
@@ -74,7 +74,7 @@
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.PageCount)
+      @Model.Book.PageCount
     </dd>
 
     <dt>
@@ -82,7 +82,7 @@
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.PurchasePrice) kn
+      @Model.Book.PurchasePrice.ToString("C2")
     </dd>
 
     <dt>
@@ -90,15 +90,15 @@
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.LoanPrice) kn
+      @Model.Book.LoanPrice.ToString("C2")
     </dd>
 
     <dt>
-      Količina
+      Dostupna količina
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.Quantity)
+      @Model.Book.Quantity
     </dd>
 
     <dt>
@@ -106,7 +106,7 @@
     </dt>
 
     <dd>
-      @Html.DisplayFor(model => model.ImagePath)
+      <img src="@Url.Content(contentPath: Model.Book.ImagePath ?? "/")" />
     </dd>
 
   </dl>
@@ -121,7 +121,4 @@
 <button type="button" class="btn btn-secondary btn-lg" disabled>Posudi</button>
 <button type="button" class="btn btn-secondary btn-lg" disabled>Obavijesti me</button>
 <br />
-@*<p>
-  @Html.ActionLink("Početna", "Index")
-  </p>*@
 
