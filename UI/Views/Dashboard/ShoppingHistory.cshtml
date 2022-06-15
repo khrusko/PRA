@@ -1,7 +1,27 @@
-﻿
+﻿@using BLL.Projection
+@using UI.Models
+@model  IEnumerable<PurchaseBookVM>
 @{
-    ViewBag.Title = "Povijest kupovina";
+  var user = Session["user"] as UserProjection;
+}
+@{
+  ViewBag.Title = "Povijest kupovina";
 }
 
 <h2>Povijest kupovina</h2>
 
+<div class="album py-5">
+  <h3>Povijest kupovina</h3>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var purchase in Model)
+      {
+
+        @Html.Partial(partialViewName: "_PurchaseCard", model: purchase)
+
+      }
+
+    </div>
+  </div>
+</div>
