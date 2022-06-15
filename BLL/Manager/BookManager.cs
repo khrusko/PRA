@@ -69,56 +69,42 @@ namespace BLL.Manager
       ? (Repository as IBookRepository).ReadAllAvailable().Select(Project)
       : (Repository as IBookRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IBookRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IBookRepository).Delete(ID, deletedBy);
 
-    public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 AuthorFK)
-      => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);
+    public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 authorFK)
+      => (Repository as IBookRepository).ReadByAuthorFK(authorFK).Select(Project);
 
-    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, Int32 CreatedBy)
+    public Int32 Create(BookProjection projection, HttpPostedFileBase file, Int32 createdBy)
     {
-      if (!(Image is null))
+      if (!(file is null))
       {
-        try
-        {
-          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
-          imageSaver.File = Image;
-          imageSaver.SaveImageAs();
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
 
-          projection.ImagePath = imageSaver.RelativePath;
-        }
-        catch (ArgumentException)
-        {
-          return 0;
-        }
+        projection.ImagePath = imageSaver.RelativePath;
+      }
+
+      return (Repository as IBookRepository).Create(Model(projection), createdBy);
+    }
+
+    public Int32 Update(BookProjection projection, HttpPostedFileBase file, Int32 updatedBy)
+    {
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        projection.ImagePath = imageSaver.RelativePath;
       }
       else
       {
-        projection.ImagePath = "";
+        projection.ImagePath = GetByID(projection.ID).ImagePath;
       }
 
-      return (Repository as IBookRepository).Create(Model(projection), CreatedBy);
-    }
-
-    public Int32 Update(BookProjection projection, HttpPostedFileBase Image, Int32 UpdatedBy)
-    {
-      if (!(Image is null))
-      {
-        try
-        {
-          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
-          imageSaver.File = Image;
-          imageSaver.SaveImageAs();
-
-          projection.ImagePath = imageSaver.RelativePath;
-        }
-        catch (ArgumentException)
-        {
-          return 0;
-        }
-      }
-
-      return (Repository as IBookRepository).Update(projection.ID, Model(projection), UpdatedBy);
+      return (Repository as IBookRepository).Update(projection.ID, Model(projection), updatedBy);
     }
   }
 }
