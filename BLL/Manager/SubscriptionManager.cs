@@ -51,11 +51,11 @@ namespace BLL.Manager
       ? (Repository as ISubscriptionRepository).ReadAllAvailable().Select(Project)
       : (Repository as ISubscriptionRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public Int32 Remove(Int32 ID, Int32 deletedBy) => throw new NotImplementedException();
 
     public Int32 Subscribe(SubscriptionProjection projection)
       => Subscribe(projection.BookFK, projection.UserFK);
-    public Int32 Subscribe(Int32 BookFK, Int32 UserFK)
-      => (Repository as ISubscriptionRepository).Subscribe(BookFK, UserFK, UserFK);
+    public Int32 Subscribe(Int32 bookFK, Int32 userFK)
+      => (Repository as ISubscriptionRepository).Subscribe(bookFK, userFK, userFK);
   }
 }

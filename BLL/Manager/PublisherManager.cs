@@ -43,7 +43,7 @@ namespace BLL.Manager
       ? (Repository as IPublisherRepository).ReadAllAvailable().Select(Project)
       : (Repository as IPublisherRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IPublisherRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IPublisherRepository).Delete(ID, deletedBy);
   }
 }

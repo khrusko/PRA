@@ -15,6 +15,6 @@ namespace BLL.Abstract.Manager.Projection
     M Model(P projection);
     P GetByID(K ID, Boolean availabilityCheck = true);
     IEnumerable<P> GetAll(Boolean availabilityCheck = true);
-    Int32 Remove(K ID, K DeletedBy);
+    Int32 Remove(K ID, K deletedBy);
   }
 }

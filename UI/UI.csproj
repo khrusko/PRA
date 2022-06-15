@@ -194,6 +194,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="Infrastructure\UserAuthenticate.cs" />
+    <Compile Include="Infrastructure\UserAuthorize.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
     <Compile Include="Models\BookPublisherVM.cs" />
     <Compile Include="Models\BookSearchVM.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="Models\Concrete\AlertMessage.cs" />
     <Compile Include="Models\Abstract\MessageBase.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
+    <Compile Include="Models\UserEditVM.cs" />
     <Compile Include="Models\Enums\BookSortType.cs" />
     <Compile Include="Models\Enums\MessageType.cs" />
     <Compile Include="Models\Enums\SortDirection.cs" />
@@ -255,11 +258,12 @@
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\HttpErrors\NotFound.cshtml" />
     <Content Include="Views\HttpErrors\BadRequest.cshtml" />
-    <Content Include="Views\Book\FormFilled.cshtml" />
     <Content Include="Views\Shared\_BookCard.cshtml" />
     <Content Include="Views\Home\ContactUs.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\_AdminDashboard.cshtml" />
     <Content Include="Views\Dashboard\_UserDashboard.cshtml" />
@@ -284,7 +288,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Images\" />
     <Folder Include="Views\Author\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">

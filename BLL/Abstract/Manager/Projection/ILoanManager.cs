@@ -10,9 +10,9 @@ namespace BLL.Abstract.Manager.Projection
   public interface ILoanManager : IProjectionManager<LoanModel, LoanProjection, Int32>
   {
     Int32 Loan(LoanProjection projection);
-    Int32 Loan(Int32 BookFK, Int32 UserFK, DateTime PlannedReturnDate);
-    Int32 Return(Int32 ID, Int32 UpdatedBy);
-    IEnumerable<LoanProjection> GetByUserFK(Int32 UserFK);
-    IEnumerable<LoanProjection> GetActiveByUserFK(Int32 UserFK);
+    Int32 Loan(Int32 bookFK, Int32 userFK, DateTime plannedReturnDate);
+    Int32 Return(Int32 ID, Int32 updatedBy);
+    IEnumerable<LoanProjection> GetByUserFK(Int32 userFK);
+    IEnumerable<LoanProjection> GetActiveByUserFK(Int32 userFK);
   }
 }

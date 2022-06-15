@@ -161,6 +161,7 @@
     <Build Include="Programmability\Stored Procedures\Loans\BL\ReadByUserFK.sql" />
     <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
     <Build Include="Programmability\Stored Procedures\Purchases\BL\ReadByUserFK.sql" />
+    <Build Include="Programmability\Stored Procedures\Users\BL\EditProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

@@ -52,7 +52,7 @@
               <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
             </svg>
           </a>
-          <a href="@Url.Action(actionName: "Profile", controllerName: "User")" class="d-block link-dark text-decoration-none dropdown-toggle me-4" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+          <a href="@Url.Action(actionName: "Index", controllerName: "User")" class="d-block link-dark text-decoration-none dropdown-toggle me-4">
             <span class="me-3 text-white">@user.FName @user.LName</span>
             <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle">
           </a>
