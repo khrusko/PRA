@@ -44,7 +44,8 @@ namespace UI
                           url: "{controller}/Details/{id}",
                           defaults: new
                           {
-                            action = "Details"
+                            action = "Details",
+                            id = UrlParameter.Optional
                           },
                           constraints: new
                           {

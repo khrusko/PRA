@@ -252,11 +252,11 @@
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\HttpErrors\NotFound.cshtml" />
     <Content Include="Views\HttpErrors\BadRequest.cshtml" />
-    <Content Include="Views\Book\FormFilled.cshtml" />
     <Content Include="Views\Shared\_BookCard.cshtml" />
     <Content Include="Views\Home\ContactUs.cshtml" />
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -267,7 +267,6 @@
   <ItemGroup>
     <Folder Include="App_Data\Images\" />
     <Folder Include="Views\Author\" />
-    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
