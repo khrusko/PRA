@@ -39,7 +39,7 @@ namespace BLL.Helper
       _file.SaveAs(AbsolutePath);
     }
 
-    private String GetRelativeImagePath() => $"{DirPath}/{Guid.NewGuid()}.{Path.GetExtension(_file.FileName)}";
+    private String GetRelativeImagePath() => $"{DirPath}/{Guid.NewGuid()}{Path.GetExtension(_file.FileName)}";
     private String GetAbsoluteImagePath() => HttpContext.Current.Server.MapPath(RelativePath);
     private String MapServerDirPath() => HttpContext.Current.Server.MapPath($"{DirPath}");
     private void CreateDirectory() => _ = Directory.CreateDirectory(MapServerDirPath());
