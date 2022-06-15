@@ -7,7 +7,6 @@ namespace BLL.Abstract.Helper
   {
     MailAddress From { get; }
     MailAddress To { get; set; }
-    SmtpClient SmtpClient { get; }
     MailMessage Message { get; set; }
     void SendEmail();
     void SendEmail(String subject, String body);

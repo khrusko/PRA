@@ -20,7 +20,9 @@ namespace BLL.Manager
       => new MessageProjection
       {
         ID = model.ID,
-        SenderUserFK = model.SenderUserFK,
+        SenderFName = model.SenderFName,
+        SenderLName = model.SenderLName,
+        SenderEmail = model.SenderEmail,
         SenderDate = model.SenderDate,
         SenderMessage = model.SenderMessage,
         ResponderUserFK = model.ResponderUserFK,
@@ -28,23 +30,43 @@ namespace BLL.Manager
         ResponderMessage = model.ResponderMessage
       };
 
-    public MessageProjection GetByID(Int32 ID)
+    public MessageModel Model(MessageProjection projection)
+      => new MessageModel
+      {
+        ID = projection.ID,
+        SenderFName = projection.SenderFName,
+        SenderLName = projection.SenderLName,
+        SenderEmail = projection.SenderEmail,
+        SenderDate = projection.SenderDate,
+        SenderMessage = projection.SenderMessage,
+        ResponderUserFK = projection.ResponderUserFK,
+        ResponderDate = projection.ResponderDate,
+        ResponderMessage = projection.ResponderMessage
+      };
+
+    public MessageProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      MessageModel model = (Repository as IMessageRepository).Read(ID);
+      MessageModel model = availabilityCheck
+        ? (Repository as IMessageRepository).ReadByIDAvailable(ID)
+        : (Repository as IMessageRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<MessageProjection> GetAll()
-      => (Repository as IMessageRepository).Read().Select(Project);
+    public IEnumerable<MessageProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IMessageRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IMessageRepository).ReadAll().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public Int32 Send(MessageProjection projection)
-      => Send(projection.SenderUserFK, projection.SenderMessage);
-    public Int32 Send(Int32 SenderUserFK, String SenderMessage)
-      => (Repository as IMessageRepository).Send(SenderUserFK, SenderMessage, SenderUserFK);
+      => Send(projection.SenderFName, projection.SenderLName, projection.SenderEmail, projection.SenderMessage);
+    public Int32 Send(String SenderFName, String SenderLName, String SenderEmail, String SenderMessage)
+      => (Repository as IMessageRepository).Send(SenderFName, SenderLName, SenderEmail, SenderMessage);
 
     public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
     public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
-      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage, ResponderUserFK);
+      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage);
   }
 }

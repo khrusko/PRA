@@ -10,9 +10,9 @@ namespace DAL.Repository.Database
 {
   internal class BranchOfficeDatabaseRepository : AbstractDatabaseRepository<BranchOfficeModel, Int32>, IBranchOfficeRepository
   {
-    public override string EntityName => "BranchOffice";
-    public override IDictionary<string, SqlDbType> DbKeyTypePairs { get; }
-      = new Dictionary<string, SqlDbType>()
+    public override String EntityName => "BranchOffice";
+    public override IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
+      = new Dictionary<String, SqlDbType>()
       {
         { "ID",             SqlDbType.Int },
         { "CreateDate",     SqlDbType.DateTime },
@@ -21,7 +21,6 @@ namespace DAL.Repository.Database
         { "UpdatedBy",      SqlDbType.Int },
         { "DeleteDate",     SqlDbType.DateTime },
         { "DeletedBy",      SqlDbType.Int },
-        { "BookStoreFK",    SqlDbType.Int },
         { "Name",           SqlDbType.NVarChar },
         { "Address",        SqlDbType.NVarChar },
         { "Telephone",      SqlDbType.NVarChar },

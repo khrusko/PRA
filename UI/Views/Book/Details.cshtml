@@ -1,0 +1,124 @@
+﻿@using UI.Models
+@model BookPublisherVM
+
+
+@{
+  ViewBag.Title = "Details";
+}
+
+<h2>Detalji knjige</h2>
+<hr />
+
+<div>
+  <dl class="dl-horizontal">
+    <dt>
+      ISBN
+    </dt>
+
+    <dd>
+      @Model.Book.ISBN
+    </dd>
+
+    <dt>
+      Naziv
+    </dt>
+
+    <dd>
+      @Model.Book.Title
+    </dd>
+
+    <dt>
+      Kratki sadržaj
+    </dt>
+
+    <dd>
+      @if (Model.Book.Summary.IsEmpty()) {
+        <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
+      }
+      else {
+        <span>@Model.Book.Summary</span>
+      }
+    </dd>
+
+    <dt>
+      Opis
+    </dt>
+
+    <dd>
+      @Model.Book.Description
+    </dd>
+
+    <dt>
+      Stanje
+    </dt>
+
+    <dd>
+      @if (Model.Book.IsNew) {
+        <span>Novo</span>
+      }
+      else {
+        <span>Rabljeno</span>
+      }
+    </dd>
+
+    <dt>
+      Izdavač
+    </dt>
+
+    <dd>
+      @Model.Publisher.Name
+    </dd>
+
+    <dt>
+      Broj stranica
+    </dt>
+
+    <dd>
+      @Model.Book.PageCount
+    </dd>
+
+    <dt>
+      Cijena kupovine
+    </dt>
+
+    <dd>
+      @Model.Book.PurchasePrice.ToString("C2")
+    </dd>
+
+    <dt>
+      Cijena posudbe
+    </dt>
+
+    <dd>
+      @Model.Book.LoanPrice.ToString("C2")
+    </dd>
+
+    <dt>
+      Dostupna količina
+    </dt>
+
+    <dd>
+      @Model.Book.Quantity
+    </dd>
+
+    <dt>
+      Slika
+    </dt>
+
+    <dd>
+      <img src="@Url.Content(contentPath: Model.Book.ImagePath ?? "/")" />
+    </dd>
+
+  </dl>
+</div>
+
+
+
+<p>
+  @* Add buttons to buy and loan but disable them *@
+<p class="text-secondary">Za kupnju i posudbu knjiga, te slanja obavijesti o dostupnosti potrebno se prijaviti/registrirati</p>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Kupi</button>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Posudi</button>
+<button type="button" class="btn btn-secondary btn-lg" disabled>Obavijesti me</button>
+<br />
+

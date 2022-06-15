@@ -16,6 +16,6 @@ AS BEGIN
   FROM [dbo].[Authors]
     INNER JOIN [dbo].[BooksAuthors]
       ON [AuthorFK] = [ID]
-  WHERE [BookFK] = @BookFK AND [DeleteDate] IS NULL
+  WHERE [BookFK] = @BookFK
 END
 GO
