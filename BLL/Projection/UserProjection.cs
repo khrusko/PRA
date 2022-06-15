@@ -4,6 +4,7 @@ using BLL.Abstract.Projection;
 
 namespace BLL.Projection
 {
+  [Serializable]
   public class UserProjection : AbstractProjection<Int32>
   {
     public String UserID { get; set; }

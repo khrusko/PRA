@@ -1,0 +1,19 @@
+﻿
+@{
+  ViewBag.Title = "Neispravan zahtjev";
+}
+
+<div class="d-flex align-items-baseline mb-3">
+  <h1 class="text-danger me-3">💥404</h1>
+
+  <h4>Stranica koju tražite ne postoji ili nije dostupna</h4>
+</div>
+
+
+@Html.ActionLink(linkText: "Natrag na početnu stranicu",
+                  actionName: "Index",
+                  controllerName: "Book",
+                  routeValues: null,
+                  htmlAttributes: new {
+                    @class = "link-primary"
+                  })

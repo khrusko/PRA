@@ -26,15 +26,27 @@ namespace BLL.Manager
         Email = model.Email
       };
 
-    public BookStoreProjection GetByID(Int32 ID)
-      => throw new System.NotImplementedException();
+    public BookStoreModel Model(BookStoreProjection projection)
+      => new BookStoreModel
+      {
+        ID = projection.ID,
+        Name = projection.Name,
+        OIB = projection.OIB,
+        DelayPricePerDay = projection.DelayPricePerDay,
+        Email = projection.Email
+      };
 
-    public IEnumerable<BookStoreProjection> GetAll()
-      => throw new System.NotImplementedException();
+    public BookStoreProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
+      => throw new NotImplementedException();
+
+    public IEnumerable<BookStoreProjection> GetAll(Boolean availabilityCheck = true)
+      => throw new NotImplementedException();
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
 
     public BookStoreProjection GetBookStore()
     {
-      BookStoreModel model = (Repository as IBookStoreRepository).Read().First();
+      BookStoreModel model = (Repository as IBookStoreRepository).ReadAll().First();
       return model is null ? null : Project(model);
     }
   }

@@ -1,0 +1,70 @@
+﻿@using BLL.Projection
+
+@{
+  var user = Session["user"] as UserProjection;
+}
+
+<header>
+  <div class="px-5 py-2 bg-dark text-white">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-5 text-white text-decoration-none">
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use xlink:href="~/Content/bootstrap-icons.svg#book" />
+        </svg>
+      </a>
+
+      <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small">
+        <li>
+          <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#house" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="@Url.Action(actionName: "Search", controllerName: "Book")" class="nav-link text-white">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#search" />
+            </svg>
+          </a>
+        </li>
+        <li>
+          <a href="@Url.Action(actionName: "ContactUs", controllerName: "Home")" class="nav-link text-white">
+            <svg width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
+            </svg>
+          </a>
+        </li>
+      </ul>
+
+      @if (!(user is null)) {
+        <div class="text-end d-flex align-items-center">
+          @if (!user.IsAdmin) {
+            <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white">
+              <svg class="bi" width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#cart" />
+              </svg>
+            </a>
+          }
+
+          <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white me-4">
+            <svg class="bi" width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#chat" />
+            </svg>
+          </a>
+          <a href="@Url.Action(actionName: "Profile", controllerName: "User")" class="d-block link-dark text-decoration-none dropdown-toggle me-4" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="me-3 text-white">@user.FName @user.LName</span>
+            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle">
+          </a>
+          @Html.ActionLink(linkText: "Odjava", actionName: "Logout", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
+        </div>
+      }
+      else {
+        <div class="text-end">
+          @Html.ActionLink(linkText: "Prijava", actionName: "Login", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
+          @Html.ActionLink(linkText: "Registracija", actionName: "Register", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-light" })
+        </div>
+      }
+    </div>
+  </div>
+</header>
