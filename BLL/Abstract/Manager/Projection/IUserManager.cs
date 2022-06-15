@@ -3,6 +3,7 @@ using BLL.Status;
 using DAL.Model;
 using DAL.Status;
 using System;
+using System.Web;
 
 namespace BLL.Abstract.Manager.Projection
 {
@@ -23,5 +24,8 @@ namespace BLL.Abstract.Manager.Projection
     ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
     Int32 ResetPassword(UserProjection projection);
     Int32 ResetPassword(Guid GUID, String password);
+    Int32 Update(UserProjection projection, HttpPostedFileBase file);
+    Int32 Update(Int32 ID, String fName, String lName, HttpPostedFileBase file, String address);
+    Int32 Remove(Int32 ID);
   }
 }
