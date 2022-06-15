@@ -4,8 +4,8 @@
   ViewData["Title"] = "Registracija";
 }
 
-@using (Html.BeginForm(actionName: "Index",
-                       controllerName: "Registration",
+@using (Html.BeginForm(actionName: "Register",
+                       controllerName: "Account",
                        method: FormMethod.Post,
                        htmlAttributes: new {
                          @class = "mb-4"
@@ -52,8 +52,8 @@
 <p class="text-secondary">
   Već imaš korisnički račun?
   @Html.ActionLink(linkText: "Prijavi se!",
-                   actionName: "Index",
-                   controllerName: "Login",
+                   actionName: "Login",
+                   controllerName: "Account",
                    routeValues: null,
                    htmlAttributes: new {
                      @class = "link-primary"

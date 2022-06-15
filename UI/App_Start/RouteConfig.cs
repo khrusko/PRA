@@ -16,12 +16,14 @@ namespace UI
 
       _ = routes.MapRoute(name: "ResetPassword",
                           url: "Account/ResetPassword/{id}",
-                          defaults: new {
-                            controller = "Login",
+                          defaults: new
+                          {
+                            controller = "Account",
                             action = "ResetPassword",
                             id = UrlParameter.Optional
                           },
-                          constraints: new {
+                          constraints: new
+                          {
                             id = new GuidRouteConstraint()
                           });
 
@@ -29,7 +31,7 @@ namespace UI
                           url: "Account/UserVerification/{id}",
                           defaults: new
                           {
-                            controller = "Registration",
+                            controller = "Account",
                             action = "UserVerification",
                             id = UrlParameter.Optional
                           },
@@ -55,9 +57,11 @@ namespace UI
 
       _ = routes.MapRoute(name: "Default",
                           url: "{controller}/{action}",
-                          defaults: new { 
-                            controller = "Book",
-                            action = "Index" }
+                          defaults: new
+                          {
+                            controller = "Home",
+                            action = "Index"
+                          }
       );
     }
   }

@@ -1,0 +1,59 @@
+﻿@using UI.Models
+@model BookSearchVM
+@{
+  ViewBag.Title = "Pretraživanje";
+}
+
+<h2 class="h2 text-center">Pretraživanje</h2>
+
+<hr />
+@using (Html.BeginForm(actionName: "Search",
+                       controllerName: "Book",
+                       method: FormMethod.Post)) {
+  <div class="col-4 offset-4">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+      @Html.LabelFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-label" })
+      @Html.CheckBoxFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-checkbox" })
+    </div>
+
+    <div class="mb-3">
+      @Html.LabelFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-label" })
+      @Html.TextBoxFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+      @Html.LabelFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-label" })
+      @Html.TextBoxFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-control" })
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Pretraži" />
+  </div>
+}
+
+<div class="album py-5">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (FullBookInfoVM book in Model.BookPublishers) {
+
+        @Html.Partial(partialViewName: "_BookCard", model: book)
+
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-end">
+  @Html.PageLinks(pagingInfo: Model.PagingInfo,
+                  pageUrl: page => Url.Action(actionName: "Search",
+                                              controllerName: "Book",
+                                              routeValues: new {
+                                                page,
+                                                availableOnly = Model.AvailableOnly,
+                                                bookQuery = Model.BookQuery,
+                                                authorQuery = Model.AuthorQuery
+                                              }))
+</div>

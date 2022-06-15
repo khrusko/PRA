@@ -1,25 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace UI.Models
 {
   public class ContactFormVM
   {
-    [Display(Name = "Ime i prezime*")]
-    [Required(ErrorMessage = "Ime i prezime je obavezno")]
-    public string FullName { get; set; }
+    [Display(Name = "Ime")]
+    [Required(ErrorMessage = "Ime je obavezno")]
+    public String FName { get; set; }
 
-    [Display(Name = "E-mail*")]
-    [Required(ErrorMessage = "E-mail je obavezan")]
-    [EmailAddress(ErrorMessage = "Nije valjani E-mail")]
-    public string Email { get; set; }
+    [Display(Name = "Prezime")]
+    [Required(ErrorMessage = "Prezime je obavezno")]
+    public String LName { get; set; }
 
+    [Display(Name = "Email")]
+    [Required(ErrorMessage = "Email je obavezan")]
+    [EmailAddress(ErrorMessage = "Email nije u ispravnom formatu")]
+    public String Email { get; set; }
 
-    [Display(Name = "Upit*")]
-    [Required(ErrorMessage = "Upit je obavezan*")]
-    public string Question { get; set; }
+    [Display(Name = "Upit")]
+    [Required(ErrorMessage = "Upit je obavezan")]
+    public String Message { get; set; }
   }
 }

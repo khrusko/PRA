@@ -5,7 +5,7 @@ using BLL.Manager;
 
 namespace UI.Controllers
 {
-  public class UserController : Controller
+  public class UserController : BaseController
   {
     private readonly IUserManager _userManager = new UserManager();
   }

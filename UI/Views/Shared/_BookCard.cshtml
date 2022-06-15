@@ -1,7 +1,7 @@
 ﻿@using UI.Models
-@model BookPublisherVM
-<td>
-  <div class="card" style="width: 18rem; height: 23rem;">
+@model FullBookInfoVM
+<div class="col">
+  <div class="card">
 
     <div class="card-body">
       <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(model => model.Book.Title)</h5>
@@ -29,4 +29,4 @@
       <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
     </div>
   </div>
-</td>
+</div>

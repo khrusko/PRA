@@ -6,7 +6,7 @@ using BLL.Manager;
 
 namespace UI.Controllers
 {
-  public class AuthorController : Controller
+  public class AuthorController : BaseController
   {
     private readonly IAuthorManager _authorManager = new AuthorManager();
 

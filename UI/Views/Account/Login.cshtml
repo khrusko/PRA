@@ -8,8 +8,8 @@
 <h4>Prijava</h4>
 <hr />
 
-@using (Html.BeginForm(actionName: "Index",
-                       controllerName: "Login",
+@using (Html.BeginForm(actionName: "Login",
+                       controllerName: "Account",
                        method: FormMethod.Post,
                        htmlAttributes: new {
                          @class = "mb-4"
@@ -36,8 +36,8 @@
 <p class="text-secondary">
   Nemaš korisnički račun?
   @Html.ActionLink(linkText: "Registriraj se!",
-                   actionName: "Index",
-                   controllerName: "Registration",
+                   actionName: "Register",
+                   controllerName: "Account",
                    routeValues: null,
                    htmlAttributes: new {
                      @class = "link-primary"
@@ -54,7 +54,7 @@
 
       <div class="modal-body">
         @using (Html.BeginForm(actionName: "RequestResetPassword",
-                               controllerName: "Login",
+                               controllerName: "Account",
                                method: FormMethod.Post,
                                htmlAttributes: new {
                                  id = "resetPasswordForm"
