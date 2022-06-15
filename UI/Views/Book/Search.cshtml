@@ -2,6 +2,7 @@
 @model BookSearchVM
 @{
   ViewBag.Title = "Pretraživanje";
+
 }
 
 <h2 class="h2 text-center">Pretraživanje</h2>
@@ -9,26 +10,42 @@
 <hr />
 @using (Html.BeginForm(actionName: "Search",
                        controllerName: "Book",
-                       method: FormMethod.Post)) {
-  <div class="col-4 offset-4">
-    @Html.AntiForgeryToken()
+                       method: FormMethod.Get)) {
+  <div class="row">
+    <div class="col-4 offset-2">
 
-    <div class="mb-3">
-      @Html.LabelFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-label" })
-      @Html.CheckBoxFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-checkbox" })
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-control" })
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-control" })
+      </div>
+
+      <div class="mb-3 align-baseline d-flex">
+        @Html.LabelFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-label me-3" })
+        @Html.CheckBoxFor(expression: model => model.AvailableOnly, htmlAttributes: new { @class = "form-check-input" })
+      </div>
     </div>
 
-    <div class="mb-3">
-      @Html.LabelFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-label" })
-      @Html.TextBoxFor(expression: model => model.AuthorQuery, htmlAttributes: new { @class = "form-control" })
+    <div class="col-4">
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.BookSortType, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.BookSortType, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <input type="submit" class="btn btn-primary px-5" value="Pretraži" />
+      </div>
     </div>
 
-    <div class="mb-3">
-      @Html.LabelFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-label" })
-      @Html.TextBoxFor(expression: model => model.BookQuery, htmlAttributes: new { @class = "form-control" })
-    </div>
-
-    <input type="submit" class="btn btn-primary" value="Pretraži" />
   </div>
 }
 
@@ -51,9 +68,11 @@
                   pageUrl: page => Url.Action(actionName: "Search",
                                               controllerName: "Book",
                                               routeValues: new {
-                                                page,
-                                                availableOnly = Model.AvailableOnly,
-                                                bookQuery = Model.BookQuery,
-                                                authorQuery = Model.AuthorQuery
+                                                Model.BookQuery,
+                                                Model.AuthorQuery,
+                                                Model.AvailableOnly,
+                                                BookSortType = (Int32)Model.BookSortType,
+                                                SortDirection = (Int32)Model.SortDirection,
+                                                page
                                               }))
 </div>
