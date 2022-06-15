@@ -10,7 +10,9 @@
   [DeleteDate]  datetime      NULL,
   [DeletedBy]   int           NULL,
 
-  [SenderUserFK]      int           NOT NULL,
+  [SenderFName]       nvarchar(50)  NOT NULL,
+  [SenderLName]       nvarchar(50)  NOT NULL,
+  [SenderEmail]       nvarchar(100) NOT NULL,
   [SenderDate]        datetime      NOT NULL
     CONSTRAINT [DF_Messages_SenderDate] DEFAULT GETDATE(),
   [SenderMessage]     nvarchar(MAX) NOT NULL,
@@ -23,7 +25,6 @@
   CONSTRAINT [FK_Messages_UpdatedBy] FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Messages_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
 
-  CONSTRAINT [FK_Messages_Users_Sender]     FOREIGN KEY ([SenderUserFK]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Messages_Users_Responder]  FOREIGN KEY ([ResponderUserFK]) REFERENCES [dbo].[Users] ([ID]),
 
   CONSTRAINT [CK_Messages_SenderMessage]    CHECK (LEN([SenderMessage]) > 0),

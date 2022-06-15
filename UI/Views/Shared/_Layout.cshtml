@@ -1,105 +1,41 @@
-﻿
+﻿@using BLL.Projection
+@{
+  IMessage message = TempData["message"] as IMessage;
+}
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @RenderSection("styles", required: false)
+  <meta name="viewport" content="width=device-width" />
+  <title>@ViewBag.Title</title>
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+  @RenderSection("styles", required: false)
 
 </head>
 <body>
-    <div>
-
+  @if (!(message is null)) {
+    <div class="row justify-content-center fixed-top mt-3">
+      <div class="col-4 alert alert-@message.Color alert-dismissible fade show align-items-center" role="alert">
+        <svg class="bi" width="24" height="24" fill="currentColor">
+          <use xlink:href="~/Content/bootstrap-icons.svg#@message.Icon" />
+        </svg>
+        <span>@message.Message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     </div>
-    <header>
-        <div class="px-5 py-2 bg-dark text-white">
-            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-                <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-5 text-white text-decoration-none">
-                    <svg class="bi" width="32" height="32" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#book" />
-                    </svg>
-                </a>
+  }
 
-                <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small">
-                    <li>
-                        <a href="@Url.Action("Index","Book")" class="nav-link text-white">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#house" />
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#search" />
-                            </svg>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="nav-link text-white">
-                            <svg class="bi" width="24" height="24" fill="currentColor">
-                                <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
+  @Html.Partial(partialViewName: "_Navigation")
 
-                <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2" onclick="@("window.location.href='" + @Url.Action("Index", "Login") + "'");">Login</button>
-                    <button type="button" class="btn btn-light" onclick="@("window.location.href='" + @Url.Action("Index", "Registration") + "'");">Sign-up</button>
-                </div>
-            </div>
-        </div>
-    </header>
+  <div class="container mt-5 mb-5">
+    @RenderBody()
+  </div>
 
-    <div>
-        @RenderBody()
-    </div>
+  @Html.Partial(partialViewName: "_Footer")
 
-    <!-- FOOTER BEGIN -->
-    <footer class="px-5 d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-        <ul class="nav col-md-4">
-            <li class="nav-item"><a href="@Url.Action("Index","Book")" class="nav-link px-2 text-muted">Naslovna</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Kontakt</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pravila korištenja</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Izjava o privatnosti</a></li>
-        </ul>
-
-        <p class="col-md-4 mb-0 d-flex justify-content-center text-muted me-auto">&copy; 2022 Bookstore</p>
-
-        <ul class="nav col-md-4 d-flex justify-content-end">
-            <li class="nav-item px-2 text-muted mb-0">Zapratite nas:</li>
-            <li>
-                <a href="https://facebook.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#facebook" />
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="https://instagram.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#instagram" />
-                    </svg>
-                </a>
-            </li>
-            <li>
-                <a href="https://twitter.com" class="nav-link text-muted">
-                    <svg class="bi" width="24" height="24" fill="currentColor">
-                        <use xlink:href="~/Content/bootstrap-icons.svg#twitter" />
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </footer>
-    <!-- FOOTER END -->
-
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @RenderSection("scripts", required: false)
 </body>
 </html>

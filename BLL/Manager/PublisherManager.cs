@@ -23,13 +23,27 @@ namespace BLL.Manager
         Name = model.Name
       };
 
-    public PublisherProjection GetByID(Int32 ID)
+    public PublisherModel Model(PublisherProjection projection)
+      => new PublisherModel
+      {
+        ID = projection.ID,
+        Name = projection.Name
+      };
+
+    public PublisherProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      PublisherModel model = (Repository as IPublisherRepository).Read(ID);
+      PublisherModel model = availabilityCheck
+        ? (Repository as IPublisherRepository).ReadByIDAvailable(ID)
+        : (Repository as IPublisherRepository).ReadByID(ID);
       return model is null ? null : Project(model);
     }
 
-    public IEnumerable<PublisherProjection> GetAll()
-      => (Repository as IPublisherRepository).Read().Select(Project);
+    public IEnumerable<PublisherProjection> GetAll(Boolean availabilityCheck = true)
+      => availabilityCheck
+      ? (Repository as IPublisherRepository).ReadAllAvailable().Select(Project)
+      : (Repository as IPublisherRepository).ReadAll().Select(Project);
+
+    public Int32 Remove(Int32 ID, Int32 DeletedBy)
+      => (Repository as IPublisherRepository).Delete(ID, DeletedBy);
   }
 }

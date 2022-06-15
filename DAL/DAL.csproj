@@ -82,7 +82,8 @@
     <Compile Include="Abstract\Repository\Database\IDatabaseRepository.cs" />
     <Compile Include="Abstract\Repository\IIdentifiableRepository.cs" />
     <Compile Include="Abstract\Repository\IRepository.cs" />
-    <Compile Include="Status\RegistrationStatus.cs" />
+    <Compile Include="Enum\Method\ReadMethod.cs" />
+    <Compile Include="Enum\Status\RegistrationStatus.cs" />
     <Compile Include="Model\AuthorModel.cs" />
     <Compile Include="Model\BookModel.cs" />
     <Compile Include="Model\BookStoreModel.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="Factory\BookRepositoryFactory.cs" />
     <Compile Include="Factory\BookStoreRepositoryFactory.cs" />
     <Compile Include="Factory\BranchOfficeRepositoryFactory.cs" />
-    <Compile Include="Factory\ConnectionStringManager.cs" />
+    <Compile Include="Factory\ConnectionStringFactory.cs" />
     <Compile Include="Factory\LoanRepositoryFactory.cs" />
     <Compile Include="Factory\MessageRepositoryFactory.cs" />
     <Compile Include="Factory\PublisherRepositoryFactory.cs" />
@@ -115,7 +116,7 @@
     <Compile Include="Repository\Database\PurchaseDatabaseRepository.cs" />
     <Compile Include="Repository\Database\SubscriptionDatabaseRepository.cs" />
     <Compile Include="Repository\Database\UserDatabaseRepository.cs" />
-    <Compile Include="Status\ResetPasswordStatus.cs" />
+    <Compile Include="Enum\Status\ResetPasswordStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

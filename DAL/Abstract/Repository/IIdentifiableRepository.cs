@@ -8,7 +8,7 @@ namespace DAL.Abstract.Repository
     where T : class, IIdentifiable<K>
   {
     K Create(T entity);
-    T Read(K ID);
+    T ReadByID(K ID);
     Int32 Update(K ID, T entity);
     Int32 Delete(K ID, T entity);
   }

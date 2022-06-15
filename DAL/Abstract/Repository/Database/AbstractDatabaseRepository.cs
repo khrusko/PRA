@@ -6,6 +6,7 @@ using System.Linq;
 
 using DAL.Abstract.Model;
 using DAL.Abstract.Repository.Model;
+using DAL.Method;
 using DAL.Factory;
 
 using Microsoft.ApplicationBlocks.Data;
@@ -15,6 +16,11 @@ namespace DAL.Abstract.Repository.Database
   internal abstract class AbstractDatabaseRepository<T, K> : IDatabaseRepository<T, K>, IModelRepository<T, K>
     where T : class, IModel<K>
   {
+    private static readonly String CREATE_PROCEDURE_NAME = "Create";
+    private static readonly String READ_PROCEDURE_NAME   = "Read";
+    private static readonly String UPDATE_PROCEDURE_NAME = "Update";
+    private static readonly String DELETE_PROCEDURE_NAME = "Delete";
+
     public String ConnectionString => ConnectionStringFactory.GetConnectionString();
     public abstract String EntityName { get; }
     public abstract IDictionary<String, SqlDbType> DbKeyTypePairs { get; }
@@ -51,7 +57,7 @@ namespace DAL.Abstract.Repository.Database
       };
       parameters.Add(returnValue);
 
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Create), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + CREATE_PROCEDURE_NAME, parameters.ToArray());
 
       Type targetType = typeof(K);
       Type conversionType = Nullable.GetUnderlyingType(targetType) ?? targetType;
@@ -87,25 +93,32 @@ namespace DAL.Abstract.Repository.Database
       };
       parameters.Add(returnValue);
 
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Delete), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + DELETE_PROCEDURE_NAME, parameters.ToArray());
 
       return Int32.Parse(returnValue.Value.ToString());
     }
 
-    public virtual T Read(K ID)
+    public virtual T ReadByID(K ID)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>
       {
-        new SqlParameter()
+        new SqlParameter
+        {
+          ParameterName = "@Method",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = Convert.ToInt32(ReadMethod.BY_ID),
+        },
+        new SqlParameter
         {
           ParameterName = "@ID",
           Direction = ParameterDirection.Input,
           SqlDbType = DbKeyTypePairs["ID"],
-          Value = ID,
+          Value = ID
         }
       };
 
-      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Read), parameters.ToArray());
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + READ_PROCEDURE_NAME, parameters.ToArray());
 
       return reader.Read()
         ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<T>(), (obj, prop) =>
@@ -116,11 +129,49 @@ namespace DAL.Abstract.Repository.Database
         : default;
     }
 
-    public virtual IEnumerable<T> Read()
+    public virtual T ReadByIDAvailable(K ID)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>
       {
-        new SqlParameter()
+        new SqlParameter
+        {
+          ParameterName = "@Method",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = Convert.ToInt32(ReadMethod.BY_ID_AVAILABLE),
+        },
+        new SqlParameter
+        {
+          ParameterName = "@ID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = ID,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + READ_PROCEDURE_NAME, parameters.ToArray());
+
+      return reader.Read()
+        ? DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<T>(), (obj, prop) =>
+        {
+          typeof(T).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        })
+        : default;
+    }
+
+    public virtual IEnumerable<T> ReadAll()
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>
+      {
+        new SqlParameter
+        {
+          ParameterName = "@Method",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = Convert.ToInt32(ReadMethod.ALL),
+        },
+        new SqlParameter
         {
           ParameterName = "@ID",
           Direction = ParameterDirection.Input,
@@ -129,7 +180,39 @@ namespace DAL.Abstract.Repository.Database
         }
       };
 
-      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Read), parameters.ToArray());
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + READ_PROCEDURE_NAME, parameters.ToArray());
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<T>(), (obj, prop) =>
+        {
+          typeof(T).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
+
+    public virtual IEnumerable<T> ReadAllAvailable()
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>
+      {
+        new SqlParameter
+        {
+          ParameterName = "@Method",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = Convert.ToInt32(ReadMethod.ALL_AVAILABLE),
+        },
+        new SqlParameter
+        {
+          ParameterName = "@ID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = DBNull.Value,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + READ_PROCEDURE_NAME, parameters.ToArray());
 
       while (reader.Read())
       {
@@ -182,7 +265,7 @@ namespace DAL.Abstract.Repository.Database
       };
       parameters.Add(returnValue);
 
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + UPDATE_PROCEDURE_NAME, parameters.ToArray());
 
       return Int32.Parse(returnValue.Value.ToString());
     }
