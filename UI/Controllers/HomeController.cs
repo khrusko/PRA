@@ -58,9 +58,12 @@ namespace UI.Controllers
     [HttpPost]
     public ActionResult ContactUs(ContactFormVM model)
     {
-      if (!ModelState.IsValid) return View(viewName: nameof(ContactUs), model: model);
+      if (!ModelState.IsValid)
+      {
+        return View(viewName: nameof(ContactUs), model: model);
+      }
 
-      _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
+      _ = _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
 
       Message = new InfoMessage(message: "Upit je uspješno poslan");
       return RedirectToAction(actionName: "Index", controllerName: "Book");

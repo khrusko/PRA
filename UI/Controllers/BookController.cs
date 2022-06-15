@@ -45,7 +45,7 @@ namespace UI.Controllers
                                           join publisher in _publisherManager.GetAll()
                                             on book.PublisherFK equals publisher.ID
                                           join author in _authorManager.GetAll()
-                                            on book.PublisherFK equals author.ID
+                                            on book.AuthorFK equals author.ID
                                           where !availableOnly || book.Quantity > 0
                                           where book.Title.ToLower().Contains(value: bookQuery?.ToLower() ?? String.Empty)
                                           where $"{author.FName} {author.LName}".ToLower().Contains(value: authorQuery?.ToLower() ?? String.Empty)

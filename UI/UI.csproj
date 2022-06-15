@@ -193,6 +193,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="Infrastructure\UserAuthenticate.cs" />
+    <Compile Include="Infrastructure\UserAuthorize.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
     <Compile Include="Models\BookPublisherVM.cs" />
     <Compile Include="Models\BookSearchVM.cs" />
@@ -201,6 +203,7 @@
     <Compile Include="Models\Concrete\AlertMessage.cs" />
     <Compile Include="Models\Abstract\MessageBase.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
+    <Compile Include="Models\UserEditVM.cs" />
     <Compile Include="Models\Enums\BookSortType.cs" />
     <Compile Include="Models\Enums\MessageType.cs" />
     <Compile Include="Models\Enums\SortDirection.cs" />
@@ -257,6 +260,7 @@
     <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,4 +1,5 @@
-﻿@model UI.Models.ContactFormVM
+﻿@using UI.Models
+@model ContactFormVM
 
 @{
   ViewBag.Title = "Kontaktirajte nas";
@@ -7,7 +8,7 @@
 <h4>Kontaktirajte nas</h4>
 <hr />
 
-@using (Html.BeginForm(actionName: "ContactUs", controllerName: "Generic", method: FormMethod.Post)) {
+@using (Html.BeginForm(actionName: "ContactUs", controllerName: "Home", method: FormMethod.Post)) {
   @Html.AntiForgeryToken()
 
   <div class="mb-3">
