@@ -114,5 +114,68 @@ namespace DAL.Repository.Database
 
       return Int32.Parse(returnValue.Value.ToString());
     }
+
+    public IEnumerable<LoanModel> ReadByUserFK(Int32 UserFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@Active",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Bit,
+          Value = false,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@UserFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = UserFK,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByUserFK), parameters.ToArray());
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<LoanModel>(), (obj, prop) =>
+        {
+          typeof(LoanModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
+    public IEnumerable<LoanModel> ReadByUserFKActive(Int32 UserFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@Active",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Bit,
+          Value = true,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@UserFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = SqlDbType.Int,
+          Value = UserFK,
+        }
+      };
+
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByUserFK), parameters.ToArray());
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<LoanModel>(), (obj, prop) =>
+        {
+          typeof(LoanModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
   }
 }

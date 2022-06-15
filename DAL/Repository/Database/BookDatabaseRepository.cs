@@ -32,114 +32,13 @@ namespace DAL.Repository.Database
         { "Description",    SqlDbType.NVarChar },
         { "IsNew",          SqlDbType.Bit },
         { "PublisherFK",    SqlDbType.Int },
+        { "AuthorFK",       SqlDbType.Int },
         { "PageCount",      SqlDbType.Int },
         { "PurchasePrice",  SqlDbType.Decimal },
         { "LoanPrice",      SqlDbType.Decimal },
         { "Quantity",       SqlDbType.Int },
         { "ImagePath",      SqlDbType.NVarChar },
       };
-
-    public override Int32 Create(BookModel entity) => throw new NotImplementedException();
-    public override Int32 Create(BookModel entity, Int32 CreatedBy) => throw new NotImplementedException();
-    public Int32 Create(BookModel entity, IEnumerable<Int32> Authors, Int32 CreatedBy)
-    {
-      IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(IModel<Int32>).GetProperties().Select(x => x.Name).ToArray();
-
-      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
-      {
-        if (unusedProperties.Contains(item.Key)) continue;
-        parameters.Add(new SqlParameter()
-        {
-          ParameterName = "@" + item.Key,
-          Direction = ParameterDirection.Input,
-          SqlDbType = item.Value,
-          Value = typeof(BookModel).GetProperty(item.Key).GetValue(entity),
-        });
-      }
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@Authors",
-        Direction = ParameterDirection.Input,
-        SqlDbType = SqlDbType.Structured,
-        Value = Authors,
-      });
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@CreatedBy",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["CreatedBy"],
-        Value = CreatedBy,
-      });
-
-      var returnValue = new SqlParameter()
-      {
-        Direction = ParameterDirection.ReturnValue
-      };
-      parameters.Add(returnValue);
-
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Create), parameters.ToArray());
-
-      return Int32.Parse(returnValue.Value.ToString());
-    }
-
-    public override Int32 Update(BookModel entity) => throw new NotImplementedException();
-    public override Int32 Update(Int32 ID, BookModel entity) => throw new NotImplementedException();
-    public override Int32 Update(Int32 ID, BookModel entity, Int32 UpdatedBy) => throw new NotImplementedException();
-    public Int32 Update(BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy) => Update(entity.ID, entity, Authors, UpdatedBy);
-    public Int32 Update(Int32 ID, BookModel entity, IEnumerable<Int32> Authors, Int32 UpdatedBy)
-    {
-      IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(IModel<Int32>).GetProperties().Select(x => x.Name).ToArray();
-
-      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
-      {
-        if (unusedProperties.Contains(item.Key)) continue;
-        parameters.Add(new SqlParameter()
-        {
-          ParameterName = "@" + item.Key,
-          Direction = ParameterDirection.Input,
-          SqlDbType = item.Value,
-          Value = typeof(BookModel).GetProperty(item.Key).GetValue(entity),
-        });
-      }
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@ID",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["ID"],
-        Value = ID,
-      });
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@Authors",
-        Direction = ParameterDirection.Input,
-        SqlDbType = SqlDbType.Structured,
-        Value = Authors,
-      });
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@UpdatedBy",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["UpdatedBy"],
-        Value = UpdatedBy,
-      });
-
-      var returnValue = new SqlParameter()
-      {
-        Direction = ParameterDirection.ReturnValue
-      };
-      parameters.Add(returnValue);
-
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Update), parameters.ToArray());
-
-      return Int32.Parse(returnValue.Value.ToString());
-    }
 
     public IEnumerable<BookModel> ReadByAuthorFK(Int32 AuthorFK)
     {
