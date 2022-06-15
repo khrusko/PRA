@@ -57,16 +57,16 @@ namespace BLL.Manager
       ? (Repository as IMessageRepository).ReadAllAvailable().Select(Project)
       : (Repository as IMessageRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public Int32 Remove(Int32 ID, Int32 deletedBy) => throw new NotImplementedException();
 
     public Int32 Send(MessageProjection projection)
       => Send(projection.SenderFName, projection.SenderLName, projection.SenderEmail, projection.SenderMessage);
-    public Int32 Send(String SenderFName, String SenderLName, String SenderEmail, String SenderMessage)
-      => (Repository as IMessageRepository).Send(SenderFName, SenderLName, SenderEmail, SenderMessage);
+    public Int32 Send(String senderFName, String senderLName, String senderEmail, String senderMessage)
+      => (Repository as IMessageRepository).Send(senderFName, senderLName, senderEmail, senderMessage);
 
     public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
-    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
-      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage);
+    public Int32 Respond(Int32 ID, Int32 responderUserFK, String responderMessage)
+      => (Repository as IMessageRepository).Respond(ID, responderUserFK, responderMessage);
   }
 }

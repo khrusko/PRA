@@ -1,0 +1,68 @@
+﻿@using BLL.Projection
+@model UserProjection
+
+@{
+  ViewBag.Title = "Profil";
+}
+
+<section class="h-100 gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-lg-9 col-xl-7">
+        <div class="card">
+          <div class="rounded-top text-white d-flex flex-row bg-dark">
+            <div class="ms-4 mt-5 d-flex align-items-end" style="width: 150px;">
+              <img src="@Url.Content(!String.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "~/Content/DefaultUser.jpg")"
+                   alt="@Model.FName @Model.LName profile picture"
+                   class="img-fluid img-thumbnail mb-2"
+                   style="width: 150px; z-index: 1">
+            </div>
+            <div class="ms-3 mt-5">
+              <h5>@Model.FName @Model.LName</h5>
+              <p class="mb-1">@Model.Email</p>
+              <p class="mb-1">@Model.Address</p>
+            </div>
+          </div>
+          <div class="p-4 text-black d-flex justify-content-between" style="background-color: #f8f9fa;">
+            <div class="d-flex align-items-center">
+              @Html.ActionLink(linkText: "Uredi profil",
+                               actionName: "Edit",
+                               controllerName: "User",
+                               routeValues: null,
+                               htmlAttributes: new {
+                                 @class = "btn btn-outline-dark me-3",
+                                 style = "z-index: 1;"
+                               })
+              <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" href="#deleteUserModal">Obriši profil</button>
+            </div>
+            <div class="d-flex justify-content-end text-center py-1">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-body p-4 text-center">
+        <h5 class="mb-0">Jeste li sigurni da želite obrisati profil?</h5>
+        <p class="mb-0 mt-3">Brisanjem profila gubite mogućnost pristupa aplikaciji.</p>
+        <p class="mb-0">Za vraćanje profila morati ćete kontaktirati djelatnike.</p>
+      </div>
+      <div class="modal-footer flex-nowrap p-0">
+        @Html.ActionLink(linkText: "Obriši",
+                         actionName: "Delete",
+                         controllerName: "User",
+                         routeValues: null,
+                         htmlAttributes: new {
+                           @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
+                           style = "z-index: 1;"
+                         })
+        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
+      </div>
+    </div>
+  </div>
+</div>

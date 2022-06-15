@@ -42,7 +42,7 @@ namespace BLL.Manager
     public IEnumerable<BookStoreProjection> GetAll(Boolean availabilityCheck = true)
       => throw new NotImplementedException();
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public Int32 Remove(Int32 ID, Int32 deletedBy) => throw new NotImplementedException();
 
     public BookStoreProjection GetBookStore()
     {

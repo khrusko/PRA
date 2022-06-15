@@ -6,6 +6,7 @@ using System.Web;
 
 using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Abstract.Projection;
 using BLL.Factory;
 using BLL.Projection;
 using BLL.Status;
@@ -65,6 +66,8 @@ namespace BLL.Manager
       ? (Repository as IUserRepository).ReadAllAvailable().Select(Project)
       : (Repository as IUserRepository).ReadAll().Select(Project);
 
+    public Int32 Remove(Int32 ID)
+      => Remove(ID, ID);
     public Int32 Remove(Int32 ID, Int32 DeletedBy)
       => (Repository as IUserRepository).Delete(ID, DeletedBy);
 
@@ -153,6 +156,27 @@ namespace BLL.Manager
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
       emailSender.SendEmail(subject, body);
+    }
+
+    public Int32 Update(UserProjection projection, HttpPostedFileBase file)
+      => Update(projection.ID, projection.FName, projection.LName, file, projection.Address);
+    public Int32 Update(Int32 ID, String fName, String lName, HttpPostedFileBase file, String address)
+    {
+      String imagePath;
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        imagePath = imageSaver.RelativePath;
+      }
+      else
+      {
+        imagePath = GetByID(ID).ImagePath;
+      }
+
+      return (Repository as IUserRepository).EditProfile(ID, fName, lName, imagePath, address, ID);
     }
   }
 }

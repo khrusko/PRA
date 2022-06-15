@@ -51,7 +51,7 @@ namespace BLL.Manager
       ? (Repository as IAuthorRepository).ReadAllAvailable().Select(Project)
       : (Repository as IAuthorRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IAuthorRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IAuthorRepository).Delete(ID, deletedBy);
   }
 }
