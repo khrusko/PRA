@@ -57,5 +57,8 @@ namespace BLL.Manager
       => Purchase(projection.BookFK, projection.UserFK, projection.Quantity);
     public Int32 Purchase(Int32 BookFK, Int32 UserFK, Int32 Quantity)
       => (Repository as IPurchaseRepository).Purchase(BookFK, UserFK, Quantity, UserFK);
+
+    public IEnumerable<PurchaseProjection> GetByUserFK(Int32 UserFK)
+      => (Repository as IPurchaseRepository).ReadByUserFK(UserFK).Select(Project);
   }
 }
