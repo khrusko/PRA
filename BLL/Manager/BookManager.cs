@@ -30,6 +30,7 @@ namespace BLL.Manager
         Description = model.Description,
         IsNew = model.IsNew,
         PublisherFK = model.PublisherFK,
+        AuthorFK = model.AuthorFK,
         PageCount = model.PageCount,
         PurchasePrice = model.PurchasePrice,
         LoanPrice = model.LoanPrice,
@@ -47,6 +48,7 @@ namespace BLL.Manager
         Description = projection.Description,
         IsNew = projection.IsNew,
         PublisherFK = projection.PublisherFK,
+        AuthorFK = projection.AuthorFK,
         PageCount = projection.PageCount,
         PurchasePrice = projection.PurchasePrice,
         LoanPrice = projection.LoanPrice,
@@ -73,7 +75,7 @@ namespace BLL.Manager
     public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 AuthorFK)
       => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);
 
-    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 CreatedBy)
+    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, Int32 CreatedBy)
     {
       if (!(Image is null))
       {
@@ -95,10 +97,10 @@ namespace BLL.Manager
         projection.ImagePath = "";
       }
 
-      return (Repository as IBookRepository).Create(Model(projection), Authors, CreatedBy);
+      return (Repository as IBookRepository).Create(Model(projection), CreatedBy);
     }
 
-    public Int32 Update(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 UpdatedBy)
+    public Int32 Update(BookProjection projection, HttpPostedFileBase Image, Int32 UpdatedBy)
     {
       if (!(Image is null))
       {
@@ -116,7 +118,7 @@ namespace BLL.Manager
         }
       }
 
-      return (Repository as IBookRepository).Update(projection.ID, Model(projection), Authors, UpdatedBy);
+      return (Repository as IBookRepository).Update(projection.ID, Model(projection), UpdatedBy);
     }
   }
 }

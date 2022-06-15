@@ -8,6 +8,7 @@ using BLL.Manager;
 using BLL.Projection;
 
 using UI.Models;
+using UI.Models.Enums;
 
 namespace UI.Controllers
 {
@@ -33,7 +34,12 @@ namespace UI.Controllers
     }
 
     [HttpGet]
-    public ViewResult Search(Boolean availableOnly = false, String bookQuery = null, String authorQuery = null, Int32 page = 1)
+    public ViewResult Search(String bookQuery,
+                             String authorQuery,
+                             Boolean availableOnly = false,
+                             BookSortType bookSortType = 0,
+                             SortDirection sortDirection = 0,
+                             Int32 page = 1)
     {
       IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
                                           join publisher in _publisherManager.GetAll()
@@ -50,6 +56,21 @@ namespace UI.Controllers
                                             Author = author
                                           };
 
+      switch (bookSortType)
+      {
+        case BookSortType.TITLE:
+          books = books.SortBy(keySelector: obj => obj.Book.Title, sortDirection: sortDirection);
+          break;
+        case BookSortType.AUTHOR:
+          books = books.SortBy(keySelector: obj => $"{obj.Author.FName} {obj.Author.LName}", sortDirection: sortDirection);
+          break;
+        case BookSortType.PURCHASE_PRICE:
+          books = books.SortBy(keySelector: obj => obj.Book.PurchasePrice, sortDirection: sortDirection);
+          break;
+        default:
+          throw new InvalidOperationException();
+      }
+
       return View(viewName: nameof(Search),
                   model: new BookSearchVM
                   {
@@ -63,44 +84,9 @@ namespace UI.Controllers
                     },
                     AvailableOnly = availableOnly,
                     BookQuery = bookQuery,
-                    AuthorQuery = authorQuery
-                  });
-    }
-
-    [HttpPost]
-    public ActionResult Search(BookSearchVM model)
-    {
-      if (!ModelState.IsValid)
-        return Search();
-
-      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
-                                          join publisher in _publisherManager.GetAll()
-                                            on book.PublisherFK equals publisher.ID
-                                          join author in _authorManager.GetAll()
-                                            on book.PublisherFK equals author.ID
-                                          where !model.AvailableOnly || book.Quantity > 0
-                                          where book.Title.ToLower().Contains(value: model.BookQuery?.ToLower() ?? String.Empty)
-                                          where $"{author.FName} {author.LName}".ToLower().Contains(value: model.AuthorQuery?.ToLower() ?? String.Empty)
-                                          select new FullBookInfoVM
-                                          {
-                                            Book = book,
-                                            Publisher = publisher,
-                                            Author = author
-                                          };
-
-      return View(viewName: nameof(Search),
-                  model: new BookSearchVM
-                  {
-                    BookPublishers = books.Take(count: PAGE_SIZE),
-                    PagingInfo = new PagingInfo
-                    {
-                      CurrentPage = 1,
-                      ItemsPerPage = PAGE_SIZE,
-                      TotalItems = books.Count()
-                    },
-                    AvailableOnly = model.AvailableOnly,
-                    BookQuery = model.BookQuery,
-                    AuthorQuery = model.AuthorQuery
+                    AuthorQuery = authorQuery,
+                    BookSortType = bookSortType,
+                    SortDirection = sortDirection
                   });
     }
   }

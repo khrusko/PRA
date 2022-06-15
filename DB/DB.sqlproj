@@ -88,16 +88,14 @@
     <Folder Include="Programmability\Stored Procedures\Users" />
     <Folder Include="Programmability\Stored Procedures\Users\BL" />
     <Folder Include="Programmability\Stored Procedures\Users\CRUD" />
-    <Folder Include="Programmability\Stored Procedures\Authors\BL" />
-    <Folder Include="Programmability\Stored Procedures\Books\BL" />
     <Folder Include="Programmability\Stored Procedures\Users\Jobs" />
+    <Folder Include="Programmability\Stored Procedures\Books\BL" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
     <Build Include="Tables\Authors.sql" />
     <Build Include="Tables\Publishers.sql" />
     <Build Include="Tables\Books.sql" />
-    <Build Include="Tables\BooksAuthors.sql" />
     <Build Include="Tables\BookStores.sql" />
     <Build Include="Tables\BranchOffices.sql" />
     <Build Include="Tables\Loans.sql" />
@@ -151,8 +149,6 @@
     <Build Include="Programmability\Stored Procedures\Users\CRUD\Read.sql" />
     <Build Include="Programmability\Stored Procedures\Users\CRUD\Update.sql" />
     <Build Include="Programmability\Types\Ids.sql" />
-    <Build Include="Programmability\Stored Procedures\Authors\BL\ReadByBookFK.sql" />
-    <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\GenerateUserID.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
@@ -162,6 +158,8 @@
     <Build Include="Programmability\Stored Procedures\Users\BL\ResetPassword.sql" />
     <Build Include="Programmability\Stored Procedures\Users\Jobs\DisableTimeoutResetPassword.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\ReadByEmail.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\ReadByUserFK.sql" />
+    <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

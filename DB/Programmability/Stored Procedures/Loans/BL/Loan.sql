@@ -3,6 +3,19 @@
                                    @PlannedReturnDate AS smalldatetime,
                                    @CreatedBy AS int)
 AS BEGIN
+    DECLARE @ActiveLoanCount AS int = (
+    SELECT ALL TOP 3
+      COUNT(*)
+    FROM [dbo].[Loans]
+    WHERE [DeleteDate] IS NULL AND
+          [ReturnDate] IS NULL AND
+          [UserFK] = @UserFK
+  )
+
+  IF @ActiveLoanCount > 3 BEGIN
+    RETURN 0
+  END
+
   DECLARE @LoanPrice AS decimal(5, 2)
   DECLARE @Quantity AS int
   

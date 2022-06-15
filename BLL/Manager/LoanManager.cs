@@ -66,5 +66,10 @@ namespace BLL.Manager
 
     public Int32 Return(Int32 ID, Int32 UpdatedBy)
       => (Repository as ILoanRepository).Return(ID, UpdatedBy);
+
+    public IEnumerable<LoanProjection> GetByUserFK(Int32 UserFK)
+      => (Repository as ILoanRepository).ReadByUserFK(UserFK).Select(Project);
+    public IEnumerable<LoanProjection> GetActiveByUserFK(Int32 UserFK)
+      => (Repository as ILoanRepository).ReadByUserFKActive(UserFK).Select(Project);
   }
 }

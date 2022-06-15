@@ -17,6 +17,7 @@
   [IsNew]         bit           NOT NULL
     CONSTRAINT [DF_Books_IsNew] DEFAULT 1,
   [PublisherFK]   int           NOT NULL,
+  [AuthorFK]      int           NOT NULL,
   [PageCount]     int           NOT NULL,
   [PurchasePrice] decimal(6, 2) NOT NULL,
   [LoanPrice]     decimal(6, 2) NOT NULL,
@@ -30,6 +31,7 @@
   CONSTRAINT [FK_Books_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
 
   CONSTRAINT [FK_Books_Publishers]    FOREIGN KEY ([PublisherFK]) REFERENCES [dbo].[Publishers] ([ID]),
+  CONSTRAINT [FK_Books_Authors]       FOREIGN KEY ([AuthorFK])    REFERENCES [dbo].[Authors] ([ID]),
 
   CONSTRAINT [CK_Books_PurchasePrice] CHECK ([PurchasePrice] >= 0),
   CONSTRAINT [CK_Books_LoanPrice]     CHECK ([LoanPrice] >= 0),
