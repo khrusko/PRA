@@ -188,6 +188,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpErrorsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,7 +201,9 @@
     <Compile Include="Models\Concrete\AlertMessage.cs" />
     <Compile Include="Models\Abstract\MessageBase.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
+    <Compile Include="Models\Enums\BookSortType.cs" />
     <Compile Include="Models\Enums\MessageType.cs" />
+    <Compile Include="Models\Enums\SortDirection.cs" />
     <Compile Include="Models\FullBookInfoVM.cs" />
     <Compile Include="Models\HomeVM.cs" />
     <Compile Include="Models\LoginVM.cs" />
