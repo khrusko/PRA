@@ -166,7 +166,7 @@ namespace DAL.Repository.Database
         }
       };
 
-      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByUserFK), parameters.ToArray());
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadByUserFKActive), parameters.ToArray());
 
       while (reader.Read())
       {
