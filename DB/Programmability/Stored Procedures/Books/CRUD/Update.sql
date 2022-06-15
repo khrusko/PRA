@@ -5,12 +5,12 @@
                                      @Description AS nvarchar(MAX), 
                                      @IsNew AS bit, 
                                      @PublisherFK AS int, 
+                                     @AuthorFK AS int,
                                      @PageCount AS int,
                                      @PurchasePrice AS decimal(6, 2), 
                                      @LoanPrice AS decimal(5, 2), 
                                      @Quantity AS int, 
                                      @ImagePath AS nvarchar(500),
-                                     @Authors AS [dbo].[Ids] READONLY,
                                      @UpdatedBy AS int)
 AS BEGIN
   DECLARE @IsUnique AS int = (
@@ -35,6 +35,7 @@ AS BEGIN
     [Description]   = @Description, 
     [IsNew]         = @IsNew, 
     [PublisherFK]   = @PublisherFK, 
+    [AuthorFK]      = @AuthorFK,
     [PageCount]     = @PageCount,
     [PurchasePrice] = @PurchasePrice,
     [LoanPrice]     = @LoanPrice, 
@@ -42,24 +43,6 @@ AS BEGIN
     [ImagePath]     = @ImagePath
   WHERE [ID] = @ID AND [DeleteDate] IS NULL
 
-  DECLARE @RowCount AS int = @@ROWCOUNT
-  IF @RowCount = 0 BEGIN
-    RETURN 0
-  END
-
-  DELETE FROM [dbo].[BooksAuthors]
-  WHERE [BookFK] = @ID
-
-  INSERT INTO [dbo].[BooksAuthors]
-  (
-    [BookFK],
-    [AuthorFK]
-  )
-  SELECT ALL
-    @ID,
-    [ID]
-  FROM @Authors
-  
-  RETURN @RowCount
+  RETURN  @@ROWCOUNT
 END
 GO

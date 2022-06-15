@@ -13,6 +13,7 @@ namespace BLL.Projection
     public String Description { get; set; }
     public Boolean IsNew { get; set; }
     public Int32 PublisherFK { get; set; }
+    public Int32 AuthorFK { get; set; }
     public Int32 PageCount { get; set; }
     public Decimal PurchasePrice { get; set; }
     public Decimal LoanPrice { get; set; }

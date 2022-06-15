@@ -20,8 +20,6 @@ AS BEGIN
     [Quantity], 
     [ImagePath]
   FROM [dbo].[Books]
-    INNER JOIN [dbo].[BooksAuthors]
-      ON [BookFK] = [ID]
   WHERE [AuthorFK] = @AuthorFK
 END
 GO
