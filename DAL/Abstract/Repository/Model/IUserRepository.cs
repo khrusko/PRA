@@ -15,5 +15,8 @@ namespace DAL.Abstract.Repository.Model
     Int32 RequestResetPassword(String Email);
     ResetPasswordStatus CheckResetPasswordStatus(Guid GUID);
     Int32 ResetPassword(Guid GUID, String Password);
+    Int32 EditProfile(UserModel entity);
+    Int32 EditProfile(UserModel entity, Int32 UpdatedBy);
+    Int32 EditProfile(Int32 ID, String FName, String LName, String ImagePath, String Address, Int32 UpdatedBy);
   }
 }
