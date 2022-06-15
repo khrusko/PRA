@@ -20,21 +20,44 @@ namespace UI.Controllers
     private readonly ILoanManager _loanManager = new LoanManager();
 
     [HttpGet]
-    public ViewResult Index()
+    public ActionResult Index()
     {
-      IEnumerable<LoanBookVM> loans = from loan in _loanManager.GetActiveByUserFK(LoggedInUser.ID)
-                                          join book in _bookManager.GetAll()
-                                            on loan.BookFK equals book.ID
-                                          join author in _authorManager.GetAll()
-                                            on book.AuthorFK equals author.ID
+      if (!ModelState.IsValid) return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
+      if (LoggedInUser == null) return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
+      IEnumerable<LoanBookVM> loans;
+      if (!LoggedInUser.IsAdmin)
+      {
+        loans = from loan in _loanManager.GetActiveByUserFK(LoggedInUser.ID)
+                join book in _bookManager.GetAll()
+                  on loan.BookFK equals book.ID
+                join author in _authorManager.GetAll()
+                  on book.AuthorFK equals author.ID
 
-                                          select new LoanBookVM
-                                          {
-                                            Book = book,
-                                            Author = author,
-                                            Loan = loan
-                                          };
-      return View("Index", loans);
+                select new LoanBookVM
+                {
+                  Book = book,
+                  Author = author,
+                  Loan = loan
+                };
+        return View("Index", loans);
+      }
+      else if (LoggedInUser.IsAdmin)
+      {
+        loans = from loan in _loanManager.GetAll()
+                join book in _bookManager.GetAll()
+                  on loan.BookFK equals book.ID
+                join author in _authorManager.GetAll()
+                  on book.AuthorFK equals author.ID
+
+                select new LoanBookVM
+                {
+                  Book = book,
+                  Author = author,
+                  Loan = loan
+                };
+        return View("Index", loans);
+      }
+      return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
     }
 
     public ActionResult LoanHistory()
@@ -58,20 +81,62 @@ namespace UI.Controllers
     public ActionResult ShoppingHistory()
     {
       IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetByUserFK(LoggedInUser.ID)
-                                      join book in _bookManager.GetAll()
-                                        on purchase.BookFK equals book.ID
-                                      join author in _authorManager.GetAll()
-                                        on book.AuthorFK equals author.ID
+                                              join book in _bookManager.GetAll()
+                                                on purchase.BookFK equals book.ID
+                                              join author in _authorManager.GetAll()
+                                                on book.AuthorFK equals author.ID
 
-                                      select new PurchaseBookVM
-                                      {
-                                        Book = book,
-                                        Author = author,
-                                        Purchase = purchase
-                                      };
+                                              select new PurchaseBookVM
+                                              {
+                                                Book = book,
+                                                Author = author,
+                                                Purchase = purchase
+                                              };
       return View("ShoppingHistory", purchases);
 
     }
 
+    public ActionResult AddAuthor()
+    {
+      return View();
+    }
+
+    public ActionResult AddBook()
+    {
+      return View();
+    }
+
+    public ActionResult AddEmployee()
+    {
+      return View();
+    }
+
+    public ActionResult EditBranchOfficeDetails()
+    {
+      return View();
+    }
+
+    public ActionResult SalesHistory()
+    {
+      IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetAll()
+                                              join book in _bookManager.GetAll()
+                                                on purchase.BookFK equals book.ID
+                                              join author in _authorManager.GetAll()
+                                                on book.AuthorFK equals author.ID
+
+                                              select new PurchaseBookVM
+                                              {
+                                                Book = book,
+                                                Author = author,
+                                                Purchase = purchase
+                                              };
+      return View("SalesHistory", purchases);
+    }
+
+    public ActionResult UserMessages()
+    {
+      IEnumerable<MessageProjection> messages = _messageManager.GetAll();
+      return View("UserMessages",messages);
+    }
   }
 }

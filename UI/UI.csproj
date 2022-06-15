@@ -267,6 +267,13 @@
     <Content Include="Views\Dashboard\ShoppingHistory.cshtml" />
     <Content Include="Views\Shared\_LoanCard.cshtml" />
     <Content Include="Views\Shared\_PurchaseCard.cshtml" />
+    <Content Include="Views\Dashboard\SalesHistory.cshtml" />
+    <Content Include="Views\Dashboard\UserMessages.cshtml" />
+    <Content Include="Views\Dashboard\AddEmployee.cshtml" />
+    <Content Include="Views\Dashboard\AddAuthor.cshtml" />
+    <Content Include="Views\Dashboard\AddBook.cshtml" />
+    <Content Include="Views\Dashboard\EditBranchOfficeDetails.cshtml" />
+    <Content Include="Views\Dashboard\_RespondUserMessage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

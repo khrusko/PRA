@@ -9,6 +9,11 @@
 <html>
 <body>
 
+  <div>
+    <input type="button" class="btn btn-primary" value="Povijest posudbi" onclick="@("window.location.href='" + @Url.Action(actionName:"LoanHistory",controllerName:"Dashboard")+"'" );" />
+    <input type="button" class="btn btn-primary" value="Povijest kupovina" onclick="@("window.location.href='" + @Url.Action(actionName:"ShoppingHistory",controllerName:"Dashboard")+"'" );" />
+  </div>
+
   <div class="album py-5">
     <h3>Trenutno posuđene knjige</h3>
     <div class="container">
@@ -25,9 +30,6 @@
     </div>
   </div>
 
-  <div>
-    <input type="button" class="btn btn-primary" value="Povijest posudbi" onclick="@("window.location.href='" + @Url.Action(actionName:"LoanHistory",controllerName:"Dashboard")+"'" );" />
-    <input type="button" class="btn btn-primary" value="Povijest kupovina" onclick="@("window.location.href='" + @Url.Action(actionName:"ShoppingHistory",controllerName:"Dashboard")+"'" );" />
-  </div>
+
 </body>
 </html>
