@@ -9,6 +9,5 @@ namespace BLL.Abstract.Manager.Projection
 {
   public interface IAuthorManager : IProjectionManager<AuthorModel, AuthorProjection, Int32>
   {
-    IEnumerable<AuthorProjection> GetAuthorsByBookFK(Int32 BookFK);
   }
 }
