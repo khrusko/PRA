@@ -49,7 +49,7 @@ namespace BLL.Manager
       ? (Repository as IBranchOfficeRepository).ReadAllAvailable().Select(Project)
       : (Repository as IBranchOfficeRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IBranchOfficeRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IBranchOfficeRepository).Delete(ID, deletedBy);
   }
 }
