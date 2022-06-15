@@ -1,0 +1,22 @@
+﻿@using BLL.Projection
+@{
+  ViewBag.Title = "Kontrolna ploča";
+  var user = Session["user"] as UserProjection;
+}
+
+<h2>Kontrolna ploča</h2>
+
+@if (user.IsAdmin)
+{
+  @Html.Partial(partialViewName: "_AdminDashboard")
+}
+
+else if (!user.IsAdmin)
+{
+  @Html.Partial(partialViewName: "_UserDashboard")
+}
+
+else
+{
+  @Html.Action(controllerName: "HttpErrorsController", actionName: "NotFound")
+}

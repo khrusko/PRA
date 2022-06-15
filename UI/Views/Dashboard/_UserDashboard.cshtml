@@ -1,0 +1,33 @@
+﻿@using BLL.Projection
+@using UI.Models
+@model  IEnumerable<LoanBookVM>
+@{
+  var user = Session["user"] as UserProjection;
+}
+
+<!DOCTYPE html>
+<html>
+<body>
+
+  <div class="album py-5">
+    <h3>Trenutno posuđene knjige</h3>
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+        @foreach (var loan in Model)
+        {
+
+          @Html.Partial(partialViewName: "_LoanCard", model: loan)
+
+        }
+
+      </div>
+    </div>
+  </div>
+  <div>
+    <input type="button" class="btn btn-primary" value="Obavijesti" onclick="@("window.location.href='" + @Url.Action(actionName:"Notifications",controllerName:"Dashboard")+"'" );" />
+    <input type="button" class="btn btn-primary" value="Povijest posudbi" onclick="@("window.location.href='" + @Url.Action(actionName:"LoanHistory",controllerName:"Dashboard")+"'" );" />
+    <input type="button" class="btn btn-primary" value="Povijest kupovina" onclick="@("window.location.href='" + @Url.Action(actionName:"ShoppingHistory",controllerName:"Dashboard")+"'" );" />
+  </div>
+</body>
+</html>

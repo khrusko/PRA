@@ -1,0 +1,22 @@
+﻿@using BLL.Projection
+@{
+  ViewBag.Title = "Obavijesti";
+  var user = Session["user"] as UserProjection;
+}
+
+<h2>Obavijesti</h2>
+
+@if (user.IsAdmin)
+{
+  @Html.Partial(partialViewName: "_AdminNotifications")
+}
+
+else if (!user.IsAdmin)
+{
+  @Html.Partial(partialViewName: "_UserNotifications")
+}
+
+else
+{
+  @Html.Action(controllerName: "HttpErrorsController", actionName: "NotFound")
+}
