@@ -527,3 +527,33 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 2 AND [UserFK] =
   EXECUTE [dbo].[LoanLoan] 2, 9, @PlannedReturnDate, 1
 END
 GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 3 AND [UserFK] = 4) BEGIN
+  DECLARE @LoanDate AS datetime = DATEADD(DAY, -10, GETDATE())
+  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -6, GETDATE())
+  DECLARE @ReturnDate AS datetime = GETDATE()
+  EXECUTE [dbo].[LoanCreate] 3, 4, 11.00, @LoanDate, @PlannedReturnDate, @ReturnDate, 6, 1, 1
+END
+GO
+
+-- PURCHASES
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 3 AND [UserFK] = 4) BEGIN
+  EXECUTE [dbo].[PurchasePurchase] 3, 4, 1, 1
+END
+GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 4 AND [UserFK] = 4) BEGIN
+  EXECUTE [dbo].[PurchasePurchase] 4, 4, 1, 1
+END
+GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 5 AND [UserFK] = 4) BEGIN
+  EXECUTE [dbo].[PurchasePurchase] 5, 4, 1, 1
+END
+GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 6 AND [UserFK] = 4) BEGIN
+  EXECUTE [dbo].[PurchasePurchase] 6, 4, 1, 1
+END
+GO
