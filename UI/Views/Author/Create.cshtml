@@ -1,23 +1,20 @@
 ﻿@using UI.Models
-@model UserEditVM
+@model AuthorVM
 
 @{
-  ViewBag.Title = "Uredi profil";
+  ViewBag.Title = $"Dodaj autora";
 }
 
-<h2>Uredi profil</h2>
+<h2>Dodaj autora</h2>
 <hr />
 
-@using (Html.BeginForm(actionName: "Edit",
-                       controllerName: "User",
+@using (Html.BeginForm(actionName: "Create",
+                       controllerName: "Author",
                        method: FormMethod.Post,
                        htmlAttributes: new {
                          enctype = "multipart/form-data"
                        })) {
   @Html.AntiForgeryToken()
-
-  @Html.HiddenFor(expression: model => model.ID)
-  @Html.HiddenFor(expression: model => model.ImagePath)
 
   <div class="mb-3">
     @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
@@ -32,25 +29,27 @@
   </div>
 
   <div class="mb-3">
-    <img src="@Url.Content(!String.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "~/Content/DefaultUser.jpg")"
-         alt="@Model.FName @Model.LName profile picture"
-         class="img-fluid img-thumbnail mb-2"
-         style="width: 150px; z-index: 1">
+    @Html.LabelFor(expression: model => model.BirthDate, htmlAttributes: new { @class = "form-label" })
+    @Html.EditorFor(expression: model => model.BirthDate, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(expression: model => model.BirthDate, "", new { @class = "text-danger" })
+  </div>
 
+  <div class="mb-3">
+    @Html.LabelFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-label" })
+    @Html.TextAreaFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-control", rows = "8" })
+    @Html.ValidationMessageFor(expression: model => model.Biography, "", new { @class = "text-danger" })
+  </div>
+
+  <div class="mb-3">
     @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
     @Html.ValidationMessageFor(expression: model => model.Image, "", new { @class = "text-danger" })
   </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Address, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.Address, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Address, "", new { @class = "text-danger" })
-  </div>
 
   <input type="submit" value="Spremi" class="btn btn-primary me-3" />
-  @Html.ActionLink(linkText: "Odustani", 
+  @Html.ActionLink(linkText: "Odustani",
                    actionName: "Index",
-                   controllerName: "User",
+                   controllerName: "Dashboard",
                    routeValues: null,
                    htmlAttributes: new { @class = "btn btn-outline-secondary" })
 }

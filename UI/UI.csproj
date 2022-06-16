@@ -194,9 +194,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
-    <Compile Include="Infrastructure\UserAuthenticate.cs" />
-    <Compile Include="Infrastructure\UserAuthorize.cs" />
+    <Compile Include="Infrastructure\UserAuthenticateAttribute.cs" />
+    <Compile Include="Infrastructure\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
+    <Compile Include="Models\AuthorVM.cs" />
     <Compile Include="Models\BookPublisherVM.cs" />
     <Compile Include="Models\BookSearchVM.cs" />
     <Compile Include="Models\Concrete\ErrorMessage.cs" />
@@ -273,11 +274,11 @@
     <Content Include="Views\Shared\_PurchaseCard.cshtml" />
     <Content Include="Views\Dashboard\SalesHistory.cshtml" />
     <Content Include="Views\Dashboard\UserMessages.cshtml" />
-    <Content Include="Views\Dashboard\AddEmployee.cshtml" />
-    <Content Include="Views\Dashboard\AddAuthor.cshtml" />
-    <Content Include="Views\Dashboard\AddBook.cshtml" />
     <Content Include="Views\Dashboard\EditBranchOfficeDetails.cshtml" />
     <Content Include="Views\Dashboard\_RespondUserMessage.cshtml" />
+    <Content Include="Views\Author\Details.cshtml" />
+    <Content Include="Views\Author\Edit.cshtml" />
+    <Content Include="Views\Author\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -287,7 +288,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Images\" />
-    <Folder Include="Views\Author\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
