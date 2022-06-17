@@ -28,11 +28,5 @@
 
   CONSTRAINT [FK_Loans_Books]             FOREIGN KEY ([BookFK]) REFERENCES [dbo].[Books] ([ID]),
   CONSTRAINT [FK_Loans_Users]             FOREIGN KEY ([UserFK]) REFERENCES [dbo].[Users] ([ID]),
-
-  CONSTRAINT [CK_Loans_LoanPrice]         CHECK ([LoanPrice] >= 0),
-  CONSTRAINT [CK_Loans_PlannedReturnDate] CHECK ([PlannedReturnDate] >= [LoanDate]),
-  CONSTRAINT [CK_Loans_ReturnDate]        CHECK ([ReturnDate] >= [LoanDate]),
-  CONSTRAINT [CK_Loans_DelayDays]         CHECK ([DelayDays] >= 0),
-  CONSTRAINT [CK_Loans_DelayPricePerDay]  CHECK ([DelayPricePerDay] >= 0)
 )
 GO

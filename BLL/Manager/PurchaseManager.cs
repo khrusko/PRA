@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new PurchaseProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         BookFK = model.BookFK,
         UserFK = model.UserFK,
         Quantity = model.Quantity,
@@ -57,5 +58,8 @@ namespace BLL.Manager
       => Purchase(projection.BookFK, projection.UserFK, projection.Quantity);
     public Int32 Purchase(Int32 bookFK, Int32 userFK, Int32 quantity)
       => (Repository as IPurchaseRepository).Purchase(bookFK, userFK, quantity, userFK);
+
+    public IEnumerable<PurchaseProjection> GetByUserFK(Int32 UserFK)
+      => (Repository as IPurchaseRepository).ReadByUserFK(UserFK).Select(Project);
   }
 }

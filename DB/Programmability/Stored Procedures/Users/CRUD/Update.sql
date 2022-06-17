@@ -19,7 +19,7 @@ AS BEGIN
       COUNT(*)
     FROM [dbo].[Users]
     WHERE [DeleteDate] IS NULL AND
-          [ID] != @ID AND
+          [ID] <> @ID AND
           (
             [UserID] = @UserID OR
             [Email] = @Email

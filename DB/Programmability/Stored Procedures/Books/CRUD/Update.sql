@@ -8,7 +8,7 @@
                                      @AuthorFK AS int,
                                      @PageCount AS int,
                                      @PurchasePrice AS decimal(6, 2), 
-                                     @LoanPrice AS decimal(5, 2), 
+                                     @LoanPrice AS decimal(6, 2), 
                                      @Quantity AS int, 
                                      @ImagePath AS nvarchar(500),
                                      @UpdatedBy AS int)
@@ -17,8 +17,8 @@ AS BEGIN
     SELECT ALL
       COUNT(*)
     FROM [dbo].[Books]
-    WHERE [ID] != @ID AND
-          [ISBN] = @ISBN AND 
+    WHERE [ID] <> @ID AND
+          [ISBN] = @ISBN AND
           [DeleteDate] IS NULL
   )
   IF @IsUnique > 0 BEGIN
@@ -41,8 +41,9 @@ AS BEGIN
     [LoanPrice]     = @LoanPrice, 
     [Quantity]      = @Quantity, 
     [ImagePath]     = @ImagePath
-  WHERE [ID] = @ID AND [DeleteDate] IS NULL
+  WHERE [DeleteDate] IS NULL AND
+        [ID] = @ID
 
-  RETURN  @@ROWCOUNT
+  RETURN @@ROWCOUNT
 END
 GO

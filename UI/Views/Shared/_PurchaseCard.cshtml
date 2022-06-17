@@ -1,0 +1,19 @@
+﻿@using UI.Models
+@model PurchaseBookVM
+<div class="col">
+  <div class="card">
+
+    <div class="card-body">
+      <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(model => model.Book.Title)</h5>
+      <hr />
+
+      <p><span class="fw-bold">Autor: </span> @Html.DisplayFor(model => model.Author.FName)<span> </span> @Html.DisplayFor(model => model.Author.LName)</p>
+
+      <p><span class="fw-bold">Datum kupovine: </span> @Html.DisplayFor(model => model.Purchase.PurchaseDate) </p>
+
+      <p><span class="fw-bold">Cijena kupovine: </span> @Html.DisplayFor(model => model.Purchase.UnitPrice) kn</p>
+
+      <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
+    </div>
+  </div>
+</div>

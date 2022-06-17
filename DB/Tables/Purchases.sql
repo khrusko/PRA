@@ -24,8 +24,5 @@
 
   CONSTRAINT [FK_Purchases_Books]     FOREIGN KEY ([BookFK]) REFERENCES [dbo].[Books] ([ID]),
   CONSTRAINT [FK_Purchases_Users]     FOREIGN KEY ([UserFK]) REFERENCES [dbo].[Users] ([ID]),
-
-  CONSTRAINT [CK_Purchases_Quantity]  CHECK ([Quantity] > 0),
-  CONSTRAINT [CK_Purchases_UnitPrice] CHECK ([UnitPrice] >= 0)
 )
 GO

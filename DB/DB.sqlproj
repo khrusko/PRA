@@ -62,7 +62,6 @@
     <Folder Include="Programmability" />
     <Folder Include="Programmability\Stored Procedures" />
     <Folder Include="Scripts" />
-    <Folder Include="Programmability\Types" />
     <Folder Include="Programmability\Stored Procedures\Authors" />
     <Folder Include="Programmability\Stored Procedures\Authors\CRUD" />
     <Folder Include="Programmability\Stored Procedures\Books" />
@@ -148,7 +147,6 @@
     <Build Include="Programmability\Stored Procedures\Users\CRUD\Delete.sql" />
     <Build Include="Programmability\Stored Procedures\Users\CRUD\Read.sql" />
     <Build Include="Programmability\Stored Procedures\Users\CRUD\Update.sql" />
-    <Build Include="Programmability\Types\Ids.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\GenerateUserID.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\ConfirmRegistration.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\CheckRegistrationStatus.sql" />
@@ -160,6 +158,7 @@
     <Build Include="Programmability\Stored Procedures\Users\BL\ReadByEmail.sql" />
     <Build Include="Programmability\Stored Procedures\Loans\BL\ReadByUserFK.sql" />
     <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
+    <Build Include="Programmability\Stored Procedures\Purchases\BL\ReadByUserFK.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\EditProfile.sql" />
   </ItemGroup>
   <ItemGroup>

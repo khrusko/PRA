@@ -56,6 +56,45 @@ namespace UI
                             })
                           });
 
+      _ = routes.MapRoute(name: "Edit",
+                          url: "{controller}/Edit/{id}",
+                          defaults: new
+                          {
+                            action = "Edit",
+                            id = UrlParameter.Optional
+                          },
+                          constraints: new
+                          {
+                            id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                            {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                            })
+                          });
+
+      _ = routes.MapRoute(name: "Delete",
+                           url: "{controller}/Delete/{id}",
+                           defaults: new
+                           {
+                             action = "Delete",
+                             id = UrlParameter.Optional
+                           },
+                           constraints: new
+                           {
+                             id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                             {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                             })
+                           });
+
+      _ = routes.MapRoute(name: "Create",
+                           url: "{controller}/Create",
+                           defaults: new
+                           {
+                             action = "Create"
+                           });
+
       _ = routes.MapRoute(name: "Default",
                           url: "{controller}/{action}",
                           defaults: new

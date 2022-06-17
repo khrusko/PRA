@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using BLL.Projection;
 
@@ -10,5 +11,6 @@ namespace BLL.Abstract.Manager.Projection
   {
     Int32 Purchase(PurchaseProjection projection);
     Int32 Purchase(Int32 bookFK, Int32 userFK, Int32 quantity);
+    IEnumerable<PurchaseProjection> GetByUserFK(Int32 UserFK);
   }
 }

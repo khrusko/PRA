@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Books]
 (
-  [ID]          int           NOT NULL  IDENTITY(1,1),
+  [ID]          int           NOT NULL IDENTITY(1,1),
   [CreateDate]  datetime      NOT NULL
     CONSTRAINT [DF_Books_CreateDate] DEFAULT GETDATE(),
   [CreatedBy]   int           NOT NULL,
@@ -10,7 +10,7 @@
   [DeleteDate]  datetime      NULL,
   [DeletedBy]   int           NULL,
 
-  [ISBN]          char(17)      NOT NULL,
+  [ISBN]          nvarchar(20)  NOT NULL,
   [Title]         nvarchar(100) NOT NULL,
   [Summary]       nvarchar(MAX) NULL,
   [Description]   nvarchar(MAX) NOT NULL,
@@ -31,10 +31,6 @@
   CONSTRAINT [FK_Books_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
 
   CONSTRAINT [FK_Books_Publishers]    FOREIGN KEY ([PublisherFK]) REFERENCES [dbo].[Publishers] ([ID]),
-  CONSTRAINT [FK_Books_Authors]       FOREIGN KEY ([AuthorFK])    REFERENCES [dbo].[Authors] ([ID]),
-
-  CONSTRAINT [CK_Books_PurchasePrice] CHECK ([PurchasePrice] >= 0),
-  CONSTRAINT [CK_Books_LoanPrice]     CHECK ([LoanPrice] >= 0),
-  CONSTRAINT [CK_Books_Quantity]      CHECK ([Quantity] >= 0)
+  CONSTRAINT [FK_Books_Authors]       FOREIGN KEY ([AuthorFK])    REFERENCES [dbo].[Authors] ([ID])
 )
 GO

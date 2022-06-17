@@ -7,7 +7,7 @@
                                      @AuthorFK AS int,
                                      @PageCount AS int,
                                      @PurchasePrice AS decimal(6, 2), 
-                                     @LoanPrice AS decimal(5, 2),
+                                     @LoanPrice AS decimal(6, 2),
                                      @Quantity AS int, 
                                      @ImagePath AS nvarchar(500),
                                      @CreatedBy AS int)
