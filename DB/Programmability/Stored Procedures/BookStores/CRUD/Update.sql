@@ -9,7 +9,7 @@ AS BEGIN
     SELECT ALL
       COUNT(*)
     FROM [dbo].[BookStores]
-    WHERE [ID] != @ID AND
+    WHERE [ID] <> @ID AND
           (
             [OIB] = @OIB OR 
             [Email] = @Email

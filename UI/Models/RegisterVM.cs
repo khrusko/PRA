@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace UI.Models
 {
@@ -10,29 +7,28 @@ namespace UI.Models
   {
     [Display(Name = "Ime")]
     [Required(ErrorMessage = "Ime je obavezno")]
-    [StringLength(maximumLength: 50, ErrorMessage = "Mora sadržavati barem 1 slovo i najviše 50 slova", MinimumLength = 1)]
-    public string FName { get; set; }
+    [MaxLength(length: 50)]
+    public String FName { get; set; }
 
     [Display(Name = "Prezime")]
     [Required(ErrorMessage = "Prezime je obavezno")]
-    [StringLength(maximumLength: 50, ErrorMessage = "Mora sadržavati barem 1 slovo i najviše 50 slova", MinimumLength = 1)]
-    public string LName { get; set; }
+    [MaxLength(length: 50)]
+    public String LName { get; set; }
 
     [Display(Name = "E-mail")]
     [Required(ErrorMessage = "E-mail je obavezan")]
     [EmailAddress(ErrorMessage = "Nije valjani E-mail")]
-    public string Email { get; set; }
+    public String Email { get; set; }
 
     [Display(Name = "Zaporka")]
     [Required(ErrorMessage = "Zaporka je obavezna")]
     [DataType(DataType.Password)]
-    public string Password { get; set; }
+    public String Password { get; set; }
 
-    [Display(Name = "Ponovi Zaporku")]
-    [Required(ErrorMessage = "Polje Ponovi Zaporku je obavezno")]
+    [Display(Name = "Ponovi zaporku")]
+    [Required(ErrorMessage = "Ponovite zaporku")]
     [Compare("Password", ErrorMessage = "Zaporke se ne podudaraju")]
     [DataType(DataType.Password)]
-    public string ConfirmPassword { get; set; }
-
+    public String ConfirmPassword { get; set; }
   }
 }

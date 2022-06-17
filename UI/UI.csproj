@@ -15,7 +15,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44306</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -185,6 +185,7 @@
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\BookStoreController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpErrorsController.cs" />
@@ -194,10 +195,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\PagingHelpers.cs" />
+    <Compile Include="Infrastructure\ISBNAttribute.cs" />
+    <Compile Include="Infrastructure\OIBAttribute.cs" />
     <Compile Include="Infrastructure\UserAuthenticateAttribute.cs" />
     <Compile Include="Infrastructure\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
     <Compile Include="Models\AuthorVM.cs" />
+    <Compile Include="Models\BookStoreVM.cs" />
+    <Compile Include="Models\BookVM.cs" />
     <Compile Include="Models\BookPublisherVM.cs" />
     <Compile Include="Models\BookSearchVM.cs" />
     <Compile Include="Models\Concrete\ErrorMessage.cs" />
@@ -279,6 +284,10 @@
     <Content Include="Views\Author\Details.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Author\Create.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\Book\Edit.cshtml" />
+    <Content Include="Views\Book\Create.cshtml" />
+    <Content Include="Views\BookStore\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -314,7 +323,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55141</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50063/</IISUrl>
+          <IISUrl>https://localhost:44306/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -6,7 +6,6 @@ using System.Web;
 
 using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
-using BLL.Abstract.Projection;
 using BLL.Factory;
 using BLL.Projection;
 using BLL.Status;
@@ -27,6 +26,7 @@ namespace BLL.Manager
       => new UserProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         UserID = model.UserID,
         FName = model.FName,
         LName = model.LName,
@@ -85,10 +85,10 @@ namespace BLL.Manager
     }
 
     public UserProjection Register(UserProjection projection)
-      => Register(projection.FName, projection.LName, projection.Email, projection.Password, projection.IsAdmin);
-    public UserProjection Register(String fName, String lName, String email, String password, Boolean isAdmin)
+      => Register(projection.FName, projection.LName, projection.Email, projection.Password);
+    public UserProjection Register(String fName, String lName, String email, String password)
     {
-      Int32 ID = (Repository as IUserRepository).Register(fName, lName, email, password, isAdmin);
+      Int32 ID = (Repository as IUserRepository).Register(fName, lName, email, password, false);
       if (ID == 0) return null;
 
       UserProjection projection = GetByID(ID);
@@ -132,6 +132,45 @@ namespace BLL.Manager
     public Int32 ResetPassword(Guid GUID, String password)
       => (Repository as IUserRepository).ResetPassword(GUID, password);
 
+    public Int32 Update(UserProjection projection, HttpPostedFileBase file)
+      => Update(projection.ID, projection.FName, projection.LName, file, projection.Address);
+    public Int32 Update(Int32 ID, String fName, String lName, HttpPostedFileBase file, String address)
+    {
+      String imagePath;
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        imagePath = imageSaver.RelativePath;
+      }
+      else
+      {
+        imagePath = GetByID(ID).ImagePath;
+      }
+
+      return (Repository as IUserRepository).EditProfile(ID, fName, lName, imagePath, address, ID);
+    }
+
+    public UserProjection CreateAdmin(String fName, String lName, String email, String password)
+    {
+      Int32 ID = (Repository as IUserRepository).Register(fName, lName, email, password, true);
+      if (ID == 0)
+        return null;
+
+      UserProjection projection = GetByID(ID);
+      RegistrationStatus registrationStatus = CheckRegistrationStatus(projection);
+
+      if (registrationStatus == RegistrationStatus.VALID)
+      {
+        Int32 updatedCount = ConfirmRegistration(projection);
+        return updatedCount == 0 ? null : projection;
+      }
+
+      return null;
+    }
+
     private void SendRegistrationConfirmationMail(UserProjection projection)
     {
       String verificationLink = $"/Account/UserVerification/{projection.GUID}";
@@ -156,27 +195,6 @@ namespace BLL.Manager
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
       emailSender.SendEmail(subject, body);
-    }
-
-    public Int32 Update(UserProjection projection, HttpPostedFileBase file)
-      => Update(projection.ID, projection.FName, projection.LName, file, projection.Address);
-    public Int32 Update(Int32 ID, String fName, String lName, HttpPostedFileBase file, String address)
-    {
-      String imagePath;
-      if (!(file is null))
-      {
-        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
-        imageSaver.File = file;
-        imageSaver.SaveImageAs();
-
-        imagePath = imageSaver.RelativePath;
-      }
-      else
-      {
-        imagePath = GetByID(ID).ImagePath;
-      }
-
-      return (Repository as IUserRepository).EditProfile(ID, fName, lName, imagePath, address, ID);
     }
   }
 }

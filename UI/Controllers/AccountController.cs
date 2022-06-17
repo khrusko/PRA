@@ -133,8 +133,7 @@ namespace UI.Controllers
       UserProjection projection = _userManager.Register(fName: model.FName,
                                                         lName: model.LName,
                                                         email: model.Email,
-                                                        password: model.Password,
-                                                        isAdmin: false);
+                                                        password: model.Password);
       Message = !(projection is null)
         ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na E-Mail: {projection.Email}")
         : (IMessage)new AlertMessage(message: $"Registracija nije uspjela, pokušajte ponovo");

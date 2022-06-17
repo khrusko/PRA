@@ -19,8 +19,5 @@
   CONSTRAINT [FK_BookStores_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_BookStores_UpdatedBy] FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_BookStores_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
-
-  CONSTRAINT [CK_BookStores_OIB]              CHECK ([OIB] LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'),
-  CONSTRAINT [CK_BookStores_DelayPricePerDay] CHECK ([DelayPricePerDay] >= 0)
 )
 GO

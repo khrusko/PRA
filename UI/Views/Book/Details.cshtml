@@ -1,9 +1,11 @@
 ﻿@using UI.Models
-@model BookPublisherVM
+@using BLL.Projection
+@model FullBookInfoVM
 
 
 @{
   ViewBag.Title = "Details";
+  UserProjection user = Session["user"] as UserProjection;
 }
 
 <h2>Detalji knjige</h2>
@@ -25,6 +27,23 @@
 
     <dd>
       @Model.Book.Title
+    </dd>
+
+    <dt>
+      Autor
+    </dt>
+
+    <dd>
+      @if (Model.Author.IsAvailable) {
+        @Html.ActionLink(linkText: $"{Model.Author.FName} {Model.Author.LName}",
+                                actionName: "Details",
+                                controllerName: "Author",
+                                routeValues: new { id = Model.Author.ID },
+                                htmlAttributes: "link-primary")
+      }
+      else {
+        @: @Model.Author.FName @Model.Author.LName
+      }
     </dd>
 
     <dt>
@@ -106,7 +125,10 @@
     </dt>
 
     <dd>
-      <img src="@Url.Content(contentPath: Model.Book.ImagePath ?? "/")" />
+      <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
+           alt="@Model.Book.Title book"
+           class="img-fluid img-thumbnail mb-2"
+           style="width: 150px; z-index: 1">
     </dd>
 
   </dl>
@@ -114,11 +136,47 @@
 
 
 
-<p>
-  @* Add buttons to buy and loan but disable them *@
-<p class="text-secondary">Za kupnju i posudbu knjiga, te slanja obavijesti o dostupnosti potrebno se prijaviti/registrirati</p>
-<button type="button" class="btn btn-secondary btn-lg" disabled>Kupi</button>
-<button type="button" class="btn btn-secondary btn-lg" disabled>Posudi</button>
-<button type="button" class="btn btn-secondary btn-lg" disabled>Obavijesti me</button>
-<br />
+@if (!(user is null) && user.IsAdmin) {
 
+  @Html.ActionLink(linkText: "Uredi knjigu",
+                          actionName: "Edit",
+                          controllerName: "Book",
+                          routeValues: new {
+                            id = Model.Book.ID
+                          },
+                          htmlAttributes: new {
+                            @class = "btn btn-outline-dark me-3",
+                            style = "z-index: 1;"
+                          })
+  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" href="#deleteUserModal">Obriši knjigu</button>
+
+}
+
+@if (!(user is null) && user.IsAdmin) {
+
+  <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-body p-4 text-center">
+          <h5 class="mb-0">Jeste li sigurni da želite obrisati knjigu?</h5>
+          <p class="mb-0 mt-3">Brisanjem knjige gubite mogućnost prikazivanja knjige.</p>
+          <p class="mb-0">Za vraćanje knjige morati ćete kontaktirati administratora baze podataka.</p>
+        </div>
+        <div class="modal-footer flex-nowrap p-0">
+          @Html.ActionLink(linkText: "Obriši",
+                        actionName: "Delete",
+                        controllerName: "Book",
+                        routeValues: new {
+                          id = Model.Book.ID
+                        },
+                        htmlAttributes: new {
+                          @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
+                          style = "z-index: 1;"
+                        })
+          <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+}

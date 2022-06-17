@@ -24,6 +24,7 @@ namespace BLL.Manager
       => new AuthorProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate == DateTime.MinValue,
         FName = model.FName,
         LName = model.LName,
         BirthDate = model.BirthDate,

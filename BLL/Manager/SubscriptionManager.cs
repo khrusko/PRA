@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new SubscriptionProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         BookFK = model.BookFK,
         UserFK = model.UserFK,
         SubscriptionDate = model.SubscriptionDate,

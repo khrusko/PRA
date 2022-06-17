@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new BranchOfficeProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         Name = model.Name,
         Address = model.Address,
         Telephone = model.Telephone,

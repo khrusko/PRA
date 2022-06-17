@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new LoanProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         BookFK = model.BookFK,
         UserFK = model.UserFK,
         LoanPrice = model.LoanPrice,

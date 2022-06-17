@@ -7,7 +7,9 @@ using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
 using BLL.Projection;
 
+using UI.Infrastructure;
 using UI.Models;
+using UI.Models.Concrete;
 using UI.Models.Enums;
 
 namespace UI.Controllers
@@ -21,16 +23,184 @@ namespace UI.Controllers
     private readonly IAuthorManager _authorManager = new AuthorManager();
 
     [HttpGet]
-    public ViewResult Details(Int32 id)
+    public ActionResult Details(Int32 id)
     {
       BookProjection book = _bookManager.GetByID(ID: id);
-      PublisherProjection publisher = _publisherManager.GetByID(ID: book.PublisherFK);
-      return View(viewName: nameof(Details),
-                  model: new BookPublisherVM
-                  {
-                    Book = book,
-                    Publisher = publisher
-                  });
+      return book is null
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Details),
+                             model: new FullBookInfoVM
+                             {
+                               Book = book,
+                               Publisher = _publisherManager.GetByID(ID: book.PublisherFK, availabilityCheck: false),
+                               Author = _authorManager.GetByID(ID: book.AuthorFK, availabilityCheck: false)
+                             });
+    }
+
+    [HttpGet]
+    [UserAuthorize]
+    public ViewResult Create()
+      => View(viewName: nameof(Create),
+              model: new BookVM()
+              {
+                Publishers = _publisherManager.GetAll().OrderBy(publisher => publisher.Name),
+                Authors = _authorManager.GetAll(),
+              });
+
+    [HttpPost]
+    [UserAuthorize]
+    public ActionResult Create(BookVM model)
+    {
+      if (!ModelState.IsValid)
+      {
+        model.Authors = _authorManager.GetAll();
+        model.Publishers = _publisherManager.GetAll();
+        return View(viewName: nameof(Create), model: model);
+      }
+
+      try
+      {
+        Int32 id = _bookManager.Create(projection: new BookProjection
+        {
+          ID = model.ID,
+          ISBN = model.ISBN,
+          Title = model.Title,
+          Summary = model.Summary,
+          Description = model.Description,
+          IsNew = model.IsNew,
+          PublisherFK = model.PublisherFK,
+          AuthorFK = model.AuthorFK,
+          PageCount = model.PageCount,
+          PurchasePrice = model.PurchasePrice,
+          LoanPrice = model.LoanPrice,
+          Quantity = model.Quantity,
+          ImagePath = model.ImagePath
+        },
+                                         file: model.Image,
+                                         createdBy: LoggedInUser.ID);
+
+        if (id == 0)
+        {
+          model.Authors = _authorManager.GetAll();
+          model.Publishers = _publisherManager.GetAll();
+          Message = new AlertMessage(message: "Knjiga nije uspješno dodana, pokušajte ponovo");
+          return View(viewName: nameof(Create), model: model);
+        }
+
+        Message = new InfoMessage(message: "Knjiga je uspješno dodana");
+        return RedirectToAction(actionName: nameof(Details),
+                                controllerName: "Book",
+                                routeValues: new { id });
+      }
+      catch (ArgumentException ex)
+      {
+        model.Authors = _authorManager.GetAll();
+        model.Publishers = _publisherManager.GetAll();
+        Message = new AlertMessage(message: ex.Message);
+        return View(viewName: nameof(Create), model: model);
+      }
+    }
+
+    [HttpGet]
+    [UserAuthorize]
+    public ActionResult Edit(Int32 id)
+    {
+      BookProjection projection = _bookManager.GetByID(id);
+
+      return projection is null
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Edit),
+                             model: new BookVM
+                             {
+                               ID = projection.ID,
+                               ISBN = projection.ISBN,
+                               Title = projection.Title,
+                               Summary = projection.Summary,
+                               Description = projection.Description,
+                               IsNew = projection.IsNew,
+                               PublisherFK = projection.PublisherFK,
+                               AuthorFK = projection.AuthorFK,
+                               PageCount = projection.PageCount,
+                               PurchasePrice = projection.PurchasePrice,
+                               LoanPrice = projection.LoanPrice,
+                               Quantity = projection.Quantity,
+                               ImagePath = projection.ImagePath,
+                               Publishers = _publisherManager.GetAll().OrderBy(publisher => publisher.Name),
+                               Authors = _authorManager.GetAll(),
+                             });
+    }
+
+    [HttpPost]
+    [UserAuthorize]
+    public ActionResult Edit(BookVM model)
+    {
+      BookProjection projection = _bookManager.GetByID(model.ID);
+      if (projection is null)
+        return new HttpStatusCodeResult(404);
+
+      if (!ModelState.IsValid)
+      {
+        model.Authors = _authorManager.GetAll();
+        model.Publishers = _publisherManager.GetAll();
+        return View(viewName: nameof(Edit), model: model);
+      }
+
+      try
+      {
+        Int32 updatedCount = _bookManager.Update(projection: new BookProjection
+        {
+          ID = model.ID,
+          ISBN = model.ISBN,
+          Title = model.Title,
+          Summary = model.Summary,
+          Description = model.Description,
+          IsNew = model.IsNew,
+          PublisherFK = model.PublisherFK,
+          AuthorFK = model.AuthorFK,
+          PageCount = model.PageCount,
+          PurchasePrice = model.PurchasePrice,
+          LoanPrice = model.LoanPrice,
+          Quantity = model.Quantity,
+          ImagePath = model.ImagePath
+        },
+                                                 file: model.Image,
+                                                 updatedBy: LoggedInUser.ID);
+
+        if (updatedCount == 0)
+        {
+          model.Authors = _authorManager.GetAll();
+          model.Publishers = _publisherManager.GetAll();
+          Message = new AlertMessage(message: "Promijena podataka nije uspješna, pokušajte ponovo");
+          return View(viewName: nameof(Edit), model: model);
+        }
+
+        Message = new InfoMessage(message: "Promijena podataka je uspješna");
+        return RedirectToAction(actionName: nameof(Details),
+                                controllerName: "Book",
+                                routeValues: new
+                                {
+                                  id = model.ID
+                                });
+      }
+      catch (ArgumentException ex)
+      {
+        model.Authors = _authorManager.GetAll();
+        model.Publishers = _publisherManager.GetAll();
+        Message = new AlertMessage(message: ex.Message);
+        return View(viewName: nameof(Edit), model: model);
+      }
+    }
+
+    [HttpGet]
+    [UserAuthorize]
+    public ActionResult Delete(Int32 id)
+    {
+      Int32 deletedCount = _bookManager.Remove(ID: id, deletedBy: LoggedInUser.ID);
+      if (deletedCount == 0)
+        return new HttpStatusCodeResult(404);
+
+      Message = new InfoMessage(message: "Knjiga je uspješno obrisana");
+      return RedirectToAction(actionName: "Search", controllerName: "Book");
     }
 
     [HttpGet]
