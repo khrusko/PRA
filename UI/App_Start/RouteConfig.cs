@@ -92,16 +92,7 @@ namespace UI
                            url: "{controller}/Create",
                            defaults: new
                            {
-                             action = "Create",
-                             id = UrlParameter.Optional
-                           },
-                           constraints: new
-                           {
-                             id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
-                             {
-                              new IntRouteConstraint(),
-                              new MinRouteConstraint(min: 1)
-                             })
+                             action = "Create"
                            });
 
       _ = routes.MapRoute(name: "Default",

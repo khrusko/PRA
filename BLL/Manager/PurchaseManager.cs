@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new PurchaseProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         BookFK = model.BookFK,
         UserFK = model.UserFK,
         Quantity = model.Quantity,

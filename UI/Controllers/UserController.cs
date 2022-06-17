@@ -36,6 +36,33 @@ namespace UI.Controllers
                   });
     }
 
+    [HttpGet]
+    [UserAuthorize]
+    public ViewResult Create()
+      => View(viewName: nameof(Create),
+              model: new RegisterVM());
+
+    [HttpPost]
+    [UserAuthorize]
+    public ActionResult Create(RegisterVM model)
+    {
+      if (!ModelState.IsValid)
+        return View(viewName: nameof(Create), model: model);
+
+      UserProjection projection = _userManager.CreateAdmin(fName: model.FName,
+                                                           lName: model.LName,
+                                                           email: model.Email,
+                                                           password: model.Password);
+      if (projection is null)
+      {
+        Message = new AlertMessage(message: "Nije moguće dodati djelatnika s danim podacima, korisnik već postoji");
+        return View(viewName: nameof(Create), model: model);
+      }
+
+      Message = new InfoMessage(message: "Djelatnik je uspješno dodan");
+      return RedirectToAction(actionName: "Index", controllerName: "Dashboard");
+    }
+
     [HttpPost]
     public ActionResult Edit(UserEditVM model)
     {

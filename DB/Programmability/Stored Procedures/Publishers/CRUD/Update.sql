@@ -7,7 +7,7 @@ AS BEGIN
       COUNT(*)
     FROM [dbo].[Publishers]
     WHERE [DeleteDate] IS NULL AND
-          [ID] != @ID AND
+          [ID] <> @ID AND
           [Name] = @Name
   )
   IF @IsUnique > 0 BEGIN

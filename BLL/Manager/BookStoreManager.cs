@@ -20,9 +20,13 @@ namespace BLL.Manager
       => new BookStoreProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         Name = model.Name,
         OIB = model.OIB,
         DelayPricePerDay = model.DelayPricePerDay,
+        Address = model.Address,
+        Telephone = model.Telephone,
+        Mobile = model.Mobile,
         Email = model.Email
       };
 
@@ -33,6 +37,9 @@ namespace BLL.Manager
         Name = projection.Name,
         OIB = projection.OIB,
         DelayPricePerDay = projection.DelayPricePerDay,
+        Address = projection.Address,
+        Telephone = projection.Telephone,
+        Mobile = projection.Mobile,
         Email = projection.Email
       };
 
@@ -49,5 +56,8 @@ namespace BLL.Manager
       BookStoreModel model = (Repository as IBookStoreRepository).ReadAll().First();
       return model is null ? null : Project(model);
     }
+
+    public Int32 Update(BookStoreProjection projection, Int32 updatedBy)
+      => (Repository as IBookStoreRepository).Update(projection.ID, Model(projection), updatedBy);
   }
 }

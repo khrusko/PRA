@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new PublisherProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         Name = model.Name
       };
 

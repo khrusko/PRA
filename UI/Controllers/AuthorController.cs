@@ -19,15 +19,14 @@ namespace UI.Controllers
     public ActionResult Details(Int32 id)
     {
       AuthorProjection projection = _authorManager.GetByID(id);
-      if (projection is null)
-        return new HttpStatusCodeResult(404);
-
-      return View(viewName: nameof(Details), model: projection);
+      return projection is null
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Details), model: projection);
     }
 
     [HttpGet]
     [UserAuthorize]
-    public ViewResult Create() 
+    public ViewResult Create()
       => View(viewName: nameof(Create),
               model: new AuthorVM() { BirthDate = DateTime.Now });
 
@@ -41,23 +40,23 @@ namespace UI.Controllers
       try
       {
         Int32 id = _authorManager.Create(projection: new AuthorProjection
-                                         {
-                                           FName = model.FName,
-                                           LName = model.LName,
-                                           BirthDate = model.BirthDate,
-                                           Biography = model.Biography,
-                                           ImagePath = model.ImagePath
-                                         },
+        {
+          FName = model.FName,
+          LName = model.LName,
+          BirthDate = model.BirthDate,
+          Biography = model.Biography,
+          ImagePath = model.ImagePath
+        },
                                          file: model.Image,
                                          createdBy: LoggedInUser.ID);
 
         if (id == 0)
         {
-          Message = new AlertMessage(message: "Autor nije kreiran, pokušajte ponovo");
+          Message = new AlertMessage(message: "Autor nije uspješno dodan, pokušajte ponovo");
           return View(viewName: nameof(Create), model: model);
         }
 
-        Message = new InfoMessage(message: "Autor je uspješno kreiran");
+        Message = new InfoMessage(message: "Autor je uspješno dodan");
         return RedirectToAction(actionName: nameof(Details),
                                 controllerName: "Author",
                                 routeValues: new { id });
@@ -74,19 +73,19 @@ namespace UI.Controllers
     public ActionResult Edit(Int32 id)
     {
       AuthorProjection projection = _authorManager.GetByID(id);
-      if (projection is null)
-        return new HttpStatusCodeResult(404);
 
-      return View(viewName: nameof(Edit),
-                  model: new AuthorVM
-                  {
-                    ID = projection.ID,
-                    FName = projection.FName,
-                    LName = projection.LName,
-                    BirthDate = projection.BirthDate,
-                    Biography = projection.Biography,
-                    ImagePath = projection.ImagePath
-                  });
+      return projection is null
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Edit),
+                             model: new AuthorVM
+                             {
+                               ID = projection.ID,
+                               FName = projection.FName,
+                               LName = projection.LName,
+                               BirthDate = projection.BirthDate,
+                               Biography = projection.Biography,
+                               ImagePath = projection.ImagePath
+                             });
     }
 
     [HttpPost]
@@ -103,14 +102,14 @@ namespace UI.Controllers
       try
       {
         Int32 updatedCount = _authorManager.Update(projection: new AuthorProjection
-                                                   {
-                                                     ID = model.ID,
-                                                     FName = model.FName,
-                                                     LName = model.LName,
-                                                     BirthDate = model.BirthDate,
-                                                     Biography = model.Biography,
-                                                     ImagePath = model.ImagePath
-                                                   },
+        {
+          ID = model.ID,
+          FName = model.FName,
+          LName = model.LName,
+          BirthDate = model.BirthDate,
+          Biography = model.Biography,
+          ImagePath = model.ImagePath
+        },
                                                    file: model.Image,
                                                    updatedBy: LoggedInUser.ID);
 

@@ -13,7 +13,7 @@ namespace BLL.Abstract.Manager.Projection
     UserProjection Login(UserProjection projection);
     UserProjection Login(String email, String password);
     UserProjection Register(UserProjection projection);
-    UserProjection Register(String fName, String lName, String email, String password, Boolean isAdmin);
+    UserProjection Register(String fName, String lName, String email, String password);
     RegistrationStatus CheckRegistrationStatus(UserProjection projection);
     RegistrationStatus CheckRegistrationStatus(Guid GUID);
     Int32 ConfirmRegistration(UserProjection projection);
@@ -27,5 +27,6 @@ namespace BLL.Abstract.Manager.Projection
     Int32 Update(UserProjection projection, HttpPostedFileBase file);
     Int32 Update(Int32 ID, String fName, String lName, HttpPostedFileBase file, String address);
     Int32 Remove(Int32 ID);
+    UserProjection CreateAdmin(String fName, String lName, String email, String password);
   }
 }

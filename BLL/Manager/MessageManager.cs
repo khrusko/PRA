@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new MessageProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         SenderFName = model.SenderFName,
         SenderLName = model.SenderLName,
         SenderEmail = model.SenderEmail,
