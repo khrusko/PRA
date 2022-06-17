@@ -64,7 +64,7 @@ namespace UI.Controllers
       _ = _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
 
       Message = new InfoMessage(message: "Upit je uspješno poslan");
-      return RedirectToAction(actionName: "Index", controllerName: "Book");
+      return RedirectToAction(actionName: "Index", controllerName: "Home");
     }
   }
 }
