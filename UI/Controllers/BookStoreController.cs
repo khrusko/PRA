@@ -23,18 +23,20 @@ namespace UI.Controllers
     public ActionResult Edit()
     {
       BookStoreProjection projection = _bookStoreManager.GetBookStore();
-      if (projection is null)
-        return new HttpStatusCodeResult(404);
-
-      return View(viewName: nameof(Edit),
-                  model: new BookStoreVM
-                  {
-                    ID = projection.ID,
-                    Name = projection.Name,
-                    OIB = projection.OIB,
-                    DelayPricePerDay = projection.DelayPricePerDay,
-                    Email = projection.Email
-                  });
+      return projection is null
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Edit),
+                             model: new BookStoreVM
+                             {
+                               ID = projection.ID,
+                               Name = projection.Name,
+                               OIB = projection.OIB,
+                               DelayPricePerDay = projection.DelayPricePerDay,
+                               Address = projection.Address,
+                               Telephone = projection.Telephone,
+                               Mobile = projection.Mobile,
+                               Email = projection.Email
+                             });
     }
 
     [HttpPost]
@@ -49,6 +51,9 @@ namespace UI.Controllers
         Name = model.Name,
         OIB = model.OIB,
         DelayPricePerDay = model.DelayPricePerDay,
+        Address = model.Address,
+        Telephone = model.Telephone,
+        Mobile = model.Mobile,
         Email = model.Email
       },
                                updatedBy: LoggedInUser.ID);

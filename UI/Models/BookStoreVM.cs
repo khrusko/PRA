@@ -28,6 +28,20 @@ namespace UI.Models
     [DataType(DataType.Currency)]
     public Decimal DelayPricePerDay { get; set; }
 
+    [Display(Name = "Adresa")]
+    [Required(ErrorMessage = "Adresa je obavezna")]
+    [MaxLength(length: 200)]
+    public String Address { get; set; }
+
+    [Display(Name = "Broj telefona")]
+    [Required(ErrorMessage = "Broj telefona je obavezan")]
+    [MaxLength(length: 50)]
+    public String Telephone { get; set; }
+
+    [Display(Name = "Broj mobitela")]
+    [MaxLength(length: 50)]
+    public String Mobile { get; set; }
+
     [Display(Name = "Email")]
     [Required(ErrorMessage = "Email je obavezan")]
     [EmailAddress(ErrorMessage = "Email nije u valjanom formatu")]
