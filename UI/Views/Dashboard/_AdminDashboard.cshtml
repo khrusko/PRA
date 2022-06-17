@@ -14,8 +14,8 @@
     <input type="button" class="btn btn-primary" value="Korisničke poruke" onclick="@("window.location.href='" + @Url.Action(actionName:"UserMessages",controllerName:"Dashboard")+"'" );" />
     <input type="button" class="btn btn-primary" value="Promijeni podatke o poslovnici" onclick="@("window.location.href='" + @Url.Action(actionName:"EditBranchOfficeDetails",controllerName:"Dashboard")+"'" );" />
     <input type="button" class="btn btn-primary" value="Dodaj autora" onclick="@("window.location.href='" + @Url.Action(actionName:"Create",controllerName:"Author")+"'" );" />
-    <input type="button" class="btn btn-primary" value="Dodaj knjigu" onclick="@("window.location.href='" + @Url.Action(actionName:"AddBook",controllerName:"Dashboard")+"'" );" />
-    <input type="button" class="btn btn-primary" value="Dodaj djelatnika" onclick="@("window.location.href='" + @Url.Action(actionName:"AddEmployee",controllerName:"Dashboard")+"'" );" />
+    <input type="button" class="btn btn-primary" value="Dodaj knjigu" onclick="@("window.location.href='" + @Url.Action(actionName:"Create",controllerName:"Book")+"'" );" />
+    <input type="button" class="btn btn-primary" value="Dodaj djelatnika" onclick="@("window.location.href='" + @Url.Action(actionName:"EmployeeCreate",controllerName:"User")+"'" );" />
   </div>
 
   @* Implement paging if needed *@
