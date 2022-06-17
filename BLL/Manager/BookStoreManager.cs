@@ -24,6 +24,9 @@ namespace BLL.Manager
         Name = model.Name,
         OIB = model.OIB,
         DelayPricePerDay = model.DelayPricePerDay,
+        Address = model.Address,
+        Telephone = model.Telephone,
+        Mobile = model.Mobile,
         Email = model.Email
       };
 
@@ -34,6 +37,9 @@ namespace BLL.Manager
         Name = projection.Name,
         OIB = projection.OIB,
         DelayPricePerDay = projection.DelayPricePerDay,
+        Address = projection.Address,
+        Telephone = projection.Telephone,
+        Mobile = projection.Mobile,
         Email = projection.Email
       };
 

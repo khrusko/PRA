@@ -70,7 +70,6 @@
     <Compile Include="Abstract\Repository\Model\IAuthorRepository.cs" />
     <Compile Include="Abstract\Repository\Model\IBookRepository.cs" />
     <Compile Include="Abstract\Repository\Model\IBookStoreRepository.cs" />
-    <Compile Include="Abstract\Repository\Model\IBranchOfficeRepository.cs" />
     <Compile Include="Abstract\Repository\Model\IModelRepository.cs" />
     <Compile Include="Abstract\Repository\Model\ILoanRepository.cs" />
     <Compile Include="Abstract\Repository\Model\IMessageRepository.cs" />
@@ -87,7 +86,6 @@
     <Compile Include="Model\AuthorModel.cs" />
     <Compile Include="Model\BookModel.cs" />
     <Compile Include="Model\BookStoreModel.cs" />
-    <Compile Include="Model\BranchOfficeModel.cs" />
     <Compile Include="Model\LoanModel.cs" />
     <Compile Include="Model\MessageModel.cs" />
     <Compile Include="Model\PublisherModel.cs" />
@@ -97,7 +95,6 @@
     <Compile Include="Factory\AuthorRepositoryFactory.cs" />
     <Compile Include="Factory\BookRepositoryFactory.cs" />
     <Compile Include="Factory\BookStoreRepositoryFactory.cs" />
-    <Compile Include="Factory\BranchOfficeRepositoryFactory.cs" />
     <Compile Include="Factory\ConnectionStringFactory.cs" />
     <Compile Include="Factory\LoanRepositoryFactory.cs" />
     <Compile Include="Factory\MessageRepositoryFactory.cs" />
@@ -109,7 +106,6 @@
     <Compile Include="Repository\Database\AuthorDatabaseRepository.cs" />
     <Compile Include="Repository\Database\BookDatabaseRepository.cs" />
     <Compile Include="Repository\Database\BookStoreDatabaseRepository.cs" />
-    <Compile Include="Repository\Database\BranchOfficeDatabaseRepository.cs" />
     <Compile Include="Repository\Database\LoanDatabaseRepository.cs" />
     <Compile Include="Repository\Database\MessageDatabaseRepository.cs" />
     <Compile Include="Repository\Database\PublisherDatabaseRepository.cs" />

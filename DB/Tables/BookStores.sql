@@ -13,6 +13,9 @@
   [Name]              nvarchar(100) NOT NULL,
   [OIB]               char(11)      NOT NULL,
   [DelayPricePerDay]  decimal(5, 2) NOT NULL,
+  [Address]           nvarchar(200) NOT NULL,
+  [Telephone]         nvarchar(50)  NOT NULL,
+  [Mobile]            nvarchar(50)  NULL,
   [Email]             nvarchar(100) NOT NULL,
 
   CONSTRAINT [PK_BookStores] PRIMARY KEY ([ID]),

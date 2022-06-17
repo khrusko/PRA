@@ -529,10 +529,39 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-8017-17-
 END
 GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-51777-6') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-0-51777-6', N'Priče iz davnine', NULL, N'Ove bajke autorici su donijele svjetsku slavu te je čak bila predložena za Nobelovu nagradu. U njima je autorica ispričala svoje umjetničke bajke u kojima je svojom maštom kombinirala realne i nestvarne događaje.', 0, 3, 6, 265, 107.10, 25.10, 3, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-51777-6') BEGIN
+    INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-0-51777-6'
+        ,N'Priče iz davnine'
+        ,NULL
+        ,N'Ove bajke autorici su donijele svjetsku slavu te je čak bila predložena za Nobelovu nagradu. U njima je autorica ispričala svoje umjetničke bajke u kojima je svojom maštom kombinirala realne i nestvarne događaje.'
+        ,0
+        ,3
+        ,6
+        ,265
+        ,107.10
+        ,25.10
+        ,3
+        ,NULL)
+END
+GO
 
 --IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-40606-3') BEGIN
 --  EXECUTE [dbo].[BookCreate] N'978-953-0-40606-3', N'Šuma Striborova', N'U šumu Striborovu zašao je mladić kako bi nasjekao drva za ogrjev. Dok je sjedio na panju ugledao je prekrasnu zmiju, koja je na suncu izgledala baš poput srebra. Mladić ju je zbog njene ljepote poželio odmah odnijeti kući. Nije prošlo puno i zmija se odjednom pretvori u prekrasnu djevojku koju je mladić odlučio oženiti. Djevojku je poveo svojoj kući gdje ih je dočekala mladićeva majka. Nije prošlo dugo i majka je u ustima djevojke primijetila zmijski jezik. Odmah je upozorila sina da se pazi jer je ta djevojka zla, ali on opijen ljepotom djeve nije htio slušati majku.', N'Zašao neki momak u šumu Striborovu, a nije znao da je ono šuma začarana i da se u njoj svakojaka čuda zbivaju. Zbivala se u njoj čuda dobra, ali i naopaka - svakome po zasluzi. Morala je pak ta šuma ostati začarana, doklegod u nju ne stupi onaj, kojemu je milija njegova nevolja, nego sva sreća ovoga svijeta.', 0, 3, 6, 31, 44.10, 13.10, 1, NULL, 1
@@ -600,6 +629,9 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[BookStores] WHERE [OIB] = N'09195262064'
     [Name],
     [OIB],
     [DelayPricePerDay],
+    [Address],
+    [Telephone],
+    [Mobile],
     [Email]
   )
   VALUES 
@@ -609,15 +641,11 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[BookStores] WHERE [OIB] = N'09195262064'
     N'Knjižara Jež',
     N'09195262064',
     1,
+    N'Ilica 127, Zagreb',
+    N'040855525',
+    N'0916235432',
     N'knjizara.jez@gmail.com'
   )
-END
-GO
-
--- BRANCHOFFICES
-
-IF NOT EXISTS (SELECT ALL * FROM [dbo].[BranchOffices] WHERE [Name] = N'Ježev brlog' AND [Address] = N'Ilica 127, Zagreb') BEGIN
-  EXECUTE [dbo].[BranchOfficeCreate] N'Ježev brlog', N'Ilica 127, Zagreb', N'040855525', N'knjizara.jez@gmail.com', 1
 END
 GO
 
@@ -678,7 +706,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 5 AND [UserF
 END
 GO
 
-IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 6 AND [UserFK] = 4) BEGIN
-  EXECUTE [dbo].[PurchasePurchase] 6, 4, 1, 1
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 4 AND [UserFK] = 4) BEGIN
+  EXECUTE [dbo].[PurchasePurchase] 4, 4, 1, 1
 END
 GO

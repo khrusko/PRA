@@ -1,4 +1,4 @@
-﻿@model BLL.Projection.BranchOfficeProjection
+﻿@model BLL.Projection.BookStoreProjection
 
 @{
   ViewBag.Title = "Contact";
@@ -10,9 +10,10 @@
   <div class="border border-1 border-secondary" style="width: 40%; padding: 20px 20px 20px 20px;">
     <h4>Kontaktirajte nas</h4>
     <hr />
-    <h6>Telefon: @Model.Telephone</h6> @* Editable - Phone *@
-    <h6>E-mail: @Model.Email</h6> @* Editable - E-mail *@
-    <h6>Adresa: @Model.Address</h6> @* Editable - Adress *@
+    <h6>Adresa: @Model.Address</h6>
+    <h6>Broj telefona: @Model.Telephone</h6>
+    <h6>Broj mobitela: @Model.Mobile</h6>
+    <h6>E-mail: @Model.Email</h6>
     <h6>OIB: 09195262064</h6>
 
     <table class="table table-bordered" style="width:90%">

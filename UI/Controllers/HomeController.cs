@@ -4,7 +4,6 @@ using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
-using BLL.Projection;
 
 using UI.Models;
 using UI.Models.Concrete;
@@ -15,7 +14,6 @@ namespace UI.Controllers
   {
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
-    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
     private readonly IMessageManager _messageManager = new MessageManager();
     private readonly IBookStoreManager _bookStoreManager = new BookStoreManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
@@ -50,7 +48,7 @@ namespace UI.Controllers
     public ViewResult TermsOfService() => View(viewName: nameof(TermsOfService));
 
     [HttpGet]
-    public ViewResult Contact() => View(viewName: nameof(Contact), model: _branchOfficeManager.GetByID(1));
+    public ViewResult Contact() => View(viewName: nameof(Contact), model: _bookStoreManager.GetBookStore());
 
     [HttpGet]
     public ViewResult ContactUs() => View(viewName: nameof(ContactUs));
