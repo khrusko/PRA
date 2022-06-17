@@ -31,6 +31,9 @@ namespace DAL.Repository.Database
         { "Name",             SqlDbType.NVarChar },
         { "OIB",              SqlDbType.Char },
         { "DelayPricePerDay", SqlDbType.Decimal },
+        { "Address",          SqlDbType.NVarChar },
+        { "Telephone",        SqlDbType.NVarChar },
+        { "Mobile",           SqlDbType.NVarChar },
         { "Email",            SqlDbType.NVarChar },
       };
 
@@ -83,6 +86,27 @@ namespace DAL.Repository.Database
           Direction = ParameterDirection.Input,
           SqlDbType = DbKeyTypePairs["DelayPricePerDay"],
           Value = entity.DelayPricePerDay,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Address",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Address"],
+          Value = entity.Address,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Telephone",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Telephone"],
+          Value = entity.Telephone,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Mobile",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Mobile"],
+          Value = entity.Mobile,
         },
         new SqlParameter()
         {
