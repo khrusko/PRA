@@ -22,9 +22,9 @@ namespace UI.Controllers
     public ViewResult Index()
     {
       IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
-                                          join publisher in _publisherManager.GetAll()
+                                          join publisher in _publisherManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals publisher.ID
-                                          join author in _authorManager.GetAll()
+                                          join author in _authorManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals author.ID
                                           select new FullBookInfoVM
                                           {
@@ -51,7 +51,17 @@ namespace UI.Controllers
     public ViewResult Contact() => View(viewName: nameof(Contact), model: _bookStoreManager.GetBookStore());
 
     [HttpGet]
-    public ViewResult ContactUs() => View(viewName: nameof(ContactUs));
+    public ViewResult ContactUs()
+      => View(viewName: nameof(ContactUs),
+              model: !(LoggedInUser is null)
+                ? new ContactFormVM
+                {
+                  FName = LoggedInUser.FName,
+                  LName = LoggedInUser.LName,
+                  Email = LoggedInUser.Email
+                }
+                : new ContactFormVM());
+
 
     [HttpPost]
     public ActionResult ContactUs(ContactFormVM model)
@@ -64,7 +74,7 @@ namespace UI.Controllers
       _ = _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
 
       Message = new InfoMessage(message: "Upit je uspješno poslan");
-      return RedirectToAction(actionName: "Index", controllerName: "Book");
+      return RedirectToAction(actionName: "Index", controllerName: "Home");
     }
   }
 }

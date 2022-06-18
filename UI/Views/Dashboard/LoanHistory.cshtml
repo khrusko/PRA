@@ -1,9 +1,6 @@
-﻿@using BLL.Projection
-@using UI.Models
+﻿@using UI.Models
 @model  IEnumerable<LoanBookVM>
-@{
-  var user = Session["user"] as UserProjection;
-}
+
 @{
   ViewBag.Title = "Povijest posudbi";
 }
@@ -18,7 +15,8 @@
       @foreach (var loan in Model)
       {
 
-        @Html.Partial(partialViewName: "_LoanCard", model: loan)
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
 
       }
 

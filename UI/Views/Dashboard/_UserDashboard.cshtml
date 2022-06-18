@@ -1,35 +1,38 @@
-﻿@using BLL.Projection
-@using UI.Models
+﻿@using UI.Models
 @model  IEnumerable<LoanBookVM>
+
 @{
-  var user = Session["user"] as UserProjection;
 }
 
-<!DOCTYPE html>
-<html>
-<body>
+<div>
+  @Html.ActionLink(linkText: "Povijest posudbi",
+                   actionName: "LoanHistory",
+                   controllerName: "Dashboard",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Povijest kupnji",
+                   actionName: "ShoppingHistory",
+                   controllerName: "Dashboard",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+</div>
 
-  <div>
-    <input type="button" class="btn btn-primary" value="Povijest posudbi" onclick="@("window.location.href='" + @Url.Action(actionName:"LoanHistory",controllerName:"Dashboard")+"'" );" />
-    <input type="button" class="btn btn-primary" value="Povijest kupovina" onclick="@("window.location.href='" + @Url.Action(actionName:"ShoppingHistory",controllerName:"Dashboard")+"'" );" />
-  </div>
+<div class="album py-5">
+  <h3>Trenutno posuđene knjige</h3>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-  <div class="album py-5">
-    <h3>Trenutno posuđene knjige</h3>
-    <div class="container">
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      @foreach (var loan in Model) {
 
-        @foreach (var loan in Model)
-        {
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
 
-          @Html.Partial(partialViewName: "_LoanCard", model: loan)
+      }
 
-        }
-
-      </div>
     </div>
   </div>
-
-
-</body>
-</html>
+</div>

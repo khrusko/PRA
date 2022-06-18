@@ -115,7 +115,7 @@ namespace DAL.Repository.Database
       };
       parameters.Add(returnValue);
 
-      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Send), parameters.ToArray());
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Respond), parameters.ToArray());
 
       return Int32.Parse(returnValue.Value.ToString());
     }

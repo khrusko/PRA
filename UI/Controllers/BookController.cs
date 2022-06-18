@@ -23,7 +23,7 @@ namespace UI.Controllers
     private readonly IAuthorManager _authorManager = new AuthorManager();
 
     [HttpGet]
-    public ActionResult Details(Int32 id)
+    public ActionResult Details(Int32 id = 0)
     {
       BookProjection book = _bookManager.GetByID(ID: id);
       return book is null
@@ -103,7 +103,7 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthorize]
-    public ActionResult Edit(Int32 id)
+    public ActionResult Edit(Int32 id = 0)
     {
       BookProjection projection = _bookManager.GetByID(id);
 
@@ -193,7 +193,7 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthorize]
-    public ActionResult Delete(Int32 id)
+    public ActionResult Delete(Int32 id = 0)
     {
       Int32 deletedCount = _bookManager.Remove(ID: id, deletedBy: LoggedInUser.ID);
       if (deletedCount == 0)
@@ -211,10 +211,10 @@ namespace UI.Controllers
                              SortDirection sortDirection = 0,
                              Int32 page = 1)
     {
-      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
-                                          join publisher in _publisherManager.GetAll()
+      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll(availabilityCheck: false)
+                                          join publisher in _publisherManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals publisher.ID
-                                          join author in _authorManager.GetAll()
+                                          join author in _authorManager.GetAll(availabilityCheck: false)
                                             on book.AuthorFK equals author.ID
                                           where !availableOnly || book.Quantity > 0
                                           where book.Title.ToLower().Contains(value: bookQuery?.ToLower() ?? String.Empty)

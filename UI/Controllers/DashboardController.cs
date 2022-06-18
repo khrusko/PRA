@@ -1,30 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
+using System;
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
-using BLL.Projection;
 
+using UI.Infrastructure;
 using UI.Models;
-using UI.Models.Concrete;
 namespace UI.Controllers
 {
+  [UserAuthenticate]
   public class DashboardController : BaseController
   {
 
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
-    private readonly IMessageManager _messageManager = new MessageManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
+    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
+
+    //    Authorize - IsAdmin
+    //Authenticate  - IsLoggedIn
 
     [HttpGet]
+    [UserAuthenticate]
     public ActionResult Index()
     {
-      if (!ModelState.IsValid) return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
-      if (LoggedInUser == null) return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
       IEnumerable<LoanBookVM> loans;
+
       if (!LoggedInUser.IsAdmin)
       {
         loans = from loan in _loanManager.GetActiveByUserFK(LoggedInUser.ID)
@@ -32,34 +35,35 @@ namespace UI.Controllers
                   on loan.BookFK equals book.ID
                 join author in _authorManager.GetAll()
                   on book.AuthorFK equals author.ID
-
                 select new LoanBookVM
                 {
                   Book = book,
                   Author = author,
                   Loan = loan
                 };
-        return View("Index", loans);
+
+        return View(viewName: nameof(Index), model: loans);
       }
-      else if (LoggedInUser.IsAdmin)
+      else
       {
         loans = from loan in _loanManager.GetAll()
                 join book in _bookManager.GetAll()
                   on loan.BookFK equals book.ID
                 join author in _authorManager.GetAll()
                   on book.AuthorFK equals author.ID
-
                 select new LoanBookVM
                 {
                   Book = book,
                   Author = author,
                   Loan = loan
                 };
-        return View("Index", loans);
+
+        return View(viewName: nameof(Index), model: loans);
       }
-      return RedirectToAction(actionName: "NotFound", controllerName: "HttpErrors");
     }
 
+    [HttpGet]
+    [UserAuthorize]
     public ActionResult LoanHistory()
     {
       IEnumerable<LoanBookVM> loans = from loan in _loanManager.GetByUserFK(LoggedInUser.ID)
@@ -67,17 +71,17 @@ namespace UI.Controllers
                                         on loan.BookFK equals book.ID
                                       join author in _authorManager.GetAll()
                                         on book.AuthorFK equals author.ID
-
                                       select new LoanBookVM
                                       {
                                         Book = book,
                                         Author = author,
                                         Loan = loan
                                       };
+
       return View("LoanHistory", loans);
     }
 
-
+    [HttpGet]
     public ActionResult ShoppingHistory()
     {
       IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetByUserFK(LoggedInUser.ID)
@@ -96,26 +100,8 @@ namespace UI.Controllers
 
     }
 
-    public ActionResult AddAuthor()
-    {
-      return View();
-    }
-
-    public ActionResult AddBook()
-    {
-      return View();
-    }
-
-    public ActionResult AddEmployee()
-    {
-      return View();
-    }
-
-    public ActionResult EditBranchOfficeDetails()
-    {
-      return View();
-    }
-
+    [HttpGet]
+    [UserAuthorize]
     public ActionResult SalesHistory()
     {
       IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetAll()
@@ -131,12 +117,6 @@ namespace UI.Controllers
                                                 Purchase = purchase
                                               };
       return View("SalesHistory", purchases);
-    }
-
-    public ActionResult UserMessages()
-    {
-      IEnumerable<MessageProjection> messages = _messageManager.GetAll();
-      return View("UserMessages",messages);
     }
   }
 }

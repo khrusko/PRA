@@ -10,13 +10,7 @@
 {
   @Html.Partial(partialViewName: "_AdminDashboard")
 }
-
-else if (!user.IsAdmin)
-{
-  @Html.Partial(partialViewName: "_UserDashboard")
-}
-
 else
 {
-  @Html.Action(controllerName: "HttpErrorsController", actionName: "NotFound")
+  @Html.Partial(partialViewName: "_UserDashboard")
 }
