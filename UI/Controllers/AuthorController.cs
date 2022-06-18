@@ -16,7 +16,7 @@ namespace UI.Controllers
     private readonly IAuthorManager _authorManager = new AuthorManager();
 
     [HttpGet]
-    public ActionResult Details(Int32 id)
+    public ActionResult Details(Int32 id = 0)
     {
       AuthorProjection projection = _authorManager.GetByID(id);
       return projection is null
@@ -70,7 +70,7 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthorize]
-    public ActionResult Edit(Int32 id)
+    public ActionResult Edit(Int32 id = 0)
     {
       AuthorProjection projection = _authorManager.GetByID(id);
 
@@ -136,7 +136,7 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthorize]
-    public ActionResult Delete(Int32 id)
+    public ActionResult Delete(Int32 id = 0)
     {
       Int32 deletedCount = _authorManager.Remove(ID: id, deletedBy: LoggedInUser.ID);
       if (deletedCount == 0)

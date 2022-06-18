@@ -40,6 +40,23 @@ namespace UI
                             id = new GuidRouteConstraint()
                           });
 
+      _ = routes.MapRoute(name: "Respond",
+                    url: "Message/Respond/{id}",
+                    defaults: new
+                    {
+                      controller = "Message",
+                      action = "Respond",
+                      id = UrlParameter.Optional
+                    },
+                    constraints: new
+                    {
+                      id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                      {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                      })
+                    });
+
       _ = routes.MapRoute(name: "Details",
                           url: "{controller}/Details/{id}",
                           defaults: new
