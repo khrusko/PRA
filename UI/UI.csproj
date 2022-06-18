@@ -189,6 +189,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HttpErrorsController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -210,6 +211,9 @@
     <Compile Include="Models\Concrete\AlertMessage.cs" />
     <Compile Include="Models\Abstract\MessageBase.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
+    <Compile Include="Models\MessageDetailsVM.cs" />
+    <Compile Include="Models\MessageListVM.cs" />
+    <Compile Include="Models\MessageRespondVM.cs" />
     <Compile Include="Models\UserEditVM.cs" />
     <Compile Include="Models\Enums\BookSortType.cs" />
     <Compile Include="Models\Enums\MessageType.cs" />
@@ -278,9 +282,6 @@
     <Content Include="Views\Shared\_LoanCard.cshtml" />
     <Content Include="Views\Shared\_PurchaseCard.cshtml" />
     <Content Include="Views\Dashboard\SalesHistory.cshtml" />
-    <Content Include="Views\Dashboard\UserMessages.cshtml" />
-    <Content Include="Views\Dashboard\EditBranchOfficeDetails.cshtml" />
-    <Content Include="Views\Dashboard\_RespondUserMessage.cshtml" />
     <Content Include="Views\Author\Details.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Author\Create.cshtml" />
@@ -288,6 +289,10 @@
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\Create.cshtml" />
     <Content Include="Views\BookStore\Edit.cshtml" />
+    <Content Include="Views\Message\List.cshtml" />
+    <Content Include="Views\Message\_MessageCard.cshtml" />
+    <Content Include="Views\Message\Details.cshtml" />
+    <Content Include="Views\Message\Respond.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

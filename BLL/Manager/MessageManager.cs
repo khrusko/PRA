@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -68,6 +72,28 @@ namespace BLL.Manager
     public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
     public Int32 Respond(Int32 ID, Int32 responderUserFK, String responderMessage)
-      => (Repository as IMessageRepository).Respond(ID, responderUserFK, responderMessage);
+    {
+      MessageProjection message = GetByID(ID);
+      if (message == null) return 0;
+
+      Int32 updatedCount = (Repository as IMessageRepository).Respond(ID, responderUserFK, responderMessage);
+      if (updatedCount == 0) return 0;
+
+      message.ResponderUserFK = responderUserFK;
+      message.ResponderMessage = responderMessage;
+      SendRespondMessageEmail(message);
+
+      return updatedCount;
+    }
+
+    private void SendRespondMessageEmail(MessageProjection projection)
+    {
+      String subject = "Odgovor na upit";
+      String body = $"<br />Upit:<br />{projection.SenderMessage}<br />Odgovor: <br />{projection.ResponderMessage}";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(projection.SenderEmail, $"{projection.SenderFName} {projection.SenderLName}");
+      emailSender.SendEmail(subject, body);
+    }
   }
 }

@@ -1,0 +1,40 @@
+﻿@using UI.Models
+@model MessageListVM
+
+@{
+  ViewBag.Title = "Korisničke poruke";
+}
+
+<h2>Neodgovorene poruke</h2>
+
+<div class="album py-5">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var message in Model.NotRespondedMessages) {
+
+        @Html.Partial(partialViewName: "_MessageCard",
+                      model: message)
+
+      }
+
+    </div>
+  </div>
+</div>
+
+<hr />
+<h2>Odgovorene poruke</h2>
+<div class="album py-5">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var message in Model.RespondedMessages) {
+
+        @Html.Partial(partialViewName: "_MessageCard",
+                      model: message)
+
+      }
+
+    </div>
+  </div>
+</div>
