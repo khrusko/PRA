@@ -17,7 +17,6 @@ namespace UI.Controllers
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
-    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
 
     //    Authorize - IsAdmin
     //Authenticate  - IsLoggedIn
