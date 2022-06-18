@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-
+using System;
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
 
@@ -17,8 +17,13 @@ namespace UI.Controllers
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
+    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
+
+    //    Authorize - IsAdmin
+    //Authenticate  - IsLoggedIn
 
     [HttpGet]
+    [UserAuthenticate]
     public ActionResult Index()
     {
       IEnumerable<LoanBookVM> loans;
