@@ -8,12 +8,16 @@ using PayPalCheckoutSdk.Orders;
 using PayPalHttp;
 using UI.Controllers;
 using UI.Infrastructure;
+using BLL.Manager;
+using BLL.Projection;
+using System.Globalization;
 
 ///Reference to PayPalCheckoutSdk.dll is added. This dll is built by downloading checkout .NET SDK from github
 namespace Udreka.Controllers
 {
   public class PaypalV2DemoController : BaseController
   {
+    private readonly BookManager _bookManager = new BookManager();
     #region ClientID_and_secret
     private readonly String _paypalEnvironment = "sandbox";//live
     private readonly String _clientId = "AST-S4Sd3FejsjKBGDr4865GFCXZ535pw0ryxYBosib8sp4TuTAwYYANwbcIEnkAQ5XElz7IWFVb8rDX";
@@ -27,10 +31,10 @@ namespace Udreka.Controllers
       return View();
     }
 
-    public async Task<ActionResult> Paypalvtwo(string Cancel = null)
+    public async Task<ActionResult> Paypalvtwo(Int32 id=0, string Cancel = null)
     {
       #region local_variables
-
+      
       //setup paypal environment to save some essential varaibles
       MyPaypalPayment.MyPaypalSetup payPalSetup
           = new MyPaypalPayment.MyPaypalSetup { Environment = _paypalEnvironment, ClientId = _clientId, Secret = _secret };
@@ -45,7 +49,7 @@ namespace Udreka.Controllers
       //check if payer has cancelled the transaction, if yes, do nothing. Let the payer know about his actions
       if (!string.IsNullOrEmpty(Cancel) && Cancel.Trim().ToLower() == "true")
       {
-        paymentResultList.Add("You cancelled the transaction.");
+        paymentResultList.Add("Otkazali ste transakciju.");
         return View("Index", paymentResultList);
       }
 
@@ -65,6 +69,7 @@ namespace Udreka.Controllers
         {
           //redirect URL. when approved or cancelled on PayPal, PayPal uses this URL to redirect to your app/website.
           payPalSetup.RedirectUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/PaypalV2Demo/Paypalvtwo?";
+          payPalSetup.bookProjection = _bookManager.GetByID(id);
           HttpResponse response = await MyPaypalPayment.createOrder(payPalSetup);
 
           var statusCode = response.StatusCode;
@@ -87,8 +92,8 @@ namespace Udreka.Controllers
         }
         catch (Exception ex)
         {
-          paymentResultList.Add("There was an error in processing your payment");
-          paymentResultList.Add("Details: " + ex.Message);
+          paymentResultList.Add("Javila se greška u obradi vaše transakcije");
+          paymentResultList.Add("Detalji: " + ex.Message);
         }
 
         #endregion
@@ -108,21 +113,21 @@ namespace Udreka.Controllers
 
           //update view bag so user/payer gets to know the status
           if (result.Status.Trim().ToUpper() == "COMPLETED")
-            paymentResultList.Add("Payment Successful. Thank you.");
-          paymentResultList.Add("Payment State: " + result.Status);
-          paymentResultList.Add("Payment ID: " + result.Id);
+            paymentResultList.Add("Plaćanje je bilo uspješno. Hvala.");
+          paymentResultList.Add("Status: ZAVRŠENO");
+          paymentResultList.Add("Identifikator plaćanja: " + result.Id);
 
           #region null_checks
           if (result.PurchaseUnits != null && result.PurchaseUnits.Count > 0 &&
               result.PurchaseUnits[0].Payments != null && result.PurchaseUnits[0].Payments.Captures != null &&
               result.PurchaseUnits[0].Payments.Captures.Count > 0)
             #endregion
-            paymentResultList.Add("Transaction ID: " + result.PurchaseUnits[0].Payments.Captures[0].Id);
+            paymentResultList.Add("Identifikator transakcije: " + result.PurchaseUnits[0].Payments.Captures[0].Id);
         }
         catch (Exception ex)
         {
-          paymentResultList.Add("There was an error in processing your payment");
-          paymentResultList.Add("Details: " + ex.Message);
+          paymentResultList.Add("Javila se greška u obradi vaše transakcije");
+          paymentResultList.Add("Detalji: " + ex.Message);
         }
 
         #endregion
@@ -188,44 +193,34 @@ namespace Udreka.Controllers
                                     new Item()
                                     {
                                         Quantity = "1",
-                                        Name = "Shirt",
-                                        Description = "Puma Shirt Exercise",
-                                        Sku = "sku",
-                                        Tax = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "AUD", Value = "0.05" },
-                                        UnitAmount = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "AUD", Value = "0.50" }
-                                    },
-                                    new Item()
-                                    {
-                                        Quantity = "1",
-                                        Name = "Shoes",
-                                        Description = "Puma Blue Size 7",
-                                        Sku = "sku",
-                                        Tax = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "AUD", Value = "0.10" },
-                                        UnitAmount = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "AUD", Value = "0.90" }
+                                        Name = "Knjiga",
+                                        Description = paypalSetup.bookProjection.Title,
+                                        Tax = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "EUR", Value = "0.0" },
+                                        UnitAmount = new PayPalCheckoutSdk.Orders.Money(){ CurrencyCode = "EUR", Value = paypalSetup.bookProjection.PurchasePrice.ToString("0.00", CultureInfo.InvariantCulture) }
                                     }
                                 },
 
                                 AmountWithBreakdown = new AmountWithBreakdown()
                                 {
-                                    CurrencyCode = "AUD",
-                                    Value = "1.65",
+                                    CurrencyCode = "EUR",
+                                    Value = paypalSetup.bookProjection.PurchasePrice.ToString("0.00", CultureInfo.InvariantCulture),
 
                                     AmountBreakdown = new AmountBreakdown()
                                     {
                                         TaxTotal = new PayPalCheckoutSdk.Orders.Money()
                                         {
-                                            CurrencyCode = "AUD",
-                                            Value = "0.15"
+                                            CurrencyCode = "EUR",
+                                            Value = "0.00"
                                         },
                                         Shipping = new PayPalCheckoutSdk.Orders.Money()
                                         {
-                                            CurrencyCode = "AUD",
-                                            Value = "0.10"
+                                            CurrencyCode = "EUR",
+                                            Value = "0.00"
                                         },
                                         ItemTotal = new PayPalCheckoutSdk.Orders.Money()
                                         {
-                                            CurrencyCode = "AUD",
-                                            Value = "1.40"
+                                            CurrencyCode = "EUR",
+                                            Value = paypalSetup.bookProjection.PurchasePrice.ToString("0.00", CultureInfo.InvariantCulture)
                                         }
                                     }
                                 }
@@ -309,6 +304,8 @@ namespace Udreka.Controllers
         /// Store this approved order ID in this property
         /// </summary>
         public String PayerApprovedOrderId { get; set; }
+
+        public BookProjection bookProjection { get; set; }
       }
 
     }

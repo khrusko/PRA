@@ -24,20 +24,18 @@
 <br />
 <span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.Book.PurchasePrice kn</span>
 <br />
-@using (Html.BeginForm(actionName: "Index", controllerName: "Purchase", method: FormMethod.Post))
-{
-  @Html.AntiForgeryToken()
 
 
+<hr />
 
-  <hr />
-  <div>
+@Html.ActionLink(linkText: "Kupi s PayPal-om",
+           actionName: "Paypalvtwo",
+           controllerName: "PaypalV2Demo",
+           routeValues: new { id = Model.Book.ID },
+     htmlAttributes: new { @class = "btn btn-outline-primary" })
 
-    <button type="submit" class="btn btn-primary">Kupi</button>
-    @Html.ActionLink(linkText: "Odustani",
-               actionName: "Details",
-               controllerName: "Book",
-               routeValues: new { id = Model.Book.ID },
-         htmlAttributes: new { @class = "btn btn-outline-secondary" })
-  </div>
-}
+@Html.ActionLink(linkText: "Odustani",
+           actionName: "Details",
+           controllerName: "Book",
+           routeValues: new { id = Model.Book.ID },
+     htmlAttributes: new { @class = "btn btn-outline-secondary" })

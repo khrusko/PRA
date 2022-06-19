@@ -5,12 +5,12 @@
 
 <div id="loginOptionBox" class="text-center">
   <div id="subheading" class="jumbotron text-center">
-    <h3>Platite pomoću PayPal-a</h3>
+    <h1>Informacije o transakciji</h1>
+    <hr />
   </div>
 
-  <div class="btn" onclick="CallPaypal();"><img style="width:100px;height:50px" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVRfEfeIC01yH3_5z_DC1h80NXqiaFpsdfEQ&usqp=CAU"/></div>
 
-
+  
   <!-- display messagesto the payer -->
   @if (Model != null && Model.Count > 0)
   {
@@ -19,12 +19,9 @@
       <div class="h4">@res</div>
     }
   }
+      else
+      {
+        <h4>Trenutno nema detalja o transakciji.</h4>
+      }
 
 </div>
-
-<script>
-
-    function CallPaypal() {
-        window.location.href = '@Url.Action("Paypalvtwo")';
-    }
-</script>
