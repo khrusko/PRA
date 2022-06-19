@@ -1,0 +1,43 @@
+﻿@using UI.Models
+@model PurchaseBookVM
+@{
+  ViewBag.Title = "Kupovina knjiga";
+}
+
+<h2>Kupite @Model.Book.Title</h2>
+
+<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.Author.FName @Model.Author.LName</span>
+<br />
+<span style="font-size:20px" class="fw-bold">Stanje: </span>
+<span style="font-size:20px">
+  @if (Model.Book.IsNew)
+  {
+    <span>Novo</span>
+  }
+  else
+  {
+    <span>Rabljeno</span>
+  }
+</span>
+<br />
+<span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.Book.Quantity kom</span>
+<br />
+<span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.Book.PurchasePrice kn</span>
+<br />
+@using (Html.BeginForm(actionName: "Index", controllerName: "Purchase", method: FormMethod.Post))
+{
+  @Html.AntiForgeryToken()
+
+
+
+  <hr />
+  <div>
+
+    <button type="submit" class="btn btn-primary">Kupi</button>
+    @Html.ActionLink(linkText: "Odustani",
+               actionName: "Details",
+               controllerName: "Book",
+               routeValues: new { id = Model.Book.ID },
+         htmlAttributes: new { @class = "btn btn-outline-secondary" })
+  </div>
+}

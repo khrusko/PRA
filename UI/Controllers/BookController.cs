@@ -19,8 +19,11 @@ namespace UI.Controllers
     private const Int32 PAGE_SIZE = 6;
 
     private readonly IBookManager _bookManager = new BookManager();
+    private readonly IBookStoreManager _bookstoreManager = new BookStoreManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
+    private readonly ILoanManager _loanManager = new LoanManager();
+    private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
 
     [HttpGet]
     public ActionResult Details(Int32 id = 0)
@@ -129,6 +132,9 @@ namespace UI.Controllers
                                Authors = _authorManager.GetAll(),
                              });
     }
+
+    
+
 
     [HttpPost]
     [UserAuthorize]

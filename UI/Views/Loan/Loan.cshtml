@@ -1,0 +1,66 @@
+﻿@using UI.Models
+@model UserLoanBookVM
+@{
+  ViewBag.Title = "Posudba knjiga";
+}
+
+<h2>Posudite @Model.Book.Title</h2>
+
+<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.Author.FName @Model.Author.LName</span>
+<br />
+<span style="font-size:20px" class="fw-bold">Stanje: </span>
+<span style="font-size:20px">
+  @if (Model.Book.IsNew)
+  {
+    <span>Novo</span>
+  }
+  else
+  {
+    <span>Rabljeno</span>
+  }
+  </span>
+  <br />
+  <span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.Book.Quantity kom</span>
+  <br />
+  <span style="font-size:20px" class="fw-bold">Cijena za posudbu: </span><span style="font-size:20px">@Model.Book.LoanPrice kn</span>
+  <br />
+  <span style="font-size:20px" class="fw-bold">Zakasnina: </span><span style="font-size:20px">@Model.Bookstore.DelayPricePerDay kn</span>
+  <br />
+  @using (Html.BeginForm(actionName: "Loan",
+                         controllerName: "Loan",
+                         method: FormMethod.Post,
+                         htmlAttributes: new
+                         {
+                           enctype = "multipart/form-data"
+                         }))
+  {
+    @Html.AntiForgeryToken()
+
+    <div class="col-10">
+
+      @{ List<SelectListItem> dateList = new List<SelectListItem>()
+{
+          new SelectListItem{ Text="1 tjedan", Value="7"},
+          new SelectListItem{ Text="2 tjedna", Value="14"},
+          new SelectListItem{ Text="3 tjedna", Value="21"},
+          new SelectListItem{ Text="4 tjedna", Value="28"},
+
+       };
+      }
+      <div class="col-md-3">
+        <span style="font-size:20px" class="fw-bold">
+          Odaberite rok vraćanja: @Html.DropDownListFor(expression: model => model.Loan.PlannedReturnDate, selectList: dateList, htmlAttributes: new { @class = "form-select" })
+        </span>
+      </div>
+
+    </div>
+    <hr />
+    <div>
+      <button type="submit" class="btn btn-primary">Posudi</button>
+      @Html.ActionLink(linkText: "Odustani",
+                 actionName: "Details",
+                 controllerName: "Book",
+                 routeValues: new { id = Model.Book.ID },
+                 htmlAttributes: new { @class = "btn btn-outline-secondary" })
+    </div>
+  }

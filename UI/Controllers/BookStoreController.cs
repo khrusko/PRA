@@ -65,8 +65,8 @@ namespace UI.Controllers
       }
 
       Message = new InfoMessage(message: "Promijena podataka je uspješna");
-      return RedirectToAction(actionName: "Index",
-                              controllerName: "Dashboard");
+      return RedirectToAction(actionName: "Contact",
+                              controllerName: "Home");
     }
   }
 }
