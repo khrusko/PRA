@@ -16,9 +16,12 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44306</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -239,6 +242,7 @@
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\PaypalV2DemoController.cs" />
     <Compile Include="Controllers\PurchaseController.cs" />
+    <Compile Include="Controllers\SubscriptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Global.asax.cs">
@@ -355,6 +359,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Images\" />
+    <Folder Include="Views\Subscription\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj">
@@ -381,7 +386,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55141</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44306/</IISUrl>
+          <IISUrl>http://localhost:50162/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
