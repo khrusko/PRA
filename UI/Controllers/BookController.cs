@@ -133,9 +133,6 @@ namespace UI.Controllers
                              });
     }
 
-    
-
-
     [HttpPost]
     [UserAuthorize]
     public ActionResult Edit(BookVM model)

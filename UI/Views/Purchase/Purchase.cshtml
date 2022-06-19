@@ -1,41 +1,50 @@
 ﻿@using UI.Models
 @model PurchaseBookVM
+
 @{
   ViewBag.Title = "Kupovina knjiga";
 }
 
-<h2>Kupite @Model.Book.Title</h2>
+<h2>Kupite @Model.BookInfo.Book.Title</h2>
 
-<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.Author.FName @Model.Author.LName</span>
+<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.BookInfo.Author.FName @Model.BookInfo.Author.LName</span>
 <br />
 <span style="font-size:20px" class="fw-bold">Stanje: </span>
 <span style="font-size:20px">
-  @if (Model.Book.IsNew)
-  {
+  @if (Model.BookInfo.Book.IsNew) {
     <span>Novo</span>
   }
-  else
-  {
+  else {
     <span>Rabljeno</span>
   }
 </span>
 <br />
-<span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.Book.Quantity kom</span>
+<span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.BookInfo.Book.Quantity kom</span>
 <br />
-<span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.Book.PurchasePrice kn</span>
+<span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.BookInfo.Book.PurchasePrice kn</span>
 <br />
-
 
 <hr />
 
-@Html.ActionLink(linkText: "Kupi s PayPal-om",
-           actionName: "Paypalvtwo",
-           controllerName: "PaypalV2Demo",
-           routeValues: new { id = Model.Book.ID },
-     htmlAttributes: new { @class = "btn btn-outline-primary" })
+@using (Html.BeginForm(actionName: "Purchase",
+                       controllerName: "Purchase",
+                       method: FormMethod.Post)) {
+  @Html.AntiForgeryToken()
 
-@Html.ActionLink(linkText: "Odustani",
-           actionName: "Details",
-           controllerName: "Book",
-           routeValues: new { id = Model.Book.ID },
-     htmlAttributes: new { @class = "btn btn-outline-secondary" })
+  @Html.HiddenFor(expression: model => model.BookID)
+
+  <div class="mb-3">
+    @Html.LabelFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+    @Html.TextBoxFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-control" })
+    @Html.ValidationMessageFor(expression: model => model.Quantity)
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary">Potvrdi</button>
+    @Html.ActionLink(linkText: "Odustani",
+               actionName: "Details",
+               controllerName: "Book",
+               routeValues: new { id = Model.BookID },
+               htmlAttributes: new { @class = "btn btn-outline-secondary" })
+  </div>
+}

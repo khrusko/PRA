@@ -7,7 +7,7 @@ using BLL.Projection;
 
 namespace UI.Models
 {
-  public class UserLoanBookVM
+  public class LoanVM
   {
     public BookProjection Book { get; set; }
     public BookStoreProjection Bookstore { get; set; }
