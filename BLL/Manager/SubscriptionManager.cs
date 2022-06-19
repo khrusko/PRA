@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Abstract.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -58,5 +63,30 @@ namespace BLL.Manager
       => Subscribe(projection.BookFK, projection.UserFK);
     public Int32 Subscribe(Int32 bookFK, Int32 userFK)
       => (Repository as ISubscriptionRepository).Subscribe(bookFK, userFK, userFK);
+
+    public IEnumerable<SubscriptionProjection> GetAllUnresolved()
+      => (Repository as ISubscriptionRepository).ReadAllUnresolved().Select(Project);
+    public Int32 Resolve(Int32 ID, BookProjection book, UserProjection user)
+    {
+      Int32 updatedCount = (Repository as ISubscriptionRepository).Resolve(ID);
+      if (updatedCount == 0) return 0;
+
+      SendResolvedSubscriptionMail(book, user);
+
+      return updatedCount;
+    }
+
+    private void SendResolvedSubscriptionMail(BookProjection book, UserProjection user)
+{
+      String verificationLink = $"/Book/Details/{book.ID}";
+      String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
+
+      String subject = $"Dostupna je knjiga {book.Title}";
+      String body = $"<br />Knjiga {book.Title} je dostupna za kupnju ili posudbu.<br />Obavite željenu radnju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
+      emailSender.SendEmail(subject, body);
+    }
   }
 }

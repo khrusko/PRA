@@ -1,4 +1,275 @@
-﻿IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = N'admin@admin.com') BEGIN
+﻿USE [msdb]
+GO
+
+-- JOBS
+
+BEGIN TRANSACTION
+DECLARE @ReturnCode AS int = 0
+IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                              @type   = N'LOCAL',
+                                              @name   = N'[Uncategorized (Local)]'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+END
+
+DECLARE @jobId AS binary(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'SubscriptionResolve',
+                                        @enabled                = 1,
+                                        @notify_level_eventlog  = 0,
+                                        @notify_level_email     = 0,
+                                        @notify_level_netsend   = 0,
+                                        @notify_level_page      = 0,
+                                        @delete_level           = 0,
+                                        @description            = N'No description available.',
+                                        @category_name          = N'[Uncategorized (Local)]',
+                                        @owner_login_name       = N'sa',
+                                        @job_id                 = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                           @step_name             = N'CallEndpoint', 
+                                           @step_id               = 1, 
+                                           @cmdexec_success_code  = 0, 
+                                           @on_success_action     = 1, 
+                                           @on_success_step_id    = 0, 
+                                           @on_fail_action        = 2, 
+                                           @on_fail_step_id       = 0, 
+                                           @retry_attempts        = 0, 
+                                           @retry_interval        = 0, 
+                                           @os_run_priority       = 0,
+                                           @subsystem             = N'PowerShell', 
+                                           @command               = N'PowerShell.exe -Command "& { Invoke-WebRequest -URI http://localhost:50162/Subscription/Resolve }"', 
+                                           @database_name         = N'BOOKSTORE', 
+                                           @flags                 = 0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                          @start_step_id  = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                               @name                    = N'CallEndpointSchedule', 
+                                               @enabled                 = 1, 
+                                               @freq_type               = 4, 
+                                               @freq_interval           = 1, 
+                                               @freq_subday_type        = 4, 
+                                               @freq_subday_interval    = 10, 
+                                               @freq_relative_interval  = 0, 
+                                               @freq_recurrence_factor  = 0, 
+                                               @active_start_date       = 20220619, 
+                                               @active_end_date         = 99991231, 
+                                               @active_start_time       = 0, 
+                                               @active_end_time         = 235959, 
+                                               @schedule_uid            = N'db385f89-a88f-48c9-8a12-7a29bada5a0b'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                             @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+COMMIT TRANSACTION
+GOTO EndSave
+
+QuitWithRollback:
+    IF (@@TRANCOUNT > 0) BEGIN
+      ROLLBACK TRANSACTION
+    END
+
+EndSave:
+GO
+
+BEGIN TRANSACTION
+DECLARE @ReturnCode AS int = 0
+IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                              @type   = N'LOCAL',
+                                              @name   = N'[Uncategorized (Local)]'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+END
+
+DECLARE @jobId AS binary(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DeleteTimeoutRegistration',
+                                        @enabled                = 1,
+                                        @notify_level_eventlog  = 0,
+                                        @notify_level_email     = 0,
+                                        @notify_level_netsend   = 0,
+                                        @notify_level_page      = 0,
+                                        @delete_level           = 0,
+                                        @description            = N'No description available.',
+                                        @category_name          = N'[Uncategorized (Local)]',
+                                        @owner_login_name       = N'sa',
+                                        @job_id                 = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                           @step_name             = N'CallProcedureUserDeleteTimeoutRegistration', 
+                                           @step_id               = 1, 
+                                           @cmdexec_success_code  = 0, 
+                                           @on_success_action     = 1, 
+                                           @on_success_step_id    = 0, 
+                                           @on_fail_action        = 2, 
+                                           @on_fail_step_id       = 0, 
+                                           @retry_attempts        = 0, 
+                                           @retry_interval        = 0, 
+                                           @os_run_priority       = 0,
+                                           @subsystem             = N'TSQL', 
+                                           @command               = N'EXECUTE [dbo].[UserDeleteTimeoutRegistration]', 
+                                           @database_name         = N'BOOKSTORE', 
+                                           @flags                 = 0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                          @start_step_id  = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                               @name                    = N'CallProcedureUserDeleteTimeoutRegistrationSchedule', 
+                                               @enabled                 = 1, 
+                                               @freq_type               = 4, 
+                                               @freq_interval           = 1, 
+                                               @freq_subday_type        = 4, 
+                                               @freq_subday_interval    = 5, 
+                                               @freq_relative_interval  = 0, 
+                                               @freq_recurrence_factor  = 0, 
+                                               @active_start_date       = 20220619, 
+                                               @active_end_date         = 99991231, 
+                                               @active_start_time       = 0, 
+                                               @active_end_time         = 235959, 
+                                               @schedule_uid            = N'249c38f5-624b-49ac-b6ba-c2e89856eca8'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                             @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+COMMIT TRANSACTION
+GOTO EndSave
+
+QuitWithRollback:
+    IF (@@TRANCOUNT > 0) BEGIN
+      ROLLBACK TRANSACTION
+    END
+
+EndSave:
+GO
+
+BEGIN TRANSACTION
+DECLARE @ReturnCode AS int = 0
+IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                              @type   = N'LOCAL',
+                                              @name   = N'[Uncategorized (Local)]'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+END
+
+DECLARE @jobId AS binary(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DisableTimeoutResetPassword',
+                                        @enabled                = 1,
+                                        @notify_level_eventlog  = 0,
+                                        @notify_level_email     = 0,
+                                        @notify_level_netsend   = 0,
+                                        @notify_level_page      = 0,
+                                        @delete_level           = 0,
+                                        @description            = N'No description available.',
+                                        @category_name          = N'[Uncategorized (Local)]',
+                                        @owner_login_name       = N'sa',
+                                        @job_id                 = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                           @step_name             = N'CallProcedureUserDisableTimeoutResetPassword', 
+                                           @step_id               = 1, 
+                                           @cmdexec_success_code  = 0, 
+                                           @on_success_action     = 1, 
+                                           @on_success_step_id    = 0, 
+                                           @on_fail_action        = 2, 
+                                           @on_fail_step_id       = 0, 
+                                           @retry_attempts        = 0, 
+                                           @retry_interval        = 0, 
+                                           @os_run_priority       = 0,
+                                           @subsystem             = N'TSQL', 
+                                           @command               = N'EXECUTE [dbo].[UserDisableTimeoutResetPassword]', 
+                                           @database_name         = N'BOOKSTORE', 
+                                           @flags                 = 0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                          @start_step_id  = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                               @name                    = N'CallProcedureUserDisableTimeoutResetPasswordSchedule', 
+                                               @enabled                 = 1, 
+                                               @freq_type               = 4, 
+                                               @freq_interval           = 1, 
+                                               @freq_subday_type        = 4, 
+                                               @freq_subday_interval    = 5, 
+                                               @freq_relative_interval  = 0, 
+                                               @freq_recurrence_factor  = 0, 
+                                               @active_start_date       = 20220619, 
+                                               @active_end_date         = 99991231, 
+                                               @active_start_time       = 0, 
+                                               @active_end_time         = 235959, 
+                                               @schedule_uid            = N'9b9711ba-b844-4f23-9819-df95a97c33da'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                             @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+  GOTO QuitWithRollback
+END
+
+COMMIT TRANSACTION
+GOTO EndSave
+
+QuitWithRollback:
+    IF (@@TRANCOUNT > 0) BEGIN
+      ROLLBACK TRANSACTION
+    END
+
+EndSave:
+GO
+
+USE [BOOKSTORE]
+GO
+
+-- USERS [ADMIN]
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = N'admin@admin.com') BEGIN
   ALTER TABLE [Users] NOCHECK CONSTRAINT [FK_Users_CreatedBy]
   ALTER TABLE [Users] NOCHECK CONSTRAINT [FK_Users_UpdatedBy]
   ALTER TABLE [Users] NOCHECK CONSTRAINT [FK_Users_DeletedBy]
