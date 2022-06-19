@@ -1,0 +1,67 @@
+﻿@using UI.Models
+@model  IEnumerable<LoanBookVM>
+
+@{
+}
+
+
+<div>
+  @Html.ActionLink(linkText: "Povijest prodaje",
+                   actionName: "SalesHistory",
+                   controllerName: "Dashboard",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Korisničke poruke",
+                   actionName: "List",
+                   controllerName: "Message",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Promijeni podatke o knjižari",
+                   actionName: "Edit",
+                   controllerName: "BookStore",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Dodaj autora",
+                   actionName: "Create",
+                   controllerName: "Author",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Dodaj knjigu",
+                   actionName: "Create",
+                   controllerName: "Book",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+  @Html.ActionLink(linkText: "Dodaj djelatnika",
+                   actionName: "Create",
+                   controllerName: "User",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+</div>
+
+<div class="album py-5">
+  <h3>Lista svih posudbi</h3>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var loan in Model) {
+
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
+
+      }
+
+    </div>
+  </div>
+</div>

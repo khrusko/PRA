@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -66,7 +69,6 @@
     <Compile Include="Abstract\Manager\Projection\IAuthorManager.cs" />
     <Compile Include="Abstract\Manager\Projection\IBookManager.cs" />
     <Compile Include="Abstract\Manager\Projection\IBookStoreManager.cs" />
-    <Compile Include="Abstract\Manager\Projection\IBranchOfficeManager.cs" />
     <Compile Include="Abstract\Manager\Projection\ILoanManager.cs" />
     <Compile Include="Abstract\Manager\Projection\IMessageManager.cs" />
     <Compile Include="Abstract\Manager\Projection\IProjectionManager.cs" />
@@ -85,7 +87,6 @@
     <Compile Include="Manager\AuthorManager.cs" />
     <Compile Include="Manager\BookManager.cs" />
     <Compile Include="Manager\BookStoreManager.cs" />
-    <Compile Include="Manager\BranchOfficeManager.cs" />
     <Compile Include="Manager\LoanManager.cs" />
     <Compile Include="Manager\MessageManager.cs" />
     <Compile Include="Manager\PublisherManager.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="Manager\UserManager.cs" />
     <Compile Include="Projection\BookProjection.cs" />
     <Compile Include="Projection\BookStoreProjection.cs" />
-    <Compile Include="Projection\BranchOfficeProjection.cs" />
     <Compile Include="Projection\LoanProjection.cs" />
     <Compile Include="Projection\MessageProjection.cs" />
     <Compile Include="Projection\PublisherProjection.cs" />

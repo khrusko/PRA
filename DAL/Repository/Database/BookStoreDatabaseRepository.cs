@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Xml.Linq;
 
 using DAL.Abstract.Repository.Database;
 using DAL.Abstract.Repository.Model;
@@ -30,6 +31,9 @@ namespace DAL.Repository.Database
         { "Name",             SqlDbType.NVarChar },
         { "OIB",              SqlDbType.Char },
         { "DelayPricePerDay", SqlDbType.Decimal },
+        { "Address",          SqlDbType.NVarChar },
+        { "Telephone",        SqlDbType.NVarChar },
+        { "Mobile",           SqlDbType.NVarChar },
         { "Email",            SqlDbType.NVarChar },
       };
 
@@ -53,36 +57,72 @@ namespace DAL.Repository.Database
     public Int32 Update(Int32 ID, BookStoreModel entity) => Update(ID, entity, entity.UpdatedBy);
     public Int32 Update(Int32 ID, BookStoreModel entity, Int32 UpdatedBy)
     {
-      IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(BookStoreModel).GetProperties().Select(x => x.Name).ToArray();
-
-      foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
+      IList<SqlParameter> parameters = new List<SqlParameter>()
       {
-        if (unusedProperties.Contains(item.Key)) continue;
-        parameters.Add(new SqlParameter()
+        new SqlParameter()
         {
-          ParameterName = "@" + item.Key,
+          ParameterName = "@ID",
           Direction = ParameterDirection.Input,
-          SqlDbType = item.Value,
-          Value = typeof(BookStoreModel).GetProperty(item.Key).GetValue(entity),
-        });
-      }
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@ID",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["ID"],
-        Value = ID,
-      });
-
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@UpdatedBy",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["UpdatedBy"],
-        Value = UpdatedBy,
-      });
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = ID,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Name",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Name"],
+          Value = entity.Name,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@OIB",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["OIB"],
+          Value = entity.OIB,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@DelayPricePerDay",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["DelayPricePerDay"],
+          Value = entity.DelayPricePerDay,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Address",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Address"],
+          Value = entity.Address,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Telephone",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Telephone"],
+          Value = entity.Telephone,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Mobile",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Mobile"],
+          Value = entity.Mobile,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Email",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Email"],
+          Value = entity.Email,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@UpdatedBy",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["UpdatedBy"],
+          Value = UpdatedBy,
+        }
+      };
 
       var returnValue = new SqlParameter()
       {

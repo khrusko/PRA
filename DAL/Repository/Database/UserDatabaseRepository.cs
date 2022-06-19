@@ -274,5 +274,67 @@ namespace DAL.Repository.Database
 
       return Int32.Parse(returnValue.Value.ToString());
     }
+
+    public Int32 EditProfile(UserModel entity) => EditProfile(entity, entity.UpdatedBy);
+    public Int32 EditProfile(UserModel entity, Int32 UpdatedBy) 
+      => EditProfile(entity.ID, entity.FName, entity.LName, entity.ImagePath, entity.Address, UpdatedBy);
+    public Int32 EditProfile(Int32 ID, String FName, String LName, String ImagePath, String Address, Int32 UpdatedBy)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@ID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = ID,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@FName",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["FName"],
+          Value = FName,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@LName",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["LName"],
+          Value = LName,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@ImagePath",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ImagePath"],
+          Value = ImagePath,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@Address",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["Address"],
+          Value = Address,
+        },
+        new SqlParameter()
+        {
+          ParameterName = "@UpdatedBy",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["UpdatedBy"],
+          Value = UpdatedBy,
+        },
+      };
+
+      var returnValue = new SqlParameter()
+      {
+        Direction = ParameterDirection.ReturnValue
+      };
+      parameters.Add(returnValue);
+
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(EditProfile), parameters.ToArray());
+
+      return Int32.Parse(returnValue.Value.ToString());
+    }
   }
 }

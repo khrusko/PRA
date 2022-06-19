@@ -10,6 +10,7 @@ using DAL.Method;
 using DAL.Factory;
 
 using Microsoft.ApplicationBlocks.Data;
+using System.Reflection;
 
 namespace DAL.Abstract.Repository.Database
 {
@@ -20,6 +21,7 @@ namespace DAL.Abstract.Repository.Database
     private static readonly String READ_PROCEDURE_NAME   = "Read";
     private static readonly String UPDATE_PROCEDURE_NAME = "Update";
     private static readonly String DELETE_PROCEDURE_NAME = "Delete";
+    private static readonly String[] UNUSED_PROPERTIES = { "ID", "CreatedBy", "UpdatedBy", "DeletedBy", "CreateDate", "UpdateDate", "DeleteDate" };
 
     public String ConnectionString => ConnectionStringFactory.GetConnectionString();
     public abstract String EntityName { get; }
@@ -29,11 +31,10 @@ namespace DAL.Abstract.Repository.Database
     public virtual K Create(T entity, K CreatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
       {
-        if (unusedProperties.Contains(item.Key)) continue;
+        if (UNUSED_PROPERTIES.Contains(item.Key)) continue;
         parameters.Add(new SqlParameter()
         {
           ParameterName = "@" + item.Key,
@@ -61,7 +62,7 @@ namespace DAL.Abstract.Repository.Database
 
       Type targetType = typeof(K);
       Type conversionType = Nullable.GetUnderlyingType(targetType) ?? targetType;
-      return (K)Convert.ChangeType(returnValue.Value, conversionType); ;
+      return (K)Convert.ChangeType(returnValue.Value, conversionType);
     }
 
     public virtual Int32 Delete(T entity) => Delete(entity.ID, entity);
@@ -69,7 +70,6 @@ namespace DAL.Abstract.Repository.Database
     public virtual Int32 Delete(K ID, K DeletedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       parameters.Add(new SqlParameter()
       {
@@ -229,11 +229,10 @@ namespace DAL.Abstract.Repository.Database
     public virtual Int32 Update(K ID, T entity, K UpdatedBy)
     {
       IList<SqlParameter> parameters = new List<SqlParameter>();
-      String[] unusedProperties = typeof(IModel<K>).GetProperties().Select(x => x.Name).ToArray();
 
       foreach (KeyValuePair<String, SqlDbType> item in DbKeyTypePairs)
       {
-        if (unusedProperties.Contains(item.Key)) continue;
+        if (UNUSED_PROPERTIES.Contains(item.Key)) continue;
         parameters.Add(new SqlParameter()
         {
           ParameterName = "@" + item.Key,

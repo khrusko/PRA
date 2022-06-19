@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Web;
 
 using BLL.Projection;
 
@@ -9,6 +9,7 @@ namespace BLL.Abstract.Manager.Projection
 {
   public interface IAuthorManager : IProjectionManager<AuthorModel, AuthorProjection, Int32>
   {
-    IEnumerable<AuthorProjection> GetAuthorsByBookFK(Int32 BookFK);
+    Int32 Update(AuthorProjection projection, HttpPostedFileBase file, Int32 updatedBy);
+    Int32 Create(AuthorProjection projection, HttpPostedFileBase file, Int32 createdBy);
   }
 }

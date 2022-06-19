@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -20,6 +24,7 @@ namespace BLL.Manager
       => new MessageProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         SenderFName = model.SenderFName,
         SenderLName = model.SenderLName,
         SenderEmail = model.SenderEmail,
@@ -57,16 +62,38 @@ namespace BLL.Manager
       ? (Repository as IMessageRepository).ReadAllAvailable().Select(Project)
       : (Repository as IMessageRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public Int32 Remove(Int32 ID, Int32 deletedBy) => throw new NotImplementedException();
 
     public Int32 Send(MessageProjection projection)
       => Send(projection.SenderFName, projection.SenderLName, projection.SenderEmail, projection.SenderMessage);
-    public Int32 Send(String SenderFName, String SenderLName, String SenderEmail, String SenderMessage)
-      => (Repository as IMessageRepository).Send(SenderFName, SenderLName, SenderEmail, SenderMessage);
+    public Int32 Send(String senderFName, String senderLName, String senderEmail, String senderMessage)
+      => (Repository as IMessageRepository).Send(senderFName, senderLName, senderEmail, senderMessage);
 
     public Int32 Respond(MessageProjection projection)
       => Respond(projection.ID, projection.ResponderUserFK, projection.ResponderMessage);
-    public Int32 Respond(Int32 ID, Int32 ResponderUserFK, String ResponderMessage)
-      => (Repository as IMessageRepository).Respond(ID, ResponderUserFK, ResponderMessage);
+    public Int32 Respond(Int32 ID, Int32 responderUserFK, String responderMessage)
+    {
+      MessageProjection message = GetByID(ID);
+      if (message == null) return 0;
+
+      Int32 updatedCount = (Repository as IMessageRepository).Respond(ID, responderUserFK, responderMessage);
+      if (updatedCount == 0) return 0;
+
+      message.ResponderUserFK = responderUserFK;
+      message.ResponderMessage = responderMessage;
+      SendRespondMessageEmail(message);
+
+      return updatedCount;
+    }
+
+    private void SendRespondMessageEmail(MessageProjection projection)
+    {
+      String subject = "Odgovor na upit";
+      String body = $"<br />Upit:<br />{projection.SenderMessage}<br />Odgovor: <br />{projection.ResponderMessage}";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(projection.SenderEmail, $"{projection.SenderFName} {projection.SenderLName}");
+      emailSender.SendEmail(subject, body);
+    }
   }
 }

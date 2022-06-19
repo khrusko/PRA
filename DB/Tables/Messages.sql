@@ -26,9 +26,5 @@
   CONSTRAINT [FK_Messages_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
 
   CONSTRAINT [FK_Messages_Users_Responder]  FOREIGN KEY ([ResponderUserFK]) REFERENCES [dbo].[Users] ([ID]),
-
-  CONSTRAINT [CK_Messages_SenderMessage]    CHECK (LEN([SenderMessage]) > 0),
-  CONSTRAINT [CK_Messages_ResponderMessage] CHECK (LEN([ResponderMessage]) > 0),
-  CONSTRAINT [CK_Messages_ResponderDate]    CHECK ([ResponderDate] >= [SenderDate])
 )
 GO

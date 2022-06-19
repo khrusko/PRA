@@ -40,11 +40,29 @@ namespace UI
                             id = new GuidRouteConstraint()
                           });
 
+      _ = routes.MapRoute(name: "Respond",
+                    url: "Message/Respond/{id}",
+                    defaults: new
+                    {
+                      controller = "Message",
+                      action = "Respond",
+                      id = UrlParameter.Optional
+                    },
+                    constraints: new
+                    {
+                      id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                      {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                      })
+                    });
+
       _ = routes.MapRoute(name: "Details",
                           url: "{controller}/Details/{id}",
                           defaults: new
                           {
-                            action = "Details"
+                            action = "Details",
+                            id = UrlParameter.Optional
                           },
                           constraints: new
                           {
@@ -54,6 +72,45 @@ namespace UI
                               new MinRouteConstraint(min: 1)
                             })
                           });
+
+      _ = routes.MapRoute(name: "Edit",
+                          url: "{controller}/Edit/{id}",
+                          defaults: new
+                          {
+                            action = "Edit",
+                            id = UrlParameter.Optional
+                          },
+                          constraints: new
+                          {
+                            id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                            {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                            })
+                          });
+
+      _ = routes.MapRoute(name: "Delete",
+                           url: "{controller}/Delete/{id}",
+                           defaults: new
+                           {
+                             action = "Delete",
+                             id = UrlParameter.Optional
+                           },
+                           constraints: new
+                           {
+                             id = new CompoundRouteConstraint(constraints: new List<IRouteConstraint>
+                             {
+                              new IntRouteConstraint(),
+                              new MinRouteConstraint(min: 1)
+                             })
+                           });
+
+      _ = routes.MapRoute(name: "Create",
+                           url: "{controller}/Create",
+                           defaults: new
+                           {
+                             action = "Create"
+                           });
 
       _ = routes.MapRoute(name: "Default",
                           url: "{controller}/{action}",

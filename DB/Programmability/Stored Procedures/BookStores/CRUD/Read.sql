@@ -11,6 +11,9 @@ AS BEGIN
     [Name],
     [OIB],
     [DelayPricePerDay],
+    [Address],
+    [Telephone],
+    [Mobile],
     [Email]
   FROM [dbo].[BookStores]
 END

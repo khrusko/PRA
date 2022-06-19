@@ -4,7 +4,6 @@ using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
-using BLL.Projection;
 
 using UI.Models;
 using UI.Models.Concrete;
@@ -15,7 +14,6 @@ namespace UI.Controllers
   {
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
-    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
     private readonly IMessageManager _messageManager = new MessageManager();
     private readonly IBookStoreManager _bookStoreManager = new BookStoreManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
@@ -24,9 +22,9 @@ namespace UI.Controllers
     public ViewResult Index()
     {
       IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
-                                          join publisher in _publisherManager.GetAll()
+                                          join publisher in _publisherManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals publisher.ID
-                                          join author in _authorManager.GetAll()
+                                          join author in _authorManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals author.ID
                                           select new FullBookInfoVM
                                           {
@@ -50,20 +48,32 @@ namespace UI.Controllers
     public ViewResult TermsOfService() => View(viewName: nameof(TermsOfService));
 
     [HttpGet]
-    public ViewResult Contact() => View(viewName: nameof(Contact), model: _branchOfficeManager.GetByID(1));
+    public ViewResult Contact() => View(viewName: nameof(Contact), model: _bookStoreManager.GetBookStore());
 
     [HttpGet]
-    public ViewResult ContactUs() => View(viewName: nameof(ContactUs));
+    public ViewResult ContactUs()
+      => View(viewName: nameof(ContactUs),
+              model: !(LoggedInUser is null)
+                ? new ContactFormVM
+                {
+                  FName = LoggedInUser.FName,
+                  LName = LoggedInUser.LName,
+                  Email = LoggedInUser.Email
+                }
+                : new ContactFormVM());
 
     [HttpPost]
     public ActionResult ContactUs(ContactFormVM model)
     {
-      if (!ModelState.IsValid) return View(viewName: nameof(ContactUs), model: model);
+      if (!ModelState.IsValid)
+      {
+        return View(viewName: nameof(ContactUs), model: model);
+      }
 
-      _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
+      _ = _messageManager.Send(model.FName, model.LName, model.Email, model.Message);
 
       Message = new InfoMessage(message: "Upit je uspješno poslan");
-      return RedirectToAction(actionName: "Index", controllerName: "Book");
+      return RedirectToAction(actionName: "Index", controllerName: "Home");
     }
   }
 }

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -20,6 +24,7 @@ namespace BLL.Manager
       => new AuthorProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate == DateTime.MinValue,
         FName = model.FName,
         LName = model.LName,
         BirthDate = model.BirthDate,
@@ -29,7 +34,7 @@ namespace BLL.Manager
 
     public AuthorModel Model(AuthorProjection projection)
       => new AuthorModel
-      { 
+      {
         ID = projection.ID,
         FName = projection.FName,
         LName = projection.LName,
@@ -40,7 +45,7 @@ namespace BLL.Manager
 
     public AuthorProjection GetByID(Int32 ID, Boolean availabilityCheck = true)
     {
-      AuthorModel model = availabilityCheck 
+      AuthorModel model = availabilityCheck
         ? (Repository as IAuthorRepository).ReadByIDAvailable(ID)
         : (Repository as IAuthorRepository).ReadByID(ID);
       return model is null ? null : Project(model);
@@ -51,10 +56,39 @@ namespace BLL.Manager
       ? (Repository as IAuthorRepository).ReadAllAvailable().Select(Project)
       : (Repository as IAuthorRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IAuthorRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IAuthorRepository).Delete(ID, deletedBy);
 
-    public IEnumerable<AuthorProjection> GetAuthorsByBookFK(Int32 BookFK)
-      => (Repository as IAuthorRepository).ReadByBookFK(BookFK).Select(Project);
+    public Int32 Update(AuthorProjection projection, HttpPostedFileBase file, Int32 updatedBy)
+    {
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        projection.ImagePath = imageSaver.RelativePath;
+      }
+      else
+      {
+        projection.ImagePath = GetByID(projection.ID).ImagePath;
+      }
+
+      return (Repository as IAuthorRepository).Update(projection.ID, Model(projection), updatedBy);
+    }
+
+    public Int32 Create(AuthorProjection projection, HttpPostedFileBase file, Int32 createdBy)
+    {
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        projection.ImagePath = imageSaver.RelativePath;
+      }
+
+      return (Repository as IAuthorRepository).Create(Model(projection), createdBy);
+    }
   }
 }

@@ -20,6 +20,7 @@ namespace BLL.Manager
       => new LoanProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         BookFK = model.BookFK,
         UserFK = model.UserFK,
         LoanPrice = model.LoanPrice,
@@ -57,14 +58,19 @@ namespace BLL.Manager
       ? (Repository as ILoanRepository).ReadAllAvailable().Select(Project)
       : (Repository as ILoanRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy) => throw new NotImplementedException();
+    public Int32 Remove(Int32 ID, Int32 deletedBy) => throw new NotImplementedException();
 
     public Int32 Loan(LoanProjection projection)
       => Loan(projection.BookFK, projection.UserFK, projection.PlannedReturnDate);
-    public Int32 Loan(Int32 BookFK, Int32 UserFK, DateTime PlannedReturnDate)
-      => (Repository as ILoanRepository).Loan(BookFK, UserFK, PlannedReturnDate, UserFK);
+    public Int32 Loan(Int32 bookFK, Int32 userFK, DateTime plannedReturnDate)
+      => (Repository as ILoanRepository).Loan(bookFK, userFK, plannedReturnDate, userFK);
 
-    public Int32 Return(Int32 ID, Int32 UpdatedBy)
-      => (Repository as ILoanRepository).Return(ID, UpdatedBy);
+    public Int32 Return(Int32 ID, Int32 updatedBy)
+      => (Repository as ILoanRepository).Return(ID, updatedBy);
+
+    public IEnumerable<LoanProjection> GetByUserFK(Int32 userFK)
+      => (Repository as ILoanRepository).ReadByUserFK(userFK).Select(Project);
+    public IEnumerable<LoanProjection> GetActiveByUserFK(Int32 userFK)
+      => (Repository as ILoanRepository).ReadByUserFKActive(userFK).Select(Project);
   }
 }

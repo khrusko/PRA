@@ -24,12 +24,14 @@ namespace BLL.Manager
       => new BookProjection
       {
         ID = model.ID,
+        IsAvailable = model.DeleteDate != DateTime.MinValue,
         ISBN = model.ISBN,
         Title = model.Title,
         Summary = model.Summary,
         Description = model.Description,
         IsNew = model.IsNew,
         PublisherFK = model.PublisherFK,
+        AuthorFK = model.AuthorFK,
         PageCount = model.PageCount,
         PurchasePrice = model.PurchasePrice,
         LoanPrice = model.LoanPrice,
@@ -47,6 +49,7 @@ namespace BLL.Manager
         Description = projection.Description,
         IsNew = projection.IsNew,
         PublisherFK = projection.PublisherFK,
+        AuthorFK = projection.AuthorFK,
         PageCount = projection.PageCount,
         PurchasePrice = projection.PurchasePrice,
         LoanPrice = projection.LoanPrice,
@@ -67,56 +70,42 @@ namespace BLL.Manager
       ? (Repository as IBookRepository).ReadAllAvailable().Select(Project)
       : (Repository as IBookRepository).ReadAll().Select(Project);
 
-    public Int32 Remove(Int32 ID, Int32 DeletedBy)
-      => (Repository as IBookRepository).Delete(ID, DeletedBy);
+    public Int32 Remove(Int32 ID, Int32 deletedBy)
+      => (Repository as IBookRepository).Delete(ID, deletedBy);
 
-    public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 AuthorFK)
-      => (Repository as IBookRepository).ReadByAuthorFK(AuthorFK).Select(Project);
+    public IEnumerable<BookProjection> GetBooksByAuthorFK(Int32 authorFK)
+      => (Repository as IBookRepository).ReadByAuthorFK(authorFK).Select(Project);
 
-    public Int32 Create(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 CreatedBy)
+    public Int32 Create(BookProjection projection, HttpPostedFileBase file, Int32 createdBy)
     {
-      if (!(Image is null))
+      if (!(file is null))
       {
-        try
-        {
-          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
-          imageSaver.File = Image;
-          imageSaver.SaveImageAs();
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
 
-          projection.ImagePath = imageSaver.RelativePath;
-        }
-        catch (ArgumentException)
-        {
-          return 0;
-        }
+        projection.ImagePath = imageSaver.RelativePath;
+      }
+
+      return (Repository as IBookRepository).Create(Model(projection), createdBy);
+    }
+
+    public Int32 Update(BookProjection projection, HttpPostedFileBase file, Int32 updatedBy)
+    {
+      if (!(file is null))
+      {
+        IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
+        imageSaver.File = file;
+        imageSaver.SaveImageAs();
+
+        projection.ImagePath = imageSaver.RelativePath;
       }
       else
       {
-        projection.ImagePath = "";
+        projection.ImagePath = GetByID(projection.ID).ImagePath;
       }
 
-      return (Repository as IBookRepository).Create(Model(projection), Authors, CreatedBy);
-    }
-
-    public Int32 Update(BookProjection projection, HttpPostedFileBase Image, IEnumerable<Int32> Authors, Int32 UpdatedBy)
-    {
-      if (!(Image is null))
-      {
-        try
-        {
-          IImageSaver imageSaver = ImageSaverFactory.GetImageSaver();
-          imageSaver.File = Image;
-          imageSaver.SaveImageAs();
-
-          projection.ImagePath = imageSaver.RelativePath;
-        }
-        catch (ArgumentException)
-        {
-          return 0;
-        }
-      }
-
-      return (Repository as IBookRepository).Update(projection.ID, Model(projection), Authors, UpdatedBy);
+      return (Repository as IBookRepository).Update(projection.ID, Model(projection), updatedBy);
     }
   }
 }
