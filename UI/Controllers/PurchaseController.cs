@@ -67,9 +67,9 @@ namespace UI.Controllers
                     });
       }
 
-      if (model.Quantity > book.Quantity)
+      if (model.Quantity > book.Quantity || model.Quantity <= 0)
       {
-        Message = new AlertMessage(message: "Tražena količina je veća od dostupne količine knjiga");
+        Message = new AlertMessage(message: "Tražena količina nije valjana");
         return Purchase(model.BookID);
       }
 

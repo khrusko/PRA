@@ -18,9 +18,6 @@ namespace UI.Controllers
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
 
-    //    Authorize - IsAdmin
-    //Authenticate  - IsLoggedIn
-
     [HttpGet]
     [UserAuthenticate]
     public ActionResult Index()
@@ -62,7 +59,6 @@ namespace UI.Controllers
     }
 
     [HttpGet]
-    [UserAuthorize]
     public ActionResult LoanHistory()
     {
       IEnumerable<LoanVM> loans = from loan in _loanManager.GetByUserFK(LoggedInUser.ID)
