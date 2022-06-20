@@ -1,4 +1,6 @@
-﻿@using BLL.Projection
+﻿@using UI.Models
+@using BLL.Projection
+@model  IEnumerable<LoanVM>
 @{
   ViewBag.Title = "Kontrolna ploča";
   var user = Session["user"] as UserProjection;
@@ -6,11 +8,9 @@
 
 <h2>Kontrolna ploča</h2>
 
-@if (user.IsAdmin)
-{
-  @Html.Partial(partialViewName: "_AdminDashboard")
+@if (user.IsAdmin) {
+  @Html.Partial(partialViewName: "_AdminDashboard", model: Model)
 }
-else
-{
-  @Html.Partial(partialViewName: "_UserDashboard")
+else {
+  @Html.Partial(partialViewName: "_UserDashboard", model: Model)
 }

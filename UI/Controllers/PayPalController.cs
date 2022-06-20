@@ -125,9 +125,10 @@ namespace Udreka.Controllers
 
       public async static Task<HttpResponse> CreateOrder(PayPalSetup setup)
       {
-        String price = setup.Quantity > 1
-          ? (setup.Book.PurchasePrice * setup.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
-          : setup.Book.PurchasePrice.ToString("0.00", CultureInfo.InvariantCulture);
+        Decimal price = setup.Operation == "Purchase" ? setup.Book.PurchasePrice : setup.Book.LoanPrice;
+        String priceString = setup.Quantity > 1
+          ? (price * setup.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
+          : price.ToString("0.00", CultureInfo.InvariantCulture);
 
         var order = new OrderRequest()
         {
@@ -140,8 +141,8 @@ namespace Udreka.Controllers
               {
                 new Item
                 {
-                  Quantity = setup.Quantity > 1 
-                    ? setup.Quantity.ToString() 
+                  Quantity = setup.Quantity > 1
+                    ? setup.Quantity.ToString()
                     : "1",
                   Name = setup.Book.Title,
                   Description = $"{setup.Book.Title}",
@@ -153,14 +154,14 @@ namespace Udreka.Controllers
                   UnitAmount = new Money
                   {
                     CurrencyCode = "EUR",
-                    Value = price
+                    Value = price.ToString("0.00", CultureInfo.InvariantCulture)
                   }
                 }
               },
               AmountWithBreakdown = new AmountWithBreakdown
               {
                 CurrencyCode = "EUR",
-                Value = price,
+                Value = priceString,
                 AmountBreakdown = new AmountBreakdown
                 {
                   TaxTotal = new Money
@@ -176,7 +177,7 @@ namespace Udreka.Controllers
                   ItemTotal = new Money
                   {
                     CurrencyCode = "EUR",
-                    Value = price
+                    Value = priceString
                   }
                 }
               }
