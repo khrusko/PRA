@@ -153,6 +153,8 @@
     <Build Include="Programmability\Stored Procedures\Books\BL\ReadByAuthorFK.sql" />
     <Build Include="Programmability\Stored Procedures\Purchases\BL\ReadByUserFK.sql" />
     <Build Include="Programmability\Stored Procedures\Users\BL\EditProfile.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\BL\ReadAllUnresolved.sql" />
+    <Build Include="Programmability\Stored Procedures\Subscriptions\BL\Resolve.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

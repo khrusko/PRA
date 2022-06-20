@@ -71,5 +71,44 @@ namespace DAL.Repository.Database
 
       return Int32.Parse(returnValue.Value.ToString());
     }
+
+    public IEnumerable<SubscriptionModel> ReadAllUnresolved()
+    {
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadAllUnresolved));
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<SubscriptionModel>(), (obj, prop) =>
+        {
+          typeof(SubscriptionModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
+
+    public Int32 Resolve(SubscriptionModel entity) => Resolve(entity.ID);
+    public Int32 Resolve(Int32 ID)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@ID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = ID,
+        }
+      };
+
+      var returnValue = new SqlParameter()
+      {
+        Direction = ParameterDirection.ReturnValue
+      };
+      parameters.Add(returnValue);
+
+      _ = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(Resolve), parameters.ToArray());
+
+      return Int32.Parse(returnValue.Value.ToString());
+    }
   }
 }

@@ -17,7 +17,6 @@ namespace UI.Controllers
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
-    private readonly IBranchOfficeManager _branchOfficeManager = new BranchOfficeManager();
 
     //    Authorize - IsAdmin
     //Authenticate  - IsLoggedIn
@@ -26,7 +25,7 @@ namespace UI.Controllers
     [UserAuthenticate]
     public ActionResult Index()
     {
-      IEnumerable<LoanBookVM> loans;
+      IEnumerable<LoanVM> loans;
 
       if (!LoggedInUser.IsAdmin)
       {
@@ -35,7 +34,7 @@ namespace UI.Controllers
                   on loan.BookFK equals book.ID
                 join author in _authorManager.GetAll()
                   on book.AuthorFK equals author.ID
-                select new LoanBookVM
+                select new LoanVM
                 {
                   Book = book,
                   Author = author,
@@ -51,7 +50,7 @@ namespace UI.Controllers
                   on loan.BookFK equals book.ID
                 join author in _authorManager.GetAll()
                   on book.AuthorFK equals author.ID
-                select new LoanBookVM
+                select new LoanVM
                 {
                   Book = book,
                   Author = author,
@@ -66,12 +65,12 @@ namespace UI.Controllers
     [UserAuthorize]
     public ActionResult LoanHistory()
     {
-      IEnumerable<LoanBookVM> loans = from loan in _loanManager.GetByUserFK(LoggedInUser.ID)
+      IEnumerable<LoanVM> loans = from loan in _loanManager.GetByUserFK(LoggedInUser.ID)
                                       join book in _bookManager.GetAll()
                                         on loan.BookFK equals book.ID
                                       join author in _authorManager.GetAll()
                                         on book.AuthorFK equals author.ID
-                                      select new LoanBookVM
+                                      select new LoanVM
                                       {
                                         Book = book,
                                         Author = author,
@@ -84,13 +83,13 @@ namespace UI.Controllers
     [HttpGet]
     public ActionResult ShoppingHistory()
     {
-      IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetByUserFK(LoggedInUser.ID)
+      IEnumerable<PurchaseVM> purchases = from purchase in _purchaseManager.GetByUserFK(LoggedInUser.ID)
                                               join book in _bookManager.GetAll()
                                                 on purchase.BookFK equals book.ID
                                               join author in _authorManager.GetAll()
                                                 on book.AuthorFK equals author.ID
 
-                                              select new PurchaseBookVM
+                                              select new PurchaseVM
                                               {
                                                 Book = book,
                                                 Author = author,
@@ -104,13 +103,13 @@ namespace UI.Controllers
     [UserAuthorize]
     public ActionResult SalesHistory()
     {
-      IEnumerable<PurchaseBookVM> purchases = from purchase in _purchaseManager.GetAll()
+      IEnumerable<PurchaseVM> purchases = from purchase in _purchaseManager.GetAll()
                                               join book in _bookManager.GetAll()
                                                 on purchase.BookFK equals book.ID
                                               join author in _authorManager.GetAll()
                                                 on book.AuthorFK equals author.ID
 
-                                              select new PurchaseBookVM
+                                              select new PurchaseVM
                                               {
                                                 Book = book,
                                                 Author = author,

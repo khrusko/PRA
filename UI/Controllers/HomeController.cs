@@ -62,7 +62,6 @@ namespace UI.Controllers
                 }
                 : new ContactFormVM());
 
-
     [HttpPost]
     public ActionResult ContactUs(ContactFormVM model)
     {
