@@ -27,7 +27,9 @@
 
       <p><span class="fw-bold">Dostupna količina: </span> @Model.Book.Quantity kom</p>
 
-      <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
-    </div>
+          <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(model => model.Book.Quantity) kom</p>
+
+          <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
+      </div>
   </div>
 </div>

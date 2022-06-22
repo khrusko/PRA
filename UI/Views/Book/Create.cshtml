@@ -2,7 +2,7 @@
 @model BookVM
 
 @{
-  ViewBag.Title = $"Dodaj knjigu";
+    ViewBag.Title = $"Dodaj knjigu";
 }
 
 <h2>Dodaj knjigu</h2>
@@ -11,103 +11,111 @@
 @using (Html.BeginForm(actionName: "Create",
                        controllerName: "Book",
                        method: FormMethod.Post,
-                       htmlAttributes: new {
-                         enctype = "multipart/form-data"
-                       })) {
-  @Html.AntiForgeryToken()
+                       htmlAttributes: new
+                       {
+                           enctype = "multipart/form-data"
+                       }))
+{
+    @Html.AntiForgeryToken()
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.ISBN, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.ISBN, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.ISBN)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.ISBN, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.ISBN, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.ISBN)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Title, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.Title, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Title)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Title, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.Title, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Title)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Summary, htmlAttributes: new { @class = "form-label" })
-    @Html.TextAreaFor(expression: model => model.Summary, htmlAttributes: new { @class = "form-control", rows = "8" })
-    @Html.ValidationMessageFor(expression: model => model.Summary)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Summary, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(expression: model => model.Summary, htmlAttributes: new { @class = "form-control", rows = "8" })
+        @Html.ValidationMessageFor(expression: model => model.Summary)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Description, htmlAttributes: new { @class = "form-label" })
-    @Html.TextAreaFor(expression: model => model.Description, htmlAttributes: new { @class = "form-control", rows = "8" })
-    @Html.ValidationMessageFor(expression: model => model.Description)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Description, htmlAttributes: new { @class = "form-label" })
+        @Html.TextAreaFor(expression: model => model.Description, htmlAttributes: new { @class = "form-control", rows = "8" })
+        @Html.ValidationMessageFor(expression: model => model.Description)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-label" })
-    @Html.CheckBoxFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-checkbox" })
-    @Html.ValidationMessageFor(expression: model => model.IsNew)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-label" })
+        @Html.CheckBoxFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-checkbox" })
+        @Html.ValidationMessageFor(expression: model => model.IsNew)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.PublisherFK, htmlAttributes: new { @class = "form-label" })
-    @Html.DropDownListFor(expression: model => model.PublisherFK,
-                          selectList: Model.Publishers.Select(publisher => new SelectListItem {
-                            Value = publisher.ID.ToString(),
-                            Text = publisher.Name,
-                            Selected = publisher.ID == Model.PublisherFK
-                          }),
-                          htmlAttributes: new {
-                            @class = "form-select"
-                          })
-    @Html.ValidationMessageFor(expression: model => model.PublisherFK)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.PublisherFK, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(expression: model => model.PublisherFK,
+                              selectList: Model.Publishers.Select(publisher => new SelectListItem
+                                  {
+                                Value = publisher.ID.ToString(),
+                                Text = publisher.Name,
+                                Selected = publisher.ID == Model.PublisherFK
+                              }),
+                              htmlAttributes: new
+                                  {
+                                @class = "form-select"
+                              })
+        @Html.ValidationMessageFor(expression: model => model.PublisherFK)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.AuthorFK, htmlAttributes: new { @class = "form-label" })
-    @Html.DropDownListFor(expression: model => model.AuthorFK,
-                          selectList: Model.Authors.Select(author => new SelectListItem {
-                            Value = author.ID.ToString(),
-                            Text = $"{author.FName} {author.LName}",
-                            Selected = author.ID == Model.AuthorFK
-                          }),
-                          htmlAttributes: new {
-                            @class = "form-select"
-                          })
-    @Html.ValidationMessageFor(expression: model => model.AuthorFK)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.AuthorFK, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(expression: model => model.AuthorFK,
+                              selectList: Model.Authors.Select(author => new SelectListItem
+                                  {
+                                Value = author.ID.ToString(),
+                                Text = $"{author.FName} {author.LName}",
+                                Selected = author.ID == Model.AuthorFK
+                              }),
+                              htmlAttributes: new
+                                  {
+                                @class = "form-select"
+                              })
+        @Html.ValidationMessageFor(expression: model => model.AuthorFK)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.PageCount, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.PageCount, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.PageCount)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.PageCount, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.PageCount, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.PageCount)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.PurchasePrice, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.PurchasePrice, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.PurchasePrice)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.PurchasePrice, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.PurchasePrice, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.PurchasePrice)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.LoanPrice, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.LoanPrice, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.LoanPrice)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LoanPrice, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.LoanPrice, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.LoanPrice)
+    </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Quantity)
-  </div>
+    <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Quantity)
+    </div>
 
-  <div class="mb-3">
-    @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
-    @Html.ValidationMessageFor(expression: model => model.Image)
-  </div>
+    <div class="mb-3">
+        @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
+        @Html.ValidationMessageFor(expression: model => model.Image)
+    </div>
 
+    <div class="text-lg-end">
 
-  <input type="submit" value="Dodaj" class="btn btn-primary me-3" />
-  @Html.ActionLink(linkText: "Odustani",
-                   actionName: "Details",
-                   controllerName: "Book",
-                   routeValues: new { id = Model.ID },
-                   htmlAttributes: new { @class = "btn btn-outline-secondary" })
+        @Html.ActionLink(linkText: "Odustani",
+                         actionName: "Details",
+                         controllerName: "Book",
+                         routeValues: new { id = Model.ID },
+                         htmlAttributes: new { @class = "btn btn-outline-secondary  me-3" })
+        <input type="submit" value="Dodaj" class="btn btn-primary" />
+    </div>
 }
