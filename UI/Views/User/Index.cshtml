@@ -45,24 +45,25 @@
 </section>
 
 <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content rounded-3 shadow">
-      <div class="modal-body p-4 text-center">
-        <h5 class="mb-0">Jeste li sigurni da želite obrisati profil?</h5>
-        <p class="mb-0 mt-3">Brisanjem profila gubite mogućnost pristupa aplikaciji.</p>
-        <p class="mb-0">Za vraćanje profila morati ćete kontaktirati djelatnike.</p>
-      </div>
-      <div class="modal-footer flex-nowrap p-0">
-        @Html.ActionLink(linkText: "Obriši",
-                         actionName: "Delete",
-                         controllerName: "User",
-                         routeValues: null,
-                         htmlAttributes: new {
-                           @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
-                           style = "z-index: 1;"
-                         })
-        <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
-      </div>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content rounded-3 shadow">
+            <div class="modal-body p-4 text-center">
+                <h5 class="mb-0">Jeste li sigurni da želite obrisati profil?</h5>
+                <p class="mb-0 mt-3">Brisanjem profila gubite mogućnost pristupa aplikaciji.</p>
+                <p class="mb-0">Za vraćanje profila morati ćete kontaktirati djelatnike.</p>
+            </div>
+                <div class="modal-footer flex-nowrap p-0">
+                    @Html.ActionLink(linkText: "Obriši",
+                                     actionName: "Delete",
+                                     controllerName: "User",
+                                     routeValues: null,
+                                     htmlAttributes: new
+                                          {
+                                       @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
+                                       style = "z-index: 1;"
+                                     })
+                    <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>

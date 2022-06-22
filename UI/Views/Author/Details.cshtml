@@ -28,26 +28,30 @@
             <div class="d-flex align-items-center">
               @Model.Biography
             </div>
+
             <div class="d-flex align-items-center mt-5">
-              @if (!(user is null) && user.IsAdmin) {
+                @if (!(user is null) && user.IsAdmin)
+                {
+                    <button type="button" class="btn btn-outline-danger me-3" data-bs-toggle="modal" href="#deleteUserModal">Obriši autora</button>
+                    @Html.ActionLink(linkText: "Uredi autora",
+                                            actionName: "Edit",
+                                            controllerName: "Author",
+                                            routeValues: new
+                                                 {
+                                              id = Model.ID
+                                            },
+                                            htmlAttributes: new
+                                                 {
+                                              @class = "btn btn-outline-dark ",
+                                              style = "z-index: 1;"
+                                            })
 
-                @Html.ActionLink(linkText: "Uredi autora",
-                                        actionName: "Edit",
-                                        controllerName: "Author",
-                                        routeValues: new {
-                                          id = Model.ID
-                                        },
-                                        htmlAttributes: new {
-                                          @class = "btn btn-outline-dark me-3",
-                                          style = "z-index: 1;"
-                                        })
-                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" href="#deleteUserModal">Obriši autora</button>
 
-              }
+                }
             </div>
-            <div class="d-flex justify-content-end text-center py-1">
-            </div>
-          </div>
+                    <div class="d-flex justify-content-end text-center py-1">
+                    </div>
+                </div>
         </div>
       </div>
     </div>
