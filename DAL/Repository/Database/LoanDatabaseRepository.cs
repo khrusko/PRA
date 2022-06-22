@@ -177,5 +177,19 @@ namespace DAL.Repository.Database
         });
       }
     }
+
+    public IEnumerable<LoanModel> ReadLoansInTimeout()
+    {
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadLoansInTimeout));
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<LoanModel>(), (obj, prop) =>
+        {
+          typeof(LoanModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
   }
 }

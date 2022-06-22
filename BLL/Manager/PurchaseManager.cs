@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -15,6 +19,9 @@ namespace BLL.Manager
   public class PurchaseManager : IPurchaseManager
   {
     public IRepository<PurchaseModel> Repository { get; } = PurchaseRepositoryFactory.GetRepository();
+
+    private readonly IUserManager _userManager = new UserManager();
+    private readonly IBookManager _bookManager = new BookManager();
 
     public PurchaseProjection Project(PurchaseModel model)
       => new PurchaseProjection
@@ -57,9 +64,32 @@ namespace BLL.Manager
     public Int32 Purchase(PurchaseProjection projection)
       => Purchase(projection.BookFK, projection.UserFK, projection.Quantity);
     public Int32 Purchase(Int32 bookFK, Int32 userFK, Int32 quantity)
-      => (Repository as IPurchaseRepository).Purchase(bookFK, userFK, quantity, userFK);
+    {
+      Int32 ID = (Repository as IPurchaseRepository).Purchase(bookFK, userFK, quantity, userFK);
+      if (ID == 0) return 0;
 
-    public IEnumerable<PurchaseProjection> GetByUserFK(Int32 UserFK)
-      => (Repository as IPurchaseRepository).ReadByUserFK(UserFK).Select(Project);
+      UserProjection user = _userManager.GetByID(userFK);
+      if (user is null) return 0;
+
+      BookProjection book = _bookManager.GetByID(bookFK);
+      if (book is null) return 0;
+
+      SendPurchaseMail(user, book);
+
+      return ID;
+    }
+
+    public IEnumerable<PurchaseProjection> GetByUserFK(Int32 userFK)
+      => (Repository as IPurchaseRepository).ReadByUserFK(userFK).Select(Project);
+
+    private void SendPurchaseMail(UserProjection user, BookProjection book)
+    {
+      String subject = "Kupnja knjige";
+      String body = $"<br />Kupili ste knjigu {book.Title}.<br />Nadamo se da ćete uživati čitajući je.";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
+      emailSender.SendEmail(subject, body);
+    }
   }
 }

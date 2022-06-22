@@ -36,9 +36,8 @@ namespace UI.Controllers
       {
         LoggedInUser = projection;
 
-        // TODO: redirect admin and user to dashborad -> replace "Book" with "Dashboard"
         Message = new InfoMessage(message: $"Pozdrav, {projection.FName} {projection.LName}");
-        return RedirectToAction(actionName: "Index", controllerName: "Home");
+        return RedirectToAction(actionName: "Index", controllerName: "Dashboard");
       }
 
       Message = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Emaila i Zaporke");
@@ -126,7 +125,7 @@ namespace UI.Controllers
     public ViewResult Register() => View(viewName: nameof(Register));
 
     [HttpPost]
-    public ViewResult Register(RegisterVM model)
+    public ActionResult Register(RegisterVM model)
     {
       if (!ModelState.IsValid) return View(nameof(Register), model: model);
 
@@ -138,7 +137,7 @@ namespace UI.Controllers
         ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na E-Mail: {projection.Email}")
         : (IMessage)new AlertMessage(message: $"Registracija nije uspjela, pokušajte ponovo");
 
-      return View(viewName: nameof(Register));
+      return RedirectToAction(actionName: nameof(Login), controllerName: "Account");
     }
 
     [HttpGet]
@@ -157,7 +156,7 @@ namespace UI.Controllers
         case RegistrationStatus.VALID:
           Message = new InfoMessage(message: "Registracija uspješna, molimo Vas da se ulogirate");
           _ = _userManager.ConfirmRegistration(GUID: GUID);
-          return View(viewName: nameof(Login));
+          return RedirectToAction(actionName: nameof(Login));
         case RegistrationStatus.APPROVED:
           Message = new AlertMessage(message: "Korisnički račun s danim parametrima već postoji");
           return RedirectToAction(actionName: nameof(Register));

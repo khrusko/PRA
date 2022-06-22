@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Web;
 
+using BLL.Abstract.Helper;
 using BLL.Abstract.Manager.Projection;
+using BLL.Factory;
 using BLL.Projection;
 
 using DAL.Abstract.Repository;
@@ -15,6 +19,9 @@ namespace BLL.Manager
   public class LoanManager : ILoanManager
   {
     public IRepository<LoanModel> Repository { get; } = LoanRepositoryFactory.GetRepository();
+
+    private readonly IUserManager _userManager = new UserManager();
+    private readonly IBookManager _bookManager = new BookManager();
 
     public LoanProjection Project(LoanModel model)
       => new LoanProjection
@@ -63,7 +70,23 @@ namespace BLL.Manager
     public Int32 Loan(LoanProjection projection)
       => Loan(projection.BookFK, projection.UserFK, projection.PlannedReturnDate);
     public Int32 Loan(Int32 bookFK, Int32 userFK, DateTime plannedReturnDate)
-      => (Repository as ILoanRepository).Loan(bookFK, userFK, plannedReturnDate, userFK);
+    {
+      Int32 ID = (Repository as ILoanRepository).Loan(bookFK, userFK, plannedReturnDate, userFK);
+      if (ID == 0) return 0;
+
+      LoanProjection loan = GetByID(ID);
+      if (loan is null) return 0;
+
+      UserProjection user = _userManager.GetByID(userFK);
+      if (user is null) return 0;
+
+      BookProjection book = _bookManager.GetByID(bookFK);
+      if (book is null) return 0;
+
+      SendLoanMail(loan, user, book);
+
+      return ID;
+    }
 
     public Int32 Return(Int32 ID, Int32 updatedBy)
       => (Repository as ILoanRepository).Return(ID, updatedBy);
@@ -72,5 +95,33 @@ namespace BLL.Manager
       => (Repository as ILoanRepository).ReadByUserFK(userFK).Select(Project);
     public IEnumerable<LoanProjection> GetActiveByUserFK(Int32 userFK)
       => (Repository as ILoanRepository).ReadByUserFKActive(userFK).Select(Project);
+
+    private void SendLoanMail(LoanProjection loan, UserProjection user, BookProjection book)
+    {
+      String subject = "Posudba knjige";
+      String body = $"<br />Posudili ste knjigu {book.Title}.<br />Nadamo se da ćete uživati čitajući je. <br />Rok vraćanja knjige je: {loan.PlannedReturnDate.ToLongDateString()}";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
+      emailSender.SendEmail(subject, body);
+    }
+
+    public IEnumerable<LoanProjection> GetLoansInTimeout()
+      => (Repository as ILoanRepository).ReadLoansInTimeout().Select(Project);
+
+    public void NotifyTimeout(Int32 ID, BookProjection book, UserProjection user)
+    {
+      SendResolvedSubscriptionMail(book, user);
+    }
+
+    private void SendResolvedSubscriptionMail(BookProjection book, UserProjection user)
+    {
+      String subject = $"Istekla posudba";
+      String body = $"<br />Poštovani, <br />istekla Vam je posudba pa Vas molimo da knjigu {book.Title} vratite u knjižaru.";
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
+      emailSender.SendEmail(subject, body);
+    }
   }
 }

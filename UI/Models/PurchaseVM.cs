@@ -5,8 +5,8 @@ namespace UI.Models
 {
   public class PurchaseVM
   {
-    public BookProjection Book { get; set; }
-    public AuthorProjection Author { get; set; }
     public PurchaseProjection Purchase { get; set; }
+    public BookProjection Book { get; set; }
+    public UserProjection User { get; set; }
   }
 }

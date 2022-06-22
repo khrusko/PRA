@@ -250,6 +250,7 @@
     <Compile Include="Infrastructure\UserAuthenticateAttribute.cs" />
     <Compile Include="Infrastructure\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
+    <Compile Include="Models\AuthorEditVM.cs" />
     <Compile Include="Models\AuthorVM.cs" />
     <Compile Include="Models\BookStoreVM.cs" />
     <Compile Include="Models\BookVM.cs" />
@@ -328,11 +329,8 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\_AdminDashboard.cshtml" />
     <Content Include="Views\Dashboard\_UserDashboard.cshtml" />
-    <Content Include="Views\Dashboard\LoanHistory.cshtml" />
-    <Content Include="Views\Dashboard\ShoppingHistory.cshtml" />
     <Content Include="Views\Shared\_LoanCard.cshtml" />
     <Content Include="Views\Shared\_PurchaseCard.cshtml" />
-    <Content Include="Views\Dashboard\SalesHistory.cshtml" />
     <Content Include="Views\Author\Details.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Author\Create.cshtml" />
@@ -346,6 +344,10 @@
     <Content Include="Views\Message\Respond.cshtml" />
     <Content Include="Views\Purchase\Purchase.cshtml" />
     <Content Include="Views\Loan\Loan.cshtml" />
+    <Content Include="Views\Loan\History.cshtml" />
+    <Content Include="Views\Loan\Details.cshtml" />
+    <Content Include="Views\Purchase\History.cshtml" />
+    <Content Include="Views\Purchase\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

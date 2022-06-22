@@ -16,6 +16,7 @@ namespace UI.Controllers
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
+    private readonly IUserManager _userManager = new UserManager();
     private readonly ILoanManager _loanManager = new LoanManager();
 
     [HttpGet]
@@ -29,13 +30,13 @@ namespace UI.Controllers
         loans = from loan in _loanManager.GetActiveByUserFK(LoggedInUser.ID)
                 join book in _bookManager.GetAll()
                   on loan.BookFK equals book.ID
-                join author in _authorManager.GetAll()
-                  on book.AuthorFK equals author.ID
+                join user in _userManager.GetAll()
+                  on loan.UserFK equals user.ID
                 select new LoanVM
                 {
+                  Loan = loan,
                   Book = book,
-                  Author = author,
-                  Loan = loan
+                  User = user
                 };
 
         return View(viewName: nameof(Index), model: loans);
@@ -45,73 +46,17 @@ namespace UI.Controllers
         loans = from loan in _loanManager.GetAll()
                 join book in _bookManager.GetAll()
                   on loan.BookFK equals book.ID
-                join author in _authorManager.GetAll()
-                  on book.AuthorFK equals author.ID
+                join user in _userManager.GetAll()
+                  on loan.UserFK equals user.ID
                 select new LoanVM
                 {
+                  Loan = loan,
                   Book = book,
-                  Author = author,
-                  Loan = loan
+                  User = user
                 };
 
         return View(viewName: nameof(Index), model: loans);
       }
-    }
-
-    [HttpGet]
-    public ActionResult LoanHistory()
-    {
-      IEnumerable<LoanVM> loans = from loan in _loanManager.GetByUserFK(LoggedInUser.ID)
-                                      join book in _bookManager.GetAll()
-                                        on loan.BookFK equals book.ID
-                                      join author in _authorManager.GetAll()
-                                        on book.AuthorFK equals author.ID
-                                      select new LoanVM
-                                      {
-                                        Book = book,
-                                        Author = author,
-                                        Loan = loan
-                                      };
-
-      return View("LoanHistory", loans);
-    }
-
-    [HttpGet]
-    public ActionResult ShoppingHistory()
-    {
-      IEnumerable<PurchaseVM> purchases = from purchase in _purchaseManager.GetByUserFK(LoggedInUser.ID)
-                                              join book in _bookManager.GetAll()
-                                                on purchase.BookFK equals book.ID
-                                              join author in _authorManager.GetAll()
-                                                on book.AuthorFK equals author.ID
-
-                                              select new PurchaseVM
-                                              {
-                                                Book = book,
-                                                Author = author,
-                                                Purchase = purchase
-                                              };
-      return View("ShoppingHistory", purchases);
-
-    }
-
-    [HttpGet]
-    [UserAuthorize]
-    public ActionResult SalesHistory()
-    {
-      IEnumerable<PurchaseVM> purchases = from purchase in _purchaseManager.GetAll()
-                                              join book in _bookManager.GetAll()
-                                                on purchase.BookFK equals book.ID
-                                              join author in _authorManager.GetAll()
-                                                on book.AuthorFK equals author.ID
-
-                                              select new PurchaseVM
-                                              {
-                                                Book = book,
-                                                Author = author,
-                                                Purchase = purchase
-                                              };
-      return View("SalesHistory", purchases);
     }
   }
 }

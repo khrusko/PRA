@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
@@ -19,6 +21,7 @@ namespace UI.Controllers
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
     private readonly IPurchaseManager _purchaseManager = new PurchaseManager();
+    private readonly IUserManager _userManager = new UserManager();
 
     [HttpGet]
     public ActionResult Purchase(Int32 id)
@@ -29,9 +32,10 @@ namespace UI.Controllers
         : (ActionResult)View(viewName: nameof(Purchase),
                              model: new PurchaseBookVM
                              {
-                               BookInfo = new FullBookInfoVM {
+                               BookInfo = new FullBookInfoVM
+                               {
                                  Book = book,
-                                 Author = _authorManager.GetByID(ID: book.AuthorFK, 
+                                 Author = _authorManager.GetByID(ID: book.AuthorFK,
                                                                  availabilityCheck: false),
                                  Publisher = _publisherManager.GetByID(ID: book.PublisherFK,
                                                                        availabilityCheck: false)
@@ -81,6 +85,52 @@ namespace UI.Controllers
                                 quantity = model.Quantity,
                                 operation = "Purchase"
                               });
+    }
+
+    [HttpGet]
+    public ActionResult History()
+    {
+      IEnumerable<PurchaseVM> purchases = LoggedInUser.IsAdmin
+        ? (from purchase in _purchaseManager.GetAll()
+           join book in _bookManager.GetAll()
+             on purchase.BookFK equals book.ID
+           join user in _userManager.GetAll()
+             on purchase.BookFK equals user.ID
+           select new PurchaseVM
+           {
+             Purchase = purchase,
+             Book = book,
+             User = LoggedInUser
+           })
+        : (from purchase in _purchaseManager.GetByUserFK(userFK: LoggedInUser.ID)
+           join book in _bookManager.GetAll()
+             on purchase.BookFK equals book.ID
+           join user in _userManager.GetAll()
+             on purchase.BookFK equals user.ID
+           select new PurchaseVM
+           {
+             Purchase = purchase,
+             Book = book,
+             User = LoggedInUser
+           });
+
+      return View(viewName: nameof(History), model: purchases);
+    }
+
+    [HttpGet]
+    public ActionResult Details(Int32 id)
+    {
+      PurchaseProjection purchase = _purchaseManager.GetByID(ID: id);
+
+      return purchase is null || (!LoggedInUser.IsAdmin && purchase.UserFK != LoggedInUser.ID)
+        ? new HttpStatusCodeResult(404)
+        : (ActionResult)View(viewName: nameof(Details),
+                                 model: new PurchaseVM
+                                 {
+                                   Purchase = purchase,
+                                   User = LoggedInUser.IsAdmin ? _userManager.GetByID(ID: purchase.UserFK, availabilityCheck: false) : LoggedInUser,
+                                   Book = _bookManager.GetByID(ID: purchase.BookFK, availabilityCheck: false)
+                                 });
     }
   }
 }

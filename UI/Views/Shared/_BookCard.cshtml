@@ -4,7 +4,7 @@
   <div class="card">
 
     <div class="card-body">
-      <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(model => model.Book.Title)</h5>
+      <h5 class="card-title" style="height: 3rem;">@Model.Book.Title</h5>
       <hr />
       <p>
         <span class="fw-bold">Stanje: </span>
@@ -16,15 +16,16 @@
         }
       </p>
 
-      <p><span class="fw-bold">Izdavač: </span>@Html.DisplayFor(model => model.Publisher.Name)</p>
+      <p><span class="fw-bold">Izdavač: </span>@Model.Publisher.Name</p>
+      <p><span class="fw-bold">Autor: </span>@Model.Author.FName @Model.Author.LName</p>
 
-      <p> <span class="fw-bold">Broj stranica: </span> @Html.DisplayFor(model => model.Book.PageCount)</p>
+      <p> <span class="fw-bold">Broj stranica: </span> @Model.Book.PageCount</p>
 
-      <p><span class="fw-bold">Cijena za kupovinu: </span> @Html.DisplayFor(model => model.Book.PurchasePrice) kn</p>
+      <p><span class="fw-bold">Cijena za kupovinu: </span> @Model.Book.PurchasePrice kn</p>
 
-      <p><span class="fw-bold">Cijena za posudbu: </span> @Html.DisplayFor(model => model.Book.LoanPrice) kn</p>
+      <p><span class="fw-bold">Cijena za posudbu: </span> @Model.Book.LoanPrice kn</p>
 
-      <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(model => model.Book.Quantity) kom</p>
+      <p><span class="fw-bold">Dostupna količina: </span> @Model.Book.Quantity kom</p>
 
       <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
     </div>
