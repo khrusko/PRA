@@ -1,58 +1,62 @@
 ﻿@using UI.Models
 @model AuthorEditVM
 
-@{
-    ViewBag.Title = $"Dodaj autora";
-}
+<div class="row">
+    <div class="col-6 offset-3">
+        @{
+            ViewBag.Title = $"Dodaj autora";
+        }
 
-<h2>Dodaj autora</h2>
-<hr />
+        <h2>Dodaj autora</h2>
+        <hr />
 
-@using (Html.BeginForm(actionName: "Create",
-                       controllerName: "Author",
-                       method: FormMethod.Post,
-                       htmlAttributes: new
-                       {
-                           enctype = "multipart/form-data"
-                       }))
-{
-    @Html.AntiForgeryToken()
+        @using (Html.BeginForm(actionName: "Create",
+                               controllerName: "Author",
+                               method: FormMethod.Post,
+                               htmlAttributes: new
+                               {
+                                   enctype = "multipart/form-data"
+                               }))
+        {
+            @Html.AntiForgeryToken()
 
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.FName, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.FName)
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.FName, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.FName)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.LName, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.LName, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.LName)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.BirthDate, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(expression: model => model.BirthDate, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(expression: model => model.BirthDate)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-control", rows = "8" })
+                @Html.ValidationMessageFor(expression: model => model.Biography)
+            </div>
+
+            <div class="mb-3">
+                @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
+                @Html.ValidationMessageFor(expression: model => model.Image)
+            </div>
+
+            <div class="text-lg-end">
+                @Html.ActionLink(linkText: "Odustani",
+                                 actionName: "Index",
+                                 controllerName: "Dashboard",
+                                 routeValues: null,
+                                 htmlAttributes: new { @class = "btn btn-outline-secondary" })
+                <input type="submit" value="Dodaj" class="btn btn-primary me-3" />
+            </div>
+        }
     </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.LName, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.LName, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.LName)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.BirthDate, htmlAttributes: new { @class = "form-label" })
-        @Html.EditorFor(expression: model => model.BirthDate, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(expression: model => model.BirthDate)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-label" })
-        @Html.TextAreaFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-control", rows = "8" })
-        @Html.ValidationMessageFor(expression: model => model.Biography)
-    </div>
-
-    <div class="mb-3">
-        @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
-        @Html.ValidationMessageFor(expression: model => model.Image)
-    </div>
-
-    <div class="text-lg-end">
-        @Html.ActionLink(linkText: "Odustani",
-                         actionName: "Index",
-                         controllerName: "Dashboard",
-                         routeValues: null,
-                         htmlAttributes: new { @class = "btn btn-outline-secondary" })
-        <input type="submit" value="Dodaj" class="btn btn-primary me-3" />
-    </div>
-}
+</div>

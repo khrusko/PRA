@@ -1,70 +1,73 @@
 ﻿@using UI.Models
 @model BookStoreVM
+<div class="row">
+    <div class="col-8 offset-2">
+        @{
+            ViewBag.Title = $"Uredi informacije o knjižari";
+        }
 
-@{
-    ViewBag.Title = $"Uredi informacije o knjižari";
-}
+        <h2>Uredi informacije o knjižari</h2>
+        <hr />
 
-<h2>Uredi informacije o knjižari</h2>
-<hr />
+        @using (Html.BeginForm(actionName: "Edit",
+                               controllerName: "BookStore",
+                               method: FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
 
-@using (Html.BeginForm(actionName: "Edit",
-                       controllerName: "BookStore",
-                       method: FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
+            @Html.HiddenFor(expression: model => model.ID)
 
-    @Html.HiddenFor(expression: model => model.ID)
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Name, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.Name, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.Name)
+            </div>
 
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Name, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.Name, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.Name)
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.OIB, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.OIB, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.OIB)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.DelayPricePerDay, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.DelayPricePerDay, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.DelayPricePerDay)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Address, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.Address, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.Address)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Telephone, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.Telephone, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.Telephone)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Mobile, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.Mobile, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.Mobile)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Email, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.Email, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.Email)
+            </div>
+
+
+            <div class="text-lg-end">
+                @Html.ActionLink(linkText: "Odustani",
+                                 actionName: "Index",
+                                 controllerName: "Dashboard",
+                                 routeValues: null,
+                                 htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+                <input type="submit" value="Spremi" class="btn btn-primary" />
+            </div>
+        }
+        </div>
     </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.OIB, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.OIB, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.OIB)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.DelayPricePerDay, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.DelayPricePerDay, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.DelayPricePerDay)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Address, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.Address, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.Address)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Telephone, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.Telephone, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.Telephone)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Mobile, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.Mobile, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.Mobile)
-    </div>
-
-    <div class="mb-3">
-        @Html.LabelFor(expression: model => model.Email, htmlAttributes: new { @class = "form-label" })
-        @Html.TextBoxFor(expression: model => model.Email, htmlAttributes: new { @class = "form-control" })
-        @Html.ValidationMessageFor(expression: model => model.Email)
-    </div>
-
-
-    <div class="text-lg-end">
-        @Html.ActionLink(linkText: "Odustani",
-                         actionName: "Index",
-                         controllerName: "Dashboard",
-                         routeValues: null,
-                         htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
-        <input type="submit" value="Spremi" class="btn btn-primary" />
-    </div>
-}
