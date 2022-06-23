@@ -112,12 +112,12 @@
             </div>
 
             <div class="text-lg-end">
-
                 @Html.ActionLink(linkText: "Odustani",
-                                 actionName: "Details",
-                                 controllerName: "Book",
-                                 routeValues: new { id = Model.ID },
-                                 htmlAttributes: new { @class = "btn btn-outline-secondary  me-3" })
+                                 actionName: "Index",
+                                 controllerName: "Dashboard",
+                                 routeValues: new { },
+                                 htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+
                 <input type="submit" value="Dodaj" class="btn btn-primary" />
             </div>
         }

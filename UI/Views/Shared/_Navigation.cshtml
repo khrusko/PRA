@@ -38,23 +38,19 @@
             Upit
           </a>
         </li>
-        @if (!(user is null)) {
-          <li>
-            <a href="@Url.Action(actionName: "Index", controllerName: "Dashboard")" class="nav-link text-white d-flex align-content-center">
-              <svg class="bi me-2" width="24" height="24" fill="currentColor">
-                <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
-              </svg>
-              Kontrolna ploča
-            </a>
-          </li>
-        }
       </ul>
 
       @if (!(user is null)) {
+        <a href="@Url.Action(actionName: "Index", controllerName: "Dashboard")" class="nav-link text-white d-flex align-content-center me-3">
+          <svg class="bi me-2" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
+          </svg>
+          Kontrolna ploča
+        </a>
         <div class="text-end d-flex align-items-center">
           <a href="@Url.Action(actionName: "Index", controllerName: "User")" class=" d-flex link-dark text-decoration-none me-4">
-            <span class="me-3 text-white align-self-center">@user.FName @user.LName</span>
-            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle">
+            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle me-3">
+            <span class="text-white align-self-center">@user.FName @user.LName</span>
           </a>
           @Html.ActionLink(linkText: "Odjava", actionName: "Logout", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
         </div>

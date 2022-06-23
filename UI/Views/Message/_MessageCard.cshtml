@@ -37,7 +37,7 @@
         <div class="col-9">
           <p class="text-black fs-5">
             @(
-              $"{Model.SenderMessage.Substring(startIndex: 0, length: Model.SenderMessage.Length > 34 ? 34 : Model.SenderMessage.Length)}{(Model.SenderMessage.Length > 34 ? "..." : "")}"
+              $"{Model.SenderMessage.Substring(startIndex: 0, length: Model.SenderMessage.Length > 25 ? 25 : Model.SenderMessage.Length)}{(Model.SenderMessage.Length > 25 ? "..." : "")}"
             )
           </p>
         </div>
