@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 using BLL.Abstract.Helper;
@@ -177,11 +178,14 @@ namespace BLL.Manager
       String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       String subject = "Potvrda registracije";
-      String body = $"<br />Uspješno ste se registrirali.<br />Molimo Vas da potvrdite registraciju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {projection.FName} {projection.LName},<br /><br />")
+                                              .Append("Uspješno ste se registrirali.<br />")
+                                              .Append("Molimo Vas da potvrdite registraciju klikom na link:<br />")
+                                              .Append($"<a href='{link}'>{link}</a>");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
 
     private void SendResetPasswordMail(UserProjection projection)
@@ -190,11 +194,14 @@ namespace BLL.Manager
       String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
 
       String subject = "Obnova zaporke";
-      String body = $"<br />Zahtjev za obnovu zaporke odobren.<br />Molimo Vas da obnovite zaporuku klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {projection.FName} {projection.LName},<br /><br />")
+                                              .Append("Zahtjev za obnovu zaporke je odobren.<br />")
+                                              .Append("Molimo Vas da obnovite zaporku klikom na link:<br />")
+                                              .Append($"<a href='{link}'>{link}</a>");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.Email, $"{projection.FName} {projection.LName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
   }
 }

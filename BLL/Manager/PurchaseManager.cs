@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 using BLL.Abstract.Helper;
@@ -85,11 +86,13 @@ namespace BLL.Manager
     private void SendPurchaseMail(UserProjection user, BookProjection book)
     {
       String subject = "Kupnja knjige";
-      String body = $"<br />Kupili ste knjigu {book.Title}.<br />Nadamo se da ćete uživati čitajući je.";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {user.FName} {user.LName},<br /><br />")
+                                              .Append($"Kupili ste knjigu {book.Title}.<br />")
+                                              .Append("Nadamo se da ćete uživati čitajući je.");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
   }
 }

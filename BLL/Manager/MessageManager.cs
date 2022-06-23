@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 using BLL.Abstract.Helper;
@@ -89,11 +90,12 @@ namespace BLL.Manager
     private void SendRespondMessageEmail(MessageProjection projection)
     {
       String subject = "Odgovor na upit";
-      String body = $"<br />Upit:<br />{projection.SenderMessage}<br />Odgovor: <br />{projection.ResponderMessage}";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {projection.SenderFName} {projection.SenderLName},<br /><br />")
+                                              .Append($"{projection.ResponderMessage}");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(projection.SenderEmail, $"{projection.SenderFName} {projection.SenderLName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
   }
 }

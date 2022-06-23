@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 using BLL.Abstract.Helper;
@@ -96,32 +97,35 @@ namespace BLL.Manager
     public IEnumerable<LoanProjection> GetActiveByUserFK(Int32 userFK)
       => (Repository as ILoanRepository).ReadByUserFKActive(userFK).Select(Project);
 
-    private void SendLoanMail(LoanProjection loan, UserProjection user, BookProjection book)
-    {
-      String subject = "Posudba knjige";
-      String body = $"<br />Posudili ste knjigu {book.Title}.<br />Nadamo se da ćete uživati čitajući je. <br />Rok vraćanja knjige je: {loan.PlannedReturnDate.ToLongDateString()}";
-
-      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
-      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
-      emailSender.SendEmail(subject, body);
-    }
-
     public IEnumerable<LoanProjection> GetLoansInTimeout()
       => (Repository as ILoanRepository).ReadLoansInTimeout().Select(Project);
 
-    public void NotifyTimeout(Int32 ID, BookProjection book, UserProjection user)
+    public void NotifyTimeout(Int32 ID, BookProjection book, UserProjection user) => SendResolvedSubscriptionMail(book, user);
+
+    private void SendLoanMail(LoanProjection loan, UserProjection user, BookProjection book)
     {
-      SendResolvedSubscriptionMail(book, user);
+      String subject = "Posudba knjige";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {user.FName} {user.LName},<br /><br />")
+                                              .Append($"Posudili ste knjigu {book.Title}.<br />")
+                                              .Append("Nadamo se da ćete uživati čitajući je.")
+                                              .Append($"Rok vraćanja knjige je: {loan.PlannedReturnDate.ToLongDateString()}.");
+
+      IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
+      emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
+      emailSender.SendEmail(subject, body.ToString());
     }
 
     private void SendResolvedSubscriptionMail(BookProjection book, UserProjection user)
     {
       String subject = $"Istekla posudba";
-      String body = $"<br />Poštovani, <br />istekla Vam je posudba pa Vas molimo da knjigu {book.Title} vratite u knjižaru.";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {user.FName} {user.LName},<br /><br />")
+                                              .Append("Istekla Vam je posudba.<br />")
+                                              .Append($"Molimo Vas da knjigu {book.Title} vratite u knjižaru,<br />")
+                                              .Append("kako Vam se ne bi naplatila zakasnina.");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
   }
 }
