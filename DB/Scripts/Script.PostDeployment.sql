@@ -3,352 +3,360 @@ GO
 
 -- JOBS
 
-BEGIN TRANSACTION
-DECLARE @ReturnCode AS int = 0
-IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
-  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
-                                              @type   = N'LOCAL',
-                                              @name   = N'[Uncategorized (Local)]'
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysjobs_view WHERE [name] = N'SubscriptionResolve') BEGIN
+  BEGIN TRANSACTION
+  DECLARE @ReturnCode AS int = 0
+  IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+    EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                                @type   = N'LOCAL',
+                                                @name   = N'[Uncategorized (Local)]'
+    IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+      GOTO QuitWithRollback
+    END
+  END
+
+  DECLARE @jobId AS binary(16)
+  EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'SubscriptionResolve',
+                                          @enabled                = 1,
+                                          @notify_level_eventlog  = 0,
+                                          @notify_level_email     = 0,
+                                          @notify_level_netsend   = 0,
+                                          @notify_level_page      = 0,
+                                          @delete_level           = 0,
+                                          @description            = N'No description available.',
+                                          @category_name          = N'[Uncategorized (Local)]',
+                                          @owner_login_name       = N'sa',
+                                          @job_id                 = @jobId OUTPUT
   IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
     GOTO QuitWithRollback
   END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                             @step_name             = N'CallSubscriptionEndpoint', 
+                                             @step_id               = 1, 
+                                             @cmdexec_success_code  = 0, 
+                                             @on_success_action     = 1, 
+                                             @on_success_step_id    = 0, 
+                                             @on_fail_action        = 2, 
+                                             @on_fail_step_id       = 0, 
+                                             @retry_attempts        = 0, 
+                                             @retry_interval        = 0, 
+                                             @os_run_priority       = 0,
+                                             @subsystem             = N'PowerShell', 
+                                             @command               = N'PowerShell.exe -Command "& { Invoke-WebRequest -URI http://localhost:50513/Subscription/Resolve }"', 
+                                             @database_name         = N'BOOKSTORE', 
+                                             @flags                 = 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                            @start_step_id  = 1
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                                 @name                    = N'CallSubscriptionEndpointSchedule', 
+                                                 @enabled                 = 1, 
+                                                 @freq_type               = 4, 
+                                                 @freq_interval           = 1, 
+                                                 @freq_subday_type        = 4, 
+                                                 @freq_subday_interval    = 10, 
+                                                 @freq_relative_interval  = 0, 
+                                                 @freq_recurrence_factor  = 0, 
+                                                 @active_start_date       = 20220619, 
+                                                 @active_end_date         = 99991231, 
+                                                 @active_start_time       = 0, 
+                                                 @active_end_time         = 235959, 
+                                                 @schedule_uid            = N'db385f89-a88f-48c9-8a12-7a29bada5a0b'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                               @server_name = N'(local)'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  COMMIT TRANSACTION
+  GOTO EndSave
+
+  QuitWithRollback:
+      IF (@@TRANCOUNT > 0) BEGIN
+        ROLLBACK TRANSACTION
+      END
+
+  EndSave:
 END
-
-DECLARE @jobId AS binary(16)
-EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'SubscriptionResolve',
-                                        @enabled                = 1,
-                                        @notify_level_eventlog  = 0,
-                                        @notify_level_email     = 0,
-                                        @notify_level_netsend   = 0,
-                                        @notify_level_page      = 0,
-                                        @delete_level           = 0,
-                                        @description            = N'No description available.',
-                                        @category_name          = N'[Uncategorized (Local)]',
-                                        @owner_login_name       = N'sa',
-                                        @job_id                 = @jobId OUTPUT
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
-                                           @step_name             = N'CallSubscriptionEndpoint', 
-                                           @step_id               = 1, 
-                                           @cmdexec_success_code  = 0, 
-                                           @on_success_action     = 1, 
-                                           @on_success_step_id    = 0, 
-                                           @on_fail_action        = 2, 
-                                           @on_fail_step_id       = 0, 
-                                           @retry_attempts        = 0, 
-                                           @retry_interval        = 0, 
-                                           @os_run_priority       = 0,
-                                           @subsystem             = N'PowerShell', 
-                                           @command               = N'PowerShell.exe -Command "& { Invoke-WebRequest -URI http://localhost:50513/Subscription/Resolve }"', 
-                                           @database_name         = N'BOOKSTORE', 
-                                           @flags                 = 0
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
-                                          @start_step_id  = 1
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
-                                               @name                    = N'CallSubscriptionEndpointSchedule', 
-                                               @enabled                 = 1, 
-                                               @freq_type               = 4, 
-                                               @freq_interval           = 1, 
-                                               @freq_subday_type        = 4, 
-                                               @freq_subday_interval    = 10, 
-                                               @freq_relative_interval  = 0, 
-                                               @freq_recurrence_factor  = 0, 
-                                               @active_start_date       = 20220619, 
-                                               @active_end_date         = 99991231, 
-                                               @active_start_time       = 0, 
-                                               @active_end_time         = 235959, 
-                                               @schedule_uid            = N'db385f89-a88f-48c9-8a12-7a29bada5a0b'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
-                                             @server_name = N'(local)'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-COMMIT TRANSACTION
-GOTO EndSave
-
-QuitWithRollback:
-    IF (@@TRANCOUNT > 0) BEGIN
-      ROLLBACK TRANSACTION
-    END
-
-EndSave:
 GO
 
-BEGIN TRANSACTION
-DECLARE @ReturnCode AS int = 0
-IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
-  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
-                                              @type   = N'LOCAL',
-                                              @name   = N'[Uncategorized (Local)]'
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysjobs_view WHERE [name] = N'DeleteTimeoutRegistration') BEGIN
+  BEGIN TRANSACTION
+  DECLARE @ReturnCode AS int = 0
+  IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+    EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                                @type   = N'LOCAL',
+                                                @name   = N'[Uncategorized (Local)]'
+    IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+      GOTO QuitWithRollback
+    END
+  END
+
+  DECLARE @jobId AS binary(16)
+  EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DeleteTimeoutRegistration',
+                                          @enabled                = 1,
+                                          @notify_level_eventlog  = 0,
+                                          @notify_level_email     = 0,
+                                          @notify_level_netsend   = 0,
+                                          @notify_level_page      = 0,
+                                          @delete_level           = 0,
+                                          @description            = N'No description available.',
+                                          @category_name          = N'[Uncategorized (Local)]',
+                                          @owner_login_name       = N'sa',
+                                          @job_id                 = @jobId OUTPUT
   IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
     GOTO QuitWithRollback
   END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                             @step_name             = N'CallProcedureUserDeleteTimeoutRegistration', 
+                                             @step_id               = 1, 
+                                             @cmdexec_success_code  = 0, 
+                                             @on_success_action     = 1, 
+                                             @on_success_step_id    = 0, 
+                                             @on_fail_action        = 2, 
+                                             @on_fail_step_id       = 0, 
+                                             @retry_attempts        = 0, 
+                                             @retry_interval        = 0, 
+                                             @os_run_priority       = 0,
+                                             @subsystem             = N'TSQL', 
+                                             @command               = N'EXECUTE [dbo].[UserDeleteTimeoutRegistration]', 
+                                             @database_name         = N'BOOKSTORE', 
+                                             @flags                 = 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                            @start_step_id  = 1
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                                 @name                    = N'CallProcedureUserDeleteTimeoutRegistrationSchedule', 
+                                                 @enabled                 = 1, 
+                                                 @freq_type               = 4, 
+                                                 @freq_interval           = 1, 
+                                                 @freq_subday_type        = 4, 
+                                                 @freq_subday_interval    = 5, 
+                                                 @freq_relative_interval  = 0, 
+                                                 @freq_recurrence_factor  = 0, 
+                                                 @active_start_date       = 20220619, 
+                                                 @active_end_date         = 99991231, 
+                                                 @active_start_time       = 0, 
+                                                 @active_end_time         = 235959, 
+                                                 @schedule_uid            = N'249c38f5-624b-49ac-b6ba-c2e89856eca8'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                               @server_name = N'(local)'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  COMMIT TRANSACTION
+  GOTO EndSave
+
+  QuitWithRollback:
+      IF (@@TRANCOUNT > 0) BEGIN
+        ROLLBACK TRANSACTION
+      END
+
+  EndSave:
 END
-
-DECLARE @jobId AS binary(16)
-EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DeleteTimeoutRegistration',
-                                        @enabled                = 1,
-                                        @notify_level_eventlog  = 0,
-                                        @notify_level_email     = 0,
-                                        @notify_level_netsend   = 0,
-                                        @notify_level_page      = 0,
-                                        @delete_level           = 0,
-                                        @description            = N'No description available.',
-                                        @category_name          = N'[Uncategorized (Local)]',
-                                        @owner_login_name       = N'sa',
-                                        @job_id                 = @jobId OUTPUT
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
-                                           @step_name             = N'CallProcedureUserDeleteTimeoutRegistration', 
-                                           @step_id               = 1, 
-                                           @cmdexec_success_code  = 0, 
-                                           @on_success_action     = 1, 
-                                           @on_success_step_id    = 0, 
-                                           @on_fail_action        = 2, 
-                                           @on_fail_step_id       = 0, 
-                                           @retry_attempts        = 0, 
-                                           @retry_interval        = 0, 
-                                           @os_run_priority       = 0,
-                                           @subsystem             = N'TSQL', 
-                                           @command               = N'EXECUTE [dbo].[UserDeleteTimeoutRegistration]', 
-                                           @database_name         = N'BOOKSTORE', 
-                                           @flags                 = 0
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
-                                          @start_step_id  = 1
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
-                                               @name                    = N'CallProcedureUserDeleteTimeoutRegistrationSchedule', 
-                                               @enabled                 = 1, 
-                                               @freq_type               = 4, 
-                                               @freq_interval           = 1, 
-                                               @freq_subday_type        = 4, 
-                                               @freq_subday_interval    = 5, 
-                                               @freq_relative_interval  = 0, 
-                                               @freq_recurrence_factor  = 0, 
-                                               @active_start_date       = 20220619, 
-                                               @active_end_date         = 99991231, 
-                                               @active_start_time       = 0, 
-                                               @active_end_time         = 235959, 
-                                               @schedule_uid            = N'249c38f5-624b-49ac-b6ba-c2e89856eca8'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
-                                             @server_name = N'(local)'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-COMMIT TRANSACTION
-GOTO EndSave
-
-QuitWithRollback:
-    IF (@@TRANCOUNT > 0) BEGIN
-      ROLLBACK TRANSACTION
-    END
-
-EndSave:
 GO
 
-BEGIN TRANSACTION
-DECLARE @ReturnCode AS int = 0
-IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
-  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
-                                              @type   = N'LOCAL',
-                                              @name   = N'[Uncategorized (Local)]'
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysjobs_view WHERE [name] = N'DisableTimeoutResetPassword') BEGIN
+  BEGIN TRANSACTION
+  DECLARE @ReturnCode AS int = 0
+  IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+    EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                                @type   = N'LOCAL',
+                                                @name   = N'[Uncategorized (Local)]'
+    IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+      GOTO QuitWithRollback
+    END
+  END
+
+  DECLARE @jobId AS binary(16)
+  EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DisableTimeoutResetPassword',
+                                          @enabled                = 1,
+                                          @notify_level_eventlog  = 0,
+                                          @notify_level_email     = 0,
+                                          @notify_level_netsend   = 0,
+                                          @notify_level_page      = 0,
+                                          @delete_level           = 0,
+                                          @description            = N'No description available.',
+                                          @category_name          = N'[Uncategorized (Local)]',
+                                          @owner_login_name       = N'sa',
+                                          @job_id                 = @jobId OUTPUT
   IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
     GOTO QuitWithRollback
   END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                             @step_name             = N'CallProcedureUserDisableTimeoutResetPassword', 
+                                             @step_id               = 1, 
+                                             @cmdexec_success_code  = 0, 
+                                             @on_success_action     = 1, 
+                                             @on_success_step_id    = 0, 
+                                             @on_fail_action        = 2, 
+                                             @on_fail_step_id       = 0, 
+                                             @retry_attempts        = 0, 
+                                             @retry_interval        = 0, 
+                                             @os_run_priority       = 0,
+                                             @subsystem             = N'TSQL', 
+                                             @command               = N'EXECUTE [dbo].[UserDisableTimeoutResetPassword]', 
+                                             @database_name         = N'BOOKSTORE', 
+                                             @flags                 = 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                            @start_step_id  = 1
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                                 @name                    = N'CallProcedureUserDisableTimeoutResetPasswordSchedule', 
+                                                 @enabled                 = 1, 
+                                                 @freq_type               = 4, 
+                                                 @freq_interval           = 1, 
+                                                 @freq_subday_type        = 4, 
+                                                 @freq_subday_interval    = 5, 
+                                                 @freq_relative_interval  = 0, 
+                                                 @freq_recurrence_factor  = 0, 
+                                                 @active_start_date       = 20220619, 
+                                                 @active_end_date         = 99991231, 
+                                                 @active_start_time       = 0, 
+                                                 @active_end_time         = 235959, 
+                                                 @schedule_uid            = N'9b9711ba-b844-4f23-9819-df95a97c33da'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                               @server_name = N'(local)'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  COMMIT TRANSACTION
+  GOTO EndSave
+
+  QuitWithRollback:
+      IF (@@TRANCOUNT > 0) BEGIN
+        ROLLBACK TRANSACTION
+      END
+
+  EndSave:
 END
-
-DECLARE @jobId AS binary(16)
-EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'DisableTimeoutResetPassword',
-                                        @enabled                = 1,
-                                        @notify_level_eventlog  = 0,
-                                        @notify_level_email     = 0,
-                                        @notify_level_netsend   = 0,
-                                        @notify_level_page      = 0,
-                                        @delete_level           = 0,
-                                        @description            = N'No description available.',
-                                        @category_name          = N'[Uncategorized (Local)]',
-                                        @owner_login_name       = N'sa',
-                                        @job_id                 = @jobId OUTPUT
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
-                                           @step_name             = N'CallProcedureUserDisableTimeoutResetPassword', 
-                                           @step_id               = 1, 
-                                           @cmdexec_success_code  = 0, 
-                                           @on_success_action     = 1, 
-                                           @on_success_step_id    = 0, 
-                                           @on_fail_action        = 2, 
-                                           @on_fail_step_id       = 0, 
-                                           @retry_attempts        = 0, 
-                                           @retry_interval        = 0, 
-                                           @os_run_priority       = 0,
-                                           @subsystem             = N'TSQL', 
-                                           @command               = N'EXECUTE [dbo].[UserDisableTimeoutResetPassword]', 
-                                           @database_name         = N'BOOKSTORE', 
-                                           @flags                 = 0
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
-                                          @start_step_id  = 1
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
-                                               @name                    = N'CallProcedureUserDisableTimeoutResetPasswordSchedule', 
-                                               @enabled                 = 1, 
-                                               @freq_type               = 4, 
-                                               @freq_interval           = 1, 
-                                               @freq_subday_type        = 4, 
-                                               @freq_subday_interval    = 5, 
-                                               @freq_relative_interval  = 0, 
-                                               @freq_recurrence_factor  = 0, 
-                                               @active_start_date       = 20220619, 
-                                               @active_end_date         = 99991231, 
-                                               @active_start_time       = 0, 
-                                               @active_end_time         = 235959, 
-                                               @schedule_uid            = N'9b9711ba-b844-4f23-9819-df95a97c33da'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
-                                             @server_name = N'(local)'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-COMMIT TRANSACTION
-GOTO EndSave
-
-QuitWithRollback:
-    IF (@@TRANCOUNT > 0) BEGIN
-      ROLLBACK TRANSACTION
-    END
-
-EndSave:
 GO
 
-BEGIN TRANSACTION
-DECLARE @ReturnCode AS int = 0
-IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
-  EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
-                                              @type   = N'LOCAL',
-                                              @name   = N'[Uncategorized (Local)]'
+IF NOT EXISTS (SELECT * FROM msdb.dbo.sysjobs_view WHERE [name] = N'NotifyLoanTimeout') BEGIN
+  BEGIN TRANSACTION
+  DECLARE @ReturnCode AS int = 0
+  IF NOT EXISTS (SELECT [name] FROM msdb.dbo.syscategories WHERE [name] = N'[Uncategorized (Local)]' AND category_class = 1) BEGIN
+    EXEC @ReturnCode = msdb.dbo.sp_add_category @class  = N'JOB',
+                                                @type   = N'LOCAL',
+                                                @name   = N'[Uncategorized (Local)]'
+    IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+      GOTO QuitWithRollback
+    END
+  END
+
+  DECLARE @jobId AS binary(16)
+  EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'NotifyLoanTimeout',
+                                          @enabled                = 1,
+                                          @notify_level_eventlog  = 0,
+                                          @notify_level_email     = 0,
+                                          @notify_level_netsend   = 0,
+                                          @notify_level_page      = 0,
+                                          @delete_level           = 0,
+                                          @description            = N'No description available.',
+                                          @category_name          = N'[Uncategorized (Local)]',
+                                          @owner_login_name       = N'sa',
+                                          @job_id                 = @jobId OUTPUT
   IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
     GOTO QuitWithRollback
   END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
+                                             @step_name             = N'CallLoanEndpoint', 
+                                             @step_id               = 1, 
+                                             @cmdexec_success_code  = 0, 
+                                             @on_success_action     = 1, 
+                                             @on_success_step_id    = 0, 
+                                             @on_fail_action        = 2, 
+                                             @on_fail_step_id       = 0, 
+                                             @retry_attempts        = 0, 
+                                             @retry_interval        = 0, 
+                                             @os_run_priority       = 0,
+                                             @subsystem             = N'PowerShell', 
+                                             @command               = N'PowerShell.exe -Command "& { Invoke-WebRequest -URI http://localhost:50513/Loan/CheckTimeout }"', 
+                                             @database_name         = N'BOOKSTORE', 
+                                             @flags                 = 0
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
+                                            @start_step_id  = 1
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
+                                                 @name                    = N'CallLoanEndpointShcedule', 
+                                                 @enabled                 = 1, 
+                                                 @freq_type               = 4, 
+                                                 @freq_interval           = 1, 
+                                                 @freq_subday_type        = 1, 
+                                                 @freq_subday_interval    = 0, 
+                                                 @freq_relative_interval  = 0, 
+                                                 @freq_recurrence_factor  = 0, 
+                                                 @active_start_date       = 20220619, 
+                                                 @active_end_date         = 99991231, 
+                                                 @active_start_time       = 0, 
+                                                 @active_end_time         = 235959, 
+                                                 @schedule_uid            = N'9b9711ba-b844-4f23-9819-df95a97c33da'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
+                                               @server_name = N'(local)'
+  IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
+    GOTO QuitWithRollback
+  END
+
+  COMMIT TRANSACTION
+  GOTO EndSave
+
+  QuitWithRollback:
+      IF (@@TRANCOUNT > 0) BEGIN
+        ROLLBACK TRANSACTION
+      END
+
+  EndSave:
 END
-
-DECLARE @jobId AS binary(16)
-EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name               = N'NotifyLoanTimeout',
-                                        @enabled                = 1,
-                                        @notify_level_eventlog  = 0,
-                                        @notify_level_email     = 0,
-                                        @notify_level_netsend   = 0,
-                                        @notify_level_page      = 0,
-                                        @delete_level           = 0,
-                                        @description            = N'No description available.',
-                                        @category_name          = N'[Uncategorized (Local)]',
-                                        @owner_login_name       = N'sa',
-                                        @job_id                 = @jobId OUTPUT
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id                = @jobId,
-                                           @step_name             = N'CallLoanEndpoint', 
-                                           @step_id               = 1, 
-                                           @cmdexec_success_code  = 0, 
-                                           @on_success_action     = 1, 
-                                           @on_success_step_id    = 0, 
-                                           @on_fail_action        = 2, 
-                                           @on_fail_step_id       = 0, 
-                                           @retry_attempts        = 0, 
-                                           @retry_interval        = 0, 
-                                           @os_run_priority       = 0,
-                                           @subsystem             = N'PowerShell', 
-                                           @command               = N'PowerShell.exe -Command "& { Invoke-WebRequest -URI http://localhost:50513/Loan/CheckTimeout }"', 
-                                           @database_name         = N'BOOKSTORE', 
-                                           @flags                 = 0
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id         = @jobId,
-                                          @start_step_id  = 1
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id                  = @jobId,
-                                               @name                    = N'CallLoanEndpointShcedule', 
-                                               @enabled                 = 1, 
-                                               @freq_type               = 4, 
-                                               @freq_interval           = 1, 
-                                               @freq_subday_type        = 1, 
-                                               @freq_subday_interval    = 0, 
-                                               @freq_relative_interval  = 0, 
-                                               @freq_recurrence_factor  = 0, 
-                                               @active_start_date       = 20220619, 
-                                               @active_end_date         = 99991231, 
-                                               @active_start_time       = 0, 
-                                               @active_end_time         = 235959, 
-                                               @schedule_uid            = N'9b9711ba-b844-4f23-9819-df95a97c33da'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId,
-                                             @server_name = N'(local)'
-IF (@@ERROR <> 0 OR @ReturnCode <> 0) BEGIN
-  GOTO QuitWithRollback
-END
-
-COMMIT TRANSACTION
-GOTO EndSave
-
-QuitWithRollback:
-    IF (@@TRANCOUNT > 0) BEGIN
-      ROLLBACK TRANSACTION
-    END
-
-EndSave:
 GO
 
 USE [BOOKSTORE]
@@ -361,7 +369,7 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = N'admin@admin.com
   ALTER TABLE [Users] NOCHECK CONSTRAINT [FK_Users_UpdatedBy]
   ALTER TABLE [Users] NOCHECK CONSTRAINT [FK_Users_DeletedBy]
 
-  DECLARE @Password AS nvarchar(512) = N'Pa$$w0rd'
+  DECLARE @Password AS nvarchar(512) = N'ALFzjq3PKYZF2jYZVII8dtpAqShmR2KM1GCSA2BkgVLfdMmTSb5c9dtw17Ys'
 
   INSERT INTO [dbo].[Users] 
   (
@@ -380,10 +388,10 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Users] WHERE [Email] = N'admin@admin.com
   (
     1, 
     1, 
-    N'D2205150001', 
-    N'admin', 
-    N'admin', 
-    N'admin@admin.com', 
+    N'D0000000001', 
+    N'db', 
+    N'db', 
+    N'jI6630EVKfSnW1qfIWtrBguTUuePOfxvf93ZCWj1WS2HIC92Dby3wMwEvwuA', 
     CONVERT(nvarchar(512), HASHBYTES('SHA2_512', @Password), 2), 
     1,
     1,
@@ -888,7 +896,7 @@ END
 GO
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-51777-6') BEGIN
-    INSERT INTO [dbo].[Books]
+  INSERT INTO [dbo].[Books]
         ([CreatedBy]
         ,[UpdatedBy]
         ,[ISBN]
@@ -921,45 +929,277 @@ IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-51777-
 END
 GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-40606-3') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-0-40606-3', N'Šuma Striborova', N'U šumu Striborovu zašao je mladić kako bi nasjekao drva za ogrjev. Dok je sjedio na panju ugledao je prekrasnu zmiju, koja je na suncu izgledala baš poput srebra. Mladić ju je zbog njene ljepote poželio odmah odnijeti kući. Nije prošlo puno i zmija se odjednom pretvori u prekrasnu djevojku koju je mladić odlučio oženiti. Djevojku je poveo svojoj kući gdje ih je dočekala mladićeva majka. Nije prošlo dugo i majka je u ustima djevojke primijetila zmijski jezik. Odmah je upozorila sina da se pazi jer je ta djevojka zla, ali on opijen ljepotom djeve nije htio slušati majku.', N'Zašao neki momak u šumu Striborovu, a nije znao da je ono šuma začarana i da se u njoj svakojaka čuda zbivaju. Zbivala se u njoj čuda dobra, ali i naopaka - svakome po zasluzi. Morala je pak ta šuma ostati začarana, doklegod u nju ne stupi onaj, kojemu je milija njegova nevolja, nego sva sreća ovoga svijeta.', 0, 3, 6, 31, 44.10, 13.10, 1, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-40606-3') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-0-40606-3'
+        ,N'Šuma Striborova'
+        ,N'U šumu Striborovu zašao je mladić kako bi nasjekao drva za ogrjev. Dok je sjedio na panju ugledao je prekrasnu zmiju, koja je na suncu izgledala baš poput srebra. Mladić ju je zbog njene ljepote poželio odmah odnijeti kući. Nije prošlo puno i zmija se odjednom pretvori u prekrasnu djevojku koju je mladić odlučio oženiti. Djevojku je poveo svojoj kući gdje ih je dočekala mladićeva majka. Nije prošlo dugo i majka je u ustima djevojke primijetila zmijski jezik. Odmah je upozorila sina da se pazi jer je ta djevojka zla, ali on opijen ljepotom djeve nije htio slušati majku.'
+        ,N'Zašao neki momak u šumu Striborovu, a nije znao da je ono šuma začarana i da se u njoj svakojaka čuda zbivaju. Zbivala se u njoj čuda dobra, ali i naopaka - svakome po zasluzi. Morala je pak ta šuma ostati začarana, doklegod u nju ne stupi onaj, kojemu je milija njegova nevolja, nego sva sreća ovoga svijeta.'
+        ,0
+        ,3
+        ,6
+        ,31
+        ,44.10
+        ,13.10
+        ,1
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-61799-5') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-0-61799-5', N'Regoč', NULL, N'Regoč je priča jedne od naših najpoznatijih književnica za djecu, Ivane Brlić-Mažuranić. Priča se nalazi u njenoj najpoznatijoj zbirci bajki Priče iz davnine, prvi put objavljene 1916. godine. Priča Regoč, poput većine bajki iz ove zbirke, inspirirana je slavenskom mitologijom. Mitološko biće, div Regoč staro je vjerovanje Hrvata još iz pretkršćanskih vremena, te se u našoj kulturi dugo vremena kroz povijest prenosila usmenom predajom.', 1, 3, 6, 40, 44.10, 13.10, 11, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-61799-5') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-0-61799-5'
+        ,N'Regoč'
+        ,NULL
+        ,N'Regoč je priča jedne od naših najpoznatijih književnica za djecu, Ivane Brlić-Mažuranić. Priča se nalazi u njenoj najpoznatijoj zbirci bajki Priče iz davnine, prvi put objavljene 1916. godine. Priča Regoč, poput većine bajki iz ove zbirke, inspirirana je slavenskom mitologijom. Mitološko biće, div Regoč staro je vjerovanje Hrvata još iz pretkršćanskih vremena, te se u našoj kulturi dugo vremena kroz povijest prenosila usmenom predajom.'
+        ,1
+        ,2
+        ,4
+        ,40
+        ,44.10
+        ,13.10
+        ,11
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-081-3') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-342-081-3', N'U kavani Europa: Život poslije socijalizma', NULL, N'Nakon što je u knjizi Kako smo preživjeli opisala iskustvo života u socijalizmu, Slavenka Drakulić u esejima U kavani Europa: život poslije socijalizma, analizirajući niz svakodnevnih, životnih detalja, odgovara na pitanje kako je tekla preobrazba društva iz socijalizma u nove demokracije. Ovi će vas tekstovi podsjetiti da su u Europi nekada postojale granice, da se u bivšoj Jugoslaviji živjelo drugačije, slobodnije nego u nizu drugih socijalističkih zemalja, da je većina ljudi na socijalističkim prostorima imala zapuštene zube, a moći ćete promisliti i o ulozi uniforme na prostoru Balkana. Susrest ćete se u ovoj knjizi s “običnim” ljudima koje je tranzicija razočarala jer su očekivali blagostanje koje mnogima nije došlo, a morali su se suočiti i s činjenicom da veća sloboda podrazumijeva i veću odgovornost. Ako vas zanima kako su se promjene u Istočnoj i Zapadnoj Europi nastavile, pročitajte i upravo objavljene eseje Ponovo u kavani Europa: kako preživjeti postsocijalizam koji su svojevrsni nastavak knjige U kavani Europa, prvi put objavljene 1996. kod američkog izdavača i prevedene na brojne svjetske jezike. Povijest se ne sastoji samo od prašnjavih knjiga i suhih činjenica i godina, čini je i svakodnevica ljudi koji su živjeli prije nas, a na to nas Slavenka Drakulić stalno podsjeća, jasno ukazujući da trivijalno zaista jest političko.', 1, 5, 10, 208, 125.10, 33.10, 7, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-081-3') BEGIN
+    INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-342-081-3'
+        ,N'U kavani Europa: Život poslije socijalizma'
+        ,NULL
+        ,N'Nakon što je u knjizi Kako smo preživjeli opisala iskustvo života u socijalizmu, Slavenka Drakulić u esejima U kavani Europa: život poslije socijalizma, analizirajući niz svakodnevnih, životnih detalja, odgovara na pitanje kako je tekla preobrazba društva iz socijalizma u nove demokracije. Ovi će vas tekstovi podsjetiti da su u Europi nekada postojale granice, da se u bivšoj Jugoslaviji živjelo drugačije, slobodnije nego u nizu drugih socijalističkih zemalja, da je većina ljudi na socijalističkim prostorima imala zapuštene zube, a moći ćete promisliti i o ulozi uniforme na prostoru Balkana. Susrest ćete se u ovoj knjizi s “običnim” ljudima koje je tranzicija razočarala jer su očekivali blagostanje koje mnogima nije došlo, a morali su se suočiti i s činjenicom da veća sloboda podrazumijeva i veću odgovornost. Ako vas zanima kako su se promjene u Istočnoj i Zapadnoj Europi nastavile, pročitajte i upravo objavljene eseje Ponovo u kavani Europa: kako preživjeti postsocijalizam koji su svojevrsni nastavak knjige U kavani Europa, prvi put objavljene 1996. kod američkog izdavača i prevedene na brojne svjetske jezike. Povijest se ne sastoji samo od prašnjavih knjiga i suhih činjenica i godina, čini je i svakodnevica ljudi koji su živjeli prije nas, a na to nas Slavenka Drakulić stalno podsjeća, jasno ukazujući da trivijalno zaista jest političko.'
+        ,1
+        ,5
+        ,10
+        ,208
+        ,125.10
+        ,33.10
+        ,7
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-022-6') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-342-022-6', N'Ponovo u kavani Europa: Kako preživjeti postsocijalizam', NULL, N'Prije trideset godina Istočnu Europu zatekle su velike promjene. Od prijelaza iz socijalizma u nove demokracije ili tzv. tranzicije očekivalo se mnogo, ne samo instant-kava i mnoštvo luksuznih proizvoda koji su preplavili samoposluge nego i instant-bogaćenje – ili barem bolji život. O tome je Slavenka Drakulić elaborirano pisala prije dvadeset pet godina u vrlo uspješnoj knjizi U kavani Europa: život poslije socijalizma koja svoje prvo hrvatsko samostalno izdanje ima ovih dana. U zbirci eseja Ponovo u kavani Europa: kako preživjeti postsocijalizam Slavenka Drakulić pita se što se od toga ostvarilo i jesu li građani Istočne Europe računali da sa slobodama dolaze i velike odgovornosti. Financijska kriza, masovna imigracija, rast nacionalizma, ksenofobije i Brexit samo su dio slike današnje, još uvijek podijeljene Europe. Smanjuju li se ili produbljuju razlike između Istoka i Zapada Europe? Zbirka eseja Ponovo u kavani Europa, prvobitno objavljena na engleskom jeziku, opisuje niz svakodnevnih situacija koje ukazuju na širu političku i društvenu situaciju u današnjoj Europi. Esej o papagaju iz Stockholma ponukat će vas da se zamislite imaju li životinje ponekad veća prava od ljudi, a priča o razlici u prehrambenim proizvodima u Istočnoj i Zapadnoj Europi da opet probate Nutellu, voćni jogurt ili riblje štapiće. Eseji o autoričinoj najdražoj kartici i onaj o imigrantskom orkestru s Trga Vittorio u Rimu mogu se čitati i kao vapaj za nekom novom europskom solidarnošću.', 1, 5, 10, 256, 134.10, 35.10, 3, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-022-6') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-342-022-6'
+        ,N'Ponovo u kavani Europa: Kako preživjeti postsocijalizam'
+        ,NULL
+        ,N'Prije trideset godina Istočnu Europu zatekle su velike promjene. Od prijelaza iz socijalizma u nove demokracije ili tzv. tranzicije očekivalo se mnogo, ne samo instant-kava i mnoštvo luksuznih proizvoda koji su preplavili samoposluge nego i instant-bogaćenje – ili barem bolji život. O tome je Slavenka Drakulić elaborirano pisala prije dvadeset pet godina u vrlo uspješnoj knjizi U kavani Europa: život poslije socijalizma koja svoje prvo hrvatsko samostalno izdanje ima ovih dana. U zbirci eseja Ponovo u kavani Europa: kako preživjeti postsocijalizam Slavenka Drakulić pita se što se od toga ostvarilo i jesu li građani Istočne Europe računali da sa slobodama dolaze i velike odgovornosti. Financijska kriza, masovna imigracija, rast nacionalizma, ksenofobije i Brexit samo su dio slike današnje, još uvijek podijeljene Europe. Smanjuju li se ili produbljuju razlike između Istoka i Zapada Europe? Zbirka eseja Ponovo u kavani Europa, prvobitno objavljena na engleskom jeziku, opisuje niz svakodnevnih situacija koje ukazuju na širu političku i društvenu situaciju u današnjoj Europi. Esej o papagaju iz Stockholma ponukat će vas da se zamislite imaju li životinje ponekad veća prava od ljudi, a priča o razlici u prehrambenim proizvodima u Istočnoj i Zapadnoj Europi da opet probate Nutellu, voćni jogurt ili riblje štapiće. Eseji o autoričinoj najdražoj kartici i onaj o imigrantskom orkestru s Trga Vittorio u Rimu mogu se čitati i kao vapaj za nekom novom europskom solidarnošću.'
+        ,1
+        ,5
+        ,10
+        ,256
+        ,134.10
+        ,35.10
+        ,3
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-038-7') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-342-038-7', N'Smrtni grijesi feminizma: Ogledi o mudologiji', NULL, N'Kada je 1984. objavljena u kultnoj biblioteci &td, prva knjiga Slavenke Drakulić Smrtni grijesi feminizma izazvala je buru u javnosti, a ta se bura, za divno čudo, nije stišala do dana današnjeg. Ponovno objavljivanje ovih tekstova koji su nastajali krajem sedamdesetih i početkom osamdesetih godina prošlog stoljeća pokazuje koliko su teme o kojima je pisala jedna od pionirki feminizma na ovim prostorima i dalje bitne, čak nezaobilazne. Kada tome dodamo novih dvadesetak tekstova objavljivanih od prvog izdanja knjige do danas, bjelodano je da Slavenka Drakulić ne samo da se konstantno bavi feminističkim temama već da im i dalje pristupa jednako oštro, beskompromisno i aktualno. Nasilje nad ženama ne jenjava, reproduktivna ženska prava ponovno su ugrožena, djevojčicama kroz odgoj i obrazovanje šaljemo drugačije poruke nego dječacima, ukratko, patrijarhat je žilav. Stoga je pitanje ravnopravnog položaja žene u društvu i obrane njezinih prava vječno aktualno, čini se kao da ga svaka generacija žena mora ponovno izboriti, samo je pitanje jesu li mlade žene toga svjesne. Smrtni grijesi feminizma u ovom proširenom izdanju idealni su prilog tom osvještavanju. Pokazuje se ne samo da su eseji Slavenke Drakulić itekako aktualni već i da se bez njih ne može ni početi misliti o feminizmu jučer, danas i sutra.', 0, 5, 10, 400, 134.10, 38.10, 1, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-038-7') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-342-038-7'
+        ,N'Smrtni grijesi feminizma: Ogledi o mudologiji'
+        ,NULL
+        ,N'Kada je 1984. objavljena u kultnoj biblioteci &td, prva knjiga Slavenke Drakulić Smrtni grijesi feminizma izazvala je buru u javnosti, a ta se bura, za divno čudo, nije stišala do dana današnjeg. Ponovno objavljivanje ovih tekstova koji su nastajali krajem sedamdesetih i početkom osamdesetih godina prošlog stoljeća pokazuje koliko su teme o kojima je pisala jedna od pionirki feminizma na ovim prostorima i dalje bitne, čak nezaobilazne. Kada tome dodamo novih dvadesetak tekstova objavljivanih od prvog izdanja knjige do danas, bjelodano je da Slavenka Drakulić ne samo da se konstantno bavi feminističkim temama već da im i dalje pristupa jednako oštro, beskompromisno i aktualno. Nasilje nad ženama ne jenjava, reproduktivna ženska prava ponovno su ugrožena, djevojčicama kroz odgoj i obrazovanje šaljemo drugačije poruke nego dječacima, ukratko, patrijarhat je žilav. Stoga je pitanje ravnopravnog položaja žene u društvu i obrane njezinih prava vječno aktualno, čini se kao da ga svaka generacija žena mora ponovno izboriti, samo je pitanje jesu li mlade žene toga svjesne. Smrtni grijesi feminizma u ovom proširenom izdanju idealni su prilog tom osvještavanju. Pokazuje se ne samo da su eseji Slavenke Drakulić itekako aktualni već i da se bez njih ne može ni početi misliti o feminizmu jučer, danas i sutra.'
+        ,0
+        ,5
+        ,10
+        ,400
+        ,134.10
+        ,38.10
+        ,1
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-60723-1') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-0-60723-1', N'Moje mjesto pod suncem', NULL, N'“Inspirativna ideja, malo razgovora i trud da se uskladi crtež i riječi– i eto slikovnice Moje mjesto pod suncem”, riječi su autora Mirka Ilića, Slavenke Drakulić i Rujane Jeger. “Moje mjesto pod suncem” je program socijalnog uključivanja namijenjen djeci i roditeljima iz obitelji koje žive u lošijim socijalnim i ekonomskim uvjetima. Cilj programa je prekinuti krug siromaštva u kojemu se djeca nalaze time što će im program omogućiti aktivnosti koje su nužne za njihov razvoj, a koje im njihovi roditelji ne mogu priuštiti. Program provodi udruga Centar za kulturu dijaloga (CeKaDe) iz Rijeke u suradnji s mnogobrojnim volonterima i donatorima. U  listopadu 2020. godine udruga je započela s nacionalnom donatorskom kampanjom s ciljem sakupljanja sredstava za uređenje prostora za rad s djecom ispod ruba siromaštva. Prostor je ustupilo Sveučilište u Rijeci, a cilj je sakupiti 1,2 milijuna kuna za potpunu adaptaciju i uređenje prostora od 380 kvadratnih metara. Kampanji se pridružio i poznati hrvatsko-američki dizajner Mirko Ilić, koji je autor loga kampanje te koji je, zajedno sa Slavenkom Drakulić i Rujanom Jeger, pripremio slikovnicu Moje mjesto pod suncem, s ciljem sakupljanja sredstava za kampanju. Kampanji se pridružila i naša nova izdavačka kuća Bodoni. Sav prihod od prodaje knjige namijenjen je kampanji “Moje mjesto pod suncem”.', 1, 5, 10, 26, 59.00, 10.10, 25, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-60723-1') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-0-60723-1'
+        ,N'Moje mjesto pod suncem'
+        ,NULL
+        ,N'“Inspirativna ideja, malo razgovora i trud da se uskladi crtež i riječi– i eto slikovnice Moje mjesto pod suncem”, riječi su autora Mirka Ilića, Slavenke Drakulić i Rujane Jeger. “Moje mjesto pod suncem” je program socijalnog uključivanja namijenjen djeci i roditeljima iz obitelji koje žive u lošijim socijalnim i ekonomskim uvjetima. Cilj programa je prekinuti krug siromaštva u kojemu se djeca nalaze time što će im program omogućiti aktivnosti koje su nužne za njihov razvoj, a koje im njihovi roditelji ne mogu priuštiti. Program provodi udruga Centar za kulturu dijaloga (CeKaDe) iz Rijeke u suradnji s mnogobrojnim volonterima i donatorima. U  listopadu 2020. godine udruga je započela s nacionalnom donatorskom kampanjom s ciljem sakupljanja sredstava za uređenje prostora za rad s djecom ispod ruba siromaštva. Prostor je ustupilo Sveučilište u Rijeci, a cilj je sakupiti 1,2 milijuna kuna za potpunu adaptaciju i uređenje prostora od 380 kvadratnih metara. Kampanji se pridružio i poznati hrvatsko-američki dizajner Mirko Ilić, koji je autor loga kampanje te koji je, zajedno sa Slavenkom Drakulić i Rujanom Jeger, pripremio slikovnicu Moje mjesto pod suncem, s ciljem sakupljanja sredstava za kampanju. Kampanji se pridružila i naša nova izdavačka kuća Bodoni. Sav prihod od prodaje knjige namijenjen je kampanji “Moje mjesto pod suncem”.'
+        ,1
+        ,5
+        ,10
+        ,26
+        ,59.00
+        ,10.10
+        ,25
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-040-0') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-342-040-0', N'Mileva Einstein, teorija tuge', N'Kada u osvit Prvoga svjetskoga rata, tek što je sa sinovima došla u Berlin, gdje je njezin suprug, najslavniji znanstvenik dvadesetog stoljeća Albert Einstein upravo dobio posao, primi pismo s Uvjetima o njihovu međusobnom životu, Milevi Einstein ionako napuknut život sasvim se izokrene. Ostaje sama, s dvojicom sinova, s golemim teretom tuge koju nosi u sebi, sa svim padovima i slomovima koje je imala u životu i koje će tek doživjeti.', N'Osoba koja je bila predodređena za najveće znanstvene dosege, genijalna matematičarka, prva žena na politehničkom fakultetu Sveučilišta u Zürichu, uvijek druga i drugačija, Mileva Einstein rođena Marić, iz bogate vojvođanske obitelji, u svojoj je sudbini gotovo paradigmatična kada razmišljamo o položaju žena. Njezina teorija tuge teška je poput bilo koje teorije relativnosti, ali i mnogo češća od nje. Prtljaga tuge koju je nosila od najranije mladosti do smrti, u kojoj su se tijekom vremena samo dodavali tegobni trenuci, od šepanja i ruganja djece, preko ljubavi i neuspjelog braka s Albertom, do smrti djeteta, bolesne sestre, nezavršenog fakulteta, loše materijalne situacije i teške bolesti najmlađega sina, teret je koji može razumjeti svaka čitateljica ili čitatelj.', 0, 5, 10, 224, 116.10, 33.10, 4, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-342-040-0') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-342-040-0'
+        ,N'Mileva Einstein, teorija tuge'
+        ,N'Kada u osvit Prvoga svjetskoga rata, tek što je sa sinovima došla u Berlin, gdje je njezin suprug, najslavniji znanstvenik dvadesetog stoljeća Albert Einstein upravo dobio posao, primi pismo s Uvjetima o njihovu međusobnom životu, Milevi Einstein ionako napuknut život sasvim se izokrene. Ostaje sama, s dvojicom sinova, s golemim teretom tuge koju nosi u sebi, sa svim padovima i slomovima koje je imala u životu i koje će tek doživjeti.'
+        ,N'Osoba koja je bila predodređena za najveće znanstvene dosege, genijalna matematičarka, prva žena na politehničkom fakultetu Sveučilišta u Zürichu, uvijek druga i drugačija, Mileva Einstein rođena Marić, iz bogate vojvođanske obitelji, u svojoj je sudbini gotovo paradigmatična kada razmišljamo o položaju žena. Njezina teorija tuge teška je poput bilo koje teorije relativnosti, ali i mnogo češća od nje. Prtljaga tuge koju je nosila od najranije mladosti do smrti, u kojoj su se tijekom vremena samo dodavali tegobni trenuci, od šepanja i ruganja djece, preko ljubavi i neuspjelog braka s Albertom, do smrti djeteta, bolesne sestre, nezavršenog fakulteta, loše materijalne situacije i teške bolesti najmlađega sina, teret je koji može razumjeti svaka čitateljica ili čitatelj.'
+        ,0
+        ,5
+        ,10
+        ,224
+        ,116.10
+        ,33.10
+        ,4
+        ,NULL)
+END
+GO
 
---IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-62193-0') BEGIN
---  EXECUTE [dbo].[BookCreate] N'978-953-0-62193-0', N'Kad su padali zidovi', NULL, N'Konac je 1980-ih, vrijeme kada Zagreb izranja iz sna, klubovi su prepuni, a noć se čini još itekako mlada. Dok velikani svjetske glazbe dolaze održati koncerte i demokracija kuca na vrata, budućnost se, barem većini, čini sretna i dobra. Istovremeno se osjećaju i promjene u zraku, koji se čak kao čisti prodaje u konzervama. Crni, glavni junak romana Kad su padali zidovi, mladi je nadobudan dečko koji voli filozofiju i rock `n` roll, odrasta u pomalo nesređenim obiteljskim odnosima u centru grada i asfalt je njegov drugi dom. On i njegovi prijatelji na kraju srednjoškolskog obrazovanja razmišljaju o djevojkama i o tome kako će promijeniti svijet.', 1, 5, 13, 256, 125.10, 35.10, 6, NULL, 1
---END
---GO
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'978-953-0-62193-0') BEGIN
+  INSERT INTO [dbo].[Books]
+        ([CreatedBy]
+        ,[UpdatedBy]
+        ,[ISBN]
+        ,[Title]
+        ,[Summary]
+        ,[Description]
+        ,[IsNew]
+        ,[PublisherFK]
+        ,[AuthorFK]
+        ,[PageCount]
+        ,[PurchasePrice]
+        ,[LoanPrice]
+        ,[Quantity]
+        ,[ImagePath])
+  VALUES
+        (1
+        ,1
+        ,N'978-953-0-62193-0'
+        ,N'Kad su padali zidovi'
+        ,NULL
+        ,N'Konac je 1980-ih, vrijeme kada Zagreb izranja iz sna, klubovi su prepuni, a noć se čini još itekako mlada. Dok velikani svjetske glazbe dolaze održati koncerte i demokracija kuca na vrata, budućnost se, barem većini, čini sretna i dobra. Istovremeno se osjećaju i promjene u zraku, koji se čak kao čisti prodaje u konzervama. Crni, glavni junak romana Kad su padali zidovi, mladi je nadobudan dečko koji voli filozofiju i rock `n` roll, odrasta u pomalo nesređenim obiteljskim odnosima u centru grada i asfalt je njegov drugi dom. On i njegovi prijatelji na kraju srednjoškolskog obrazovanja razmišljaju o djevojkama i o tome kako će promijeniti svijet.'
+        ,1
+        ,5
+        ,13
+        ,256
+        ,125.10
+        ,35.10
+        ,6
+        ,NULL)
+END
+GO
 
 --IF NOT EXISTS (SELECT ALL * FROM [dbo].[Books] WHERE [ISBN] = N'9789531323307') BEGIN
 --  EXECUTE [dbo].[BookCreate] N'9789531323307', N'Štapići za pričanje', NULL, N'Udba, politička emigracija, naše godine kojima smo opsjednuti, 1941., 1991., 1945., 1995..., generali, pukovnici i pokojnici, politika, želja za što većom moći, sve su to teme o kojima na jedinstven, neponovljiv, literarno maestralan način progovara Ivica Đikić. Sedam priča u Štapićima za pričanje natopljeno je pitanjima o zlu i njegovu izvoru, o mračnim dubinama ljudske duše, o životnim nesrećama i biblijskome ljudskom bijesu. I sasvim je svejedno piše li Đikić o svojem djetinjstvu izmaštanim i udaljenim likovima, o Slobodanu Praljku, ili pak još jednu priču o Blagi Antiću, nezaboravnom špijunu iz njegove serije Novine, jer svi su ti likovi itekako višedimenzionalni i njihove sudbine tiču se i nas kao čitatelja. Štapići za pričanje ovdje nisu samo naslov, već su i magičan aparat koji ovaj istinski pripovjedač ima duboko u sebi. Svaka priča u Štapićima za pričanje dolazi iz različite poetike, ali sve zajedno ulaze u jedinstven đikićevski svijet, svijet u kojemu su protagonisti i njihov unutarnji nemir pokretači ne samo radnje već i svega što će se neukrotivo i neobuzdano sručiti na njih same i njihovu okolinu.', 1, 5, 14, 192, 125.10, 35.10, 12, NULL, 1
@@ -1010,7 +1250,7 @@ GO
 -- LOANS
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 1 AND [UserFK] = 4) BEGIN
-  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, 10, GETDATE())
+  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -10, GETDATE())
   EXECUTE [dbo].[LoanLoan] 1, 4, @PlannedReturnDate, 1
 END
 GO
@@ -1028,7 +1268,7 @@ END
 GO
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 3 AND [UserFK] = 6) BEGIN
-  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, 3, GETDATE())
+  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -3, GETDATE())
   EXECUTE [dbo].[LoanLoan] 3, 6, @PlannedReturnDate, 1
 END
 GO
@@ -1067,4 +1307,110 @@ GO
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Purchases] WHERE [BookFK] = 4 AND [UserFK] = 4) BEGIN
   EXECUTE [dbo].[PurchasePurchase] 4, 4, 1, 1
 END
+GO
+
+-- MESSAGES
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Messages] WHERE [SenderMessage] = N'Do kada radite ponedjeljkom?') BEGIN
+  INSERT INTO [dbo].[Messages] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [SenderFName],
+    [SenderLName],
+    [SenderEmail],
+    [SenderDate],
+    [SenderMessage],
+    [ResponderUserFK],
+    [ResponderDate],
+    [ResponderMessage]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    N'Andrija',
+    N'Brežni',
+    N'abrezni@gmail.com',
+    GETDATE(),
+    N'Do kada radite ponedjeljkom?',
+    NULL,
+    NULL,
+    NULL
+  )
+END
+GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Messages] WHERE [SenderMessage] = N'Imate li knjigu Gospoda Glembajevi na lageru?') BEGIN
+  INSERT INTO [dbo].[Messages] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [SenderFName],
+    [SenderLName],
+    [SenderEmail],
+    [SenderDate],
+    [SenderMessage],
+    [ResponderUserFK],
+    [ResponderDate],
+    [ResponderMessage]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    N'Julia',
+    N'Božić',
+    N'jbozic@gmail.com',
+    GETDATE(),
+    N'Imate li knjigu Gospoda Glembajevi na lageru?',
+    NULL,
+    NULL,
+    NULL
+  )
+END
+GO
+
+IF NOT EXISTS (SELECT ALL * FROM [dbo].[Messages] WHERE [SenderMessage] = N'Zapošljavate li nove radnike?') BEGIN
+  INSERT INTO [dbo].[Messages] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [SenderFName],
+    [SenderLName],
+    [SenderEmail],
+    [SenderDate],
+    [SenderMessage],
+    [ResponderUserFK],
+    [ResponderDate],
+    [ResponderMessage]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    N'Julia',
+    N'Brežni',
+    N'abrezni@gmail.com',
+    GETDATE(),
+    N'Zapošljavate li nove radnike?',
+    16,
+    GETDATE(),
+    N'Poštovani, nažalost ne zapošljavamo nove radnike?'
+  )
+END
+GO
+
+-- SUBSCRIPTIONS
+
+EXECUTE [dbo].[SubscriptionSubscribe] 4, 4, 1
+GO
+
+EXECUTE [dbo].[SubscriptionSubscribe] 4, 4, 1
+GO
+
+EXECUTE [dbo].[SubscriptionSubscribe] 4, 5, 1
+GO
+
+EXECUTE [dbo].[SubscriptionSubscribe] 5, 6, 1
 GO

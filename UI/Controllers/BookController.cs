@@ -16,7 +16,7 @@ namespace UI.Controllers
 {
   public class BookController : BaseController
   {
-    private const Int32 PAGE_SIZE = 6;
+    private const Int32 PAGE_SIZE = 8;
 
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IBookStoreManager _bookstoreManager = new BookStoreManager();

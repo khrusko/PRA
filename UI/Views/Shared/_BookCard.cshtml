@@ -2,34 +2,19 @@
 @model FullBookInfoVM
 <div class="col">
   <div class="card">
-
+    <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
+         alt="@Model.Book.Title book"
+         class="card-img-top align-self-center"
+         style="width: 150px; z-index: 1">
     <div class="card-body">
-      <h5 class="card-title" style="height: 3rem;">@Model.Book.Title</h5>
+      <h5 class="card-title" style="height: 3rem">@Model.Book.Title</h5>
       <hr />
-      <p>
-        <span class="fw-bold">Stanje: </span>
-        @if (Model.Book.IsNew) {
-          <span>Novo</span>
-        }
-        else {
-          <span>Rabljeno</span>
-        }
-      </p>
 
-      <p><span class="fw-bold">Izdavač: </span>@Model.Publisher.Name</p>
       <p><span class="fw-bold">Autor: </span>@Model.Author.FName @Model.Author.LName</p>
 
-      <p> <span class="fw-bold">Broj stranica: </span> @Model.Book.PageCount</p>
+      <p><span class="fw-bold">Cijena: </span> @Model.Book.PurchasePrice kn</p>
 
-      <p><span class="fw-bold">Cijena za kupovinu: </span> @Model.Book.PurchasePrice kn</p>
-
-      <p><span class="fw-bold">Cijena za posudbu: </span> @Model.Book.LoanPrice kn</p>
-
-      <p><span class="fw-bold">Dostupna količina: </span> @Model.Book.Quantity kom</p>
-
-          <p><span class="fw-bold">Količina: </span> @Html.DisplayFor(model => model.Book.Quantity) kom</p>
-
-          <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
-      </div>
+      <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
+    </div>
   </div>
 </div>
