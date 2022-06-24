@@ -14,9 +14,10 @@
   [LName]       nvarchar(50)  NOT NULL,
   [BirthDate]   date          NOT NULL,
   [ImagePath]   nvarchar(500) NULL,
-  [Biography]   nvarchar(MAX) NULL,
+  [Biography]   nvarchar(2000) NULL,
 
-  CONSTRAINT [PK_Authors] PRIMARY KEY ([ID]),
+  CONSTRAINT [PK_Authors] PRIMARY KEY CLUSTERED ([ID])
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF),
   CONSTRAINT [FK_Authors_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Authors_UpdatedBy] FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Authors_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID])

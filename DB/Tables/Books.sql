@@ -12,8 +12,8 @@
 
   [ISBN]          nvarchar(20)  NOT NULL,
   [Title]         nvarchar(100) NOT NULL,
-  [Summary]       nvarchar(MAX) NULL,
-  [Description]   nvarchar(MAX) NOT NULL,
+  [Summary]       nvarchar(2000) NULL,
+  [Description]   nvarchar(2000) NOT NULL,
   [IsNew]         bit           NOT NULL
     CONSTRAINT [DF_Books_IsNew] DEFAULT 1,
   [PublisherFK]   int           NOT NULL,
@@ -25,7 +25,8 @@
     CONSTRAINT [DF_Books_Quantity] DEFAULT 0,
   [ImagePath]     nvarchar(500) NULL,
 
-  CONSTRAINT [PK_Books] PRIMARY KEY ([ID]),
+  CONSTRAINT [PK_Books] PRIMARY KEY  CLUSTERED ([ID] ASC)
+    WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF),
   CONSTRAINT [FK_Books_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Books_UpdatedBy] FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[Users] ([ID]),
   CONSTRAINT [FK_Books_DeletedBy] FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[Users] ([ID]),
