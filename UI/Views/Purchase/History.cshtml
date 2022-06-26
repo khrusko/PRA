@@ -1,5 +1,5 @@
 ﻿@using UI.Models
-@model  IEnumerable<PurchaseVM>
+@model  PurchaseSearchVM
 
 @{
   ViewBag.Title = "Povijest kupnji";
@@ -7,12 +7,37 @@
 
 <h2>Povijest kupnji</h2>
 
+@using (Html.BeginForm(actionName: "History",
+                       controllerName: "Purchase",
+                       method: FormMethod.Get)) {
+  <div class="row">
+    <div class="col-4 offset-2">
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.PurchaseSortType, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.PurchaseSortType, htmlAttributes: new { @class = "form-select" })
+      </div>
+    </div>
+
+    <div class="col-4">
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <input type="submit" class="btn btn-primary px-5" value="Pretraži" />
+      </div>
+    </div>
+
+  </div>
+}
+
 <div class="album py-5">
-  <h3>Povijest kupnji</h3>
   <div class="container">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
-      @foreach (var purchase in Model) {
+      @foreach (var purchase in Model.Purchases) {
 
         @Html.Partial(partialViewName: "_PurchaseCard",
                       model: purchase)
@@ -21,4 +46,15 @@
 
     </div>
   </div>
+</div>
+
+<div class="d-flex justify-content-end">
+  @Html.PageLinks(pagingInfo: Model.PagingInfo,
+                  pageUrl: page => Url.Action(actionName: "History",
+                                              controllerName: "Purchase",
+                                              routeValues: new {
+                                                PurchaseSortType = (Int32)Model.PurchaseSortType,
+                                                SortDirection = (Int32)Model.SortDirection,
+                                                page
+                                              }))
 </div>

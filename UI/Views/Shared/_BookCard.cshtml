@@ -1,5 +1,5 @@
 ﻿@using UI.Models
-@model FullBookInfoVM
+@model BookCardVM
 <div class="col">
   <div class="card">
     <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
@@ -10,7 +10,7 @@
       <h5 class="card-title" style="height: 3rem">@Model.Book.Title</h5>
       <hr />
 
-      <p><span class="fw-bold">Autor: </span>@Model.Author.FName @Model.Author.LName</p>
+      <p><span class="fw-bold">Autor: </span>@Model.Author</p>
 
       <p><span class="fw-bold">Cijena: </span> @Model.Book.PurchasePrice kn</p>
 

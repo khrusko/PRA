@@ -30,5 +30,8 @@ namespace UI.Models
     [Compare("Password", ErrorMessage = "Zaporke se ne podudaraju")]
     [DataType(DataType.Password)]
     public String ConfirmPassword { get; set; }
+
+    [Display(Name = "Prihvaćam pravila privatnosti")]
+    public Boolean AcceptRules { get; set; }
   }
 }

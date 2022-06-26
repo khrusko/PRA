@@ -1,17 +1,38 @@
 ﻿@using UI.Models
+@using BLL.Projection
 @model LoanVM
+@{
+  UserProjection user = Session["user"] as UserProjection;
+  Int32 daysLeft = (Model.Loan.PlannedReturnDate - Model.Loan.LoanDate).Days;
+
+  String borderClass = "";
+  if (Model.Loan.ReturnDate == DateTime.MinValue) {
+    if (daysLeft <= 0) {
+      borderClass = "border-danger";
+    }
+    else if (daysLeft <= 3) {
+      borderClass = "border-warning";
+    }
+    else {
+      borderClass = "border-success";
+    }
+  }
+}
+
 <div class="col">
-  <div class="card">
+  <div class="card @borderClass">
 
     <div class="card-body">
-      <h5 class="card-title" style="height: 3rem;">@Model.Book.Title</h5>
+      <h5 class="card-title">@Model.Book.Title</h5>
       <hr />
 
-      <p>
-        <span class="fw-bold">Posudio/la:</span>
-        <span>@Model.User.FName</span>
-        <span>@Model.User.LName</span>
-      </p>
+      @if (!(user is null) && user.IsAdmin) {
+        <p>
+          <span class="fw-bold">Posudio/la:</span>
+          <span>@Model.User.FName</span>
+          <span>@Model.User.LName</span>
+        </p>
+      }
 
       <p>
         <span class="fw-bold">Cijena posudbe:</span>
@@ -27,6 +48,18 @@
         <span class="fw-bold">Planirani datum vraćanja:</span>
         <span>@Model.Loan.PlannedReturnDate.ToLongDateString()</span>
       </p>
+
+      @if (Model.Loan.ReturnDate == DateTime.MinValue) {
+      <p>
+        <span class="fw-bold">Preostalo dana:</span>
+        @if (daysLeft <= 0) {
+          <span class="text-danger">Istekao rok posudbe</span>
+        }
+        else {
+          <span>@daysLeft</span>
+        }
+      </p>
+      }
 
       <p>
         <span class="fw-bold">Stvarni datum vraćanja:</span>

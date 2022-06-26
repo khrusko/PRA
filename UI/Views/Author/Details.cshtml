@@ -59,7 +59,7 @@
   <div class="container">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
 
-      @foreach (FullBookInfoVM book in Model.Books) {
+      @foreach (BookCardVM book in Model.Books) {
 
         @Html.Partial(partialViewName: "_BookCard", model: book)
 

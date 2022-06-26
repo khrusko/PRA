@@ -44,6 +44,11 @@
     @Html.DropDownListFor(expression: model => model.LoanDays, selectList: dateList, htmlAttributes: new { @class = "form-select" })
   </div>
 
+  <div class="mb-3">
+    @Html.CheckBoxFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-checkbox me-3" })
+    @Html.LabelFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-label" })
+  </div>
+
   <div>
     <button type="submit" class="btn btn-primary">Potvrdi</button>
 

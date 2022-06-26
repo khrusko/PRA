@@ -10,6 +10,7 @@ using BLL.Projection;
 using UI.Infrastructure;
 using UI.Models;
 using UI.Models.Concrete;
+using UI.Models.Enums;
 
 namespace UI.Controllers
 {
@@ -17,6 +18,8 @@ namespace UI.Controllers
   [UserAuthenticate]
   public class PurchaseController : BaseController
   {
+    private const Int32 PAGE_SIZE = 6;
+
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly IPublisherManager _publisherManager = new PublisherManager();
@@ -71,6 +74,12 @@ namespace UI.Controllers
                     });
       }
 
+      if (!model.AcceptRules)
+      {
+        Message = new AlertMessage(message: "Molimo Vas da prihvatite pravila korištenja usluge");
+        return Purchase(model.BookID);
+      }
+
       if (model.Quantity > book.Quantity || model.Quantity <= 0)
       {
         Message = new AlertMessage(message: "Tražena količina nije valjana");
@@ -88,25 +97,25 @@ namespace UI.Controllers
     }
 
     [HttpGet]
-    public ActionResult History()
+    public ActionResult History(PurchaseSortType purchaseSortType = 0,
+                                SortDirection sortDirection = 0,
+                                Int32 page = 1)
     {
       IEnumerable<PurchaseVM> purchases = LoggedInUser.IsAdmin
         ? (from purchase in _purchaseManager.GetAll()
            join book in _bookManager.GetAll()
              on purchase.BookFK equals book.ID
            join user in _userManager.GetAll()
-             on purchase.BookFK equals user.ID
+             on purchase.UserFK equals user.ID
            select new PurchaseVM
            {
              Purchase = purchase,
              Book = book,
-             User = LoggedInUser
+             User = user
            })
         : (from purchase in _purchaseManager.GetByUserFK(userFK: LoggedInUser.ID)
            join book in _bookManager.GetAll()
              on purchase.BookFK equals book.ID
-           join user in _userManager.GetAll()
-             on purchase.BookFK equals user.ID
            select new PurchaseVM
            {
              Purchase = purchase,
@@ -114,7 +123,35 @@ namespace UI.Controllers
              User = LoggedInUser
            });
 
-      return View(viewName: nameof(History), model: purchases);
+      switch (purchaseSortType)
+      {
+        case PurchaseSortType.DATE:
+          purchases = purchases.SortBy(keySelector: model => model.Purchase.PurchaseDate, sortDirection: sortDirection);
+          break;
+        case PurchaseSortType.TOTAL_PRICE:
+          purchases = purchases.SortBy(keySelector: model => model.Purchase.UnitPrice * model.Purchase.Quantity, sortDirection: sortDirection);
+          break;
+        case PurchaseSortType.QUANTITY:
+          purchases = purchases.SortBy(keySelector: model => model.Purchase.Quantity, sortDirection: sortDirection);
+          break;
+        default:
+          throw new InvalidOperationException();
+      }
+
+      return View(viewName: nameof(History),
+                  model: new PurchaseSearchVM
+                  {
+                    Purchases = purchases.Skip(count: (page - 1) * PAGE_SIZE)
+                                         .Take(count: PAGE_SIZE),
+                    PagingInfo = new PagingInfo
+                    {
+                      CurrentPage = page,
+                      ItemsPerPage = PAGE_SIZE,
+                      TotalItems = purchases.Count()
+                    },
+                    PurchaseSortType = purchaseSortType,
+                    SortDirection = sortDirection
+                  });
     }
 
     [HttpGet]

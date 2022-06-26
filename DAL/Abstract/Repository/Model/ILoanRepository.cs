@@ -16,5 +16,6 @@ namespace DAL.Abstract.Repository.Model
     IEnumerable<LoanModel> ReadByUserFK(Int32 UserFK);
     IEnumerable<LoanModel> ReadByUserFKActive(Int32 UserFK);
     IEnumerable<LoanModel> ReadLoansInTimeout();
+    Int32 CountByBookFK(Int32 BookFK);
   }
 }

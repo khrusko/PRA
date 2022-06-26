@@ -12,132 +12,134 @@
 <hr />
 
 <div>
-    <dl class="dl-horizontal">
-        <dt>
-            ISBN
-        </dt>
+  <dl class="dl-horizontal">
+    <dt>
+      ISBN
+    </dt>
 
-        <dd>
-            @Model.Book.ISBN
-        </dd>
+    <dd>
+      @Model.Book.ISBN
+    </dd>
 
-        <dt>
-            Naziv
-        </dt>
+    <dt>
+      Naziv
+    </dt>
 
-        <dd>
-            @Model.Book.Title
-        </dd>
+    <dd>
+      @Model.Book.Title
+    </dd>
 
-        <dt>
-            Autor
-        </dt>
+    <dt>
+      Autor
+    </dt>
 
-        <dd>
-            @if (Model.Author.IsAvailable)
-            {
-                @Html.ActionLink(linkText: $"{Model.Author.FName} {Model.Author.LName}",
-                                        actionName: "Details",
-                                        controllerName: "Author",
-                                        routeValues: new { id = Model.Author.ID },
-                                        htmlAttributes: "link-primary")
-            }
-            else
-            {
-                @: @Model.Author.FName @Model.Author.LName
-            }
-        </dd>
+    <dd>
+      @if (Model.Author.IsAvailable) {
+        @Html.ActionLink(linkText: $"{Model.Author.FName} {Model.Author.LName}",
+                                actionName: "Details",
+                                controllerName: "Author",
+                                routeValues: new { id = Model.Author.ID },
+                                htmlAttributes: "link-primary")
+      }
+      else {
+        @: @Model.Author.FName @Model.Author.LName
+      }
+    </dd>
 
-        <dt>
-            Kratki sadržaj
-        </dt>
+    <dt>
+      Kratki sadržaj
+    </dt>
 
-        <dd>
-            @if (Model.Book.Summary.IsEmpty())
-            {
-                <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
-            }
-            else
-            {
-                <span>@Model.Book.Summary</span>
-            }
-        </dd>
+    <dd>
+      @if (Model.Book.Summary.IsEmpty()) {
+        <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
+      }
+      else {
+        <span>@Model.Book.Summary</span>
+      }
+    </dd>
 
-        <dt>
-            Opis
-        </dt>
+    <dt>
+      Opis
+    </dt>
 
-        <dd>
-            @Model.Book.Description
-        </dd>
+    <dd>
+      @Model.Book.Description
+    </dd>
 
-        <dt>
-            Stanje
-        </dt>
+    <dt>
+      Stanje
+    </dt>
 
-        <dd>
-            @if (Model.Book.IsNew)
-            {
-                <span>Novo</span>
-            }
-            else
-            {
-                <span>Rabljeno</span>
-            }
-        </dd>
+    <dd>
+      @if (Model.Book.IsNew) {
+        <span>Novo</span>
+      }
+      else {
+        <span>Rabljeno</span>
+      }
+    </dd>
 
-        <dt>
-            Izdavač
-        </dt>
+    <dt>
+      Izdavač
+    </dt>
 
-        <dd>
-            @Model.Publisher.Name
-        </dd>
+    <dd>
+      @Model.Publisher.Name
+    </dd>
 
-        <dt>
-            Broj stranica
-        </dt>
+    <dt>
+      Broj stranica
+    </dt>
 
-        <dd>
-            @Model.Book.PageCount
-        </dd>
+    <dd>
+      @Model.Book.PageCount
+    </dd>
 
-        <dt>
-            Cijena kupovine
-        </dt>
+    <dt>
+      Cijena kupovine
+    </dt>
 
-        <dd>
-            @Model.Book.PurchasePrice.ToString("C2")
-        </dd>
+    <dd>
+      @Model.Book.PurchasePrice.ToString("C2")
+    </dd>
 
-        <dt>
-            Cijena posudbe
-        </dt>
+    <dt>
+      Cijena posudbe
+    </dt>
 
-        <dd>
-            @Model.Book.LoanPrice.ToString("C2")
-        </dd>
+    <dd>
+      @Model.Book.LoanPrice.ToString("C2")
+    </dd>
 
-        <dt>
-            Dostupna količina
-        </dt>
+    <dt>
+      Dostupna količina
+    </dt>
 
-        <dd>
-            @Model.Book.Quantity
-        </dd>
+    <dd>
+      @Model.Book.Quantity
+    </dd>
 
-        <dt>
-            Slika
-        </dt>
+    <dt>
+      Broj posudbi
+    </dt>
 
-        <dd>
-            <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
-                 alt="@Model.Book.Title book"
-                 class="img-fluid img-thumbnail mb-2"
-                 style="width: 150px; z-index: 1">
-        </dd>
+    <dd>
+      @Model.LoanCount
+    </dd>
 
-    </dl>
+    <dt>
+      Slika
+    </dt>
+
+    <dd>
+      <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
+           alt="@Model.Book.Title book"
+           class="img-fluid img-thumbnail mb-2"
+           style="width: 150px; z-index: 1">
+    </dd>
+
+  </dl>
 </div>
 
 @if (!(user is null))

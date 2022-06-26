@@ -4,13 +4,13 @@
 @{
   ViewBag.Title = "Naslovna";
 
-  IEnumerable<FullBookInfoVM> top4NewBooks = Model.Books
-                                                  .Where(predicate: book => book.Book.IsNew && book.Book.Quantity > 0)
-                                                  .Take(count: 4);
+  IEnumerable<BookCardVM> top4NewBooks = Model.Books
+                                              .Where(predicate: book => book.Book.IsNew && book.Book.Quantity > 0)
+                                              .Take(count: 4);
 
-  IEnumerable<FullBookInfoVM> top4AvailableBooks = Model.Books
-                                                        .Where(predicate: book => book.Book.Quantity > 0)
-                                                        .Take(count: 4);
+  IEnumerable<BookCardVM> top4AvailableBooks = Model.Books
+                                                    .Where(predicate: book => book.Book.Quantity > 0)
+                                                    .Take(count: 4);
 }
 
 <div class="text-center">
@@ -23,7 +23,7 @@
   <div class="container">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
 
-      @foreach (FullBookInfoVM book in top4NewBooks) {
+      @foreach (BookCardVM book in top4NewBooks) {
 
         @Html.Partial(partialViewName: "_BookCard", model: book)
 
@@ -38,7 +38,7 @@
   <div class="container">
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
 
-      @foreach (FullBookInfoVM book in top4AvailableBooks) {
+      @foreach (BookCardVM book in top4AvailableBooks) {
 
         @Html.Partial(partialViewName: "_BookCard", model: book)
 

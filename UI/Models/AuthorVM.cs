@@ -7,6 +7,6 @@ namespace UI.Models
   public class AuthorVM
   {
     public AuthorProjection Author { get; set; }
-    public IEnumerable<FullBookInfoVM> Books { get; set; }
+    public IEnumerable<BookCardVM> Books { get; set; }
   }
 }

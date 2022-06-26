@@ -129,6 +129,12 @@ namespace UI.Controllers
     {
       if (!ModelState.IsValid) return View(nameof(Register), model: model);
 
+      if (!model.AcceptRules)
+      {
+        Message = new AlertMessage(message: "Molimo Vas da prihvatite pravila privatnosti");
+        return View(nameof(Register), model: model);
+      }
+
       UserProjection projection = _userManager.Register(fName: model.FName,
                                                         lName: model.LName,
                                                         email: model.Email,

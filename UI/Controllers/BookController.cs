@@ -36,7 +36,8 @@ namespace UI.Controllers
                              {
                                Book = book,
                                Publisher = _publisherManager.GetByID(ID: book.PublisherFK, availabilityCheck: false),
-                               Author = _authorManager.GetByID(ID: book.AuthorFK, availabilityCheck: false)
+                               Author = _authorManager.GetByID(ID: book.AuthorFK, availabilityCheck: false),
+                               LoanCount = _loanManager.CountByBookFK(bookFK: book.ID)
                              });
     }
 
@@ -214,20 +215,16 @@ namespace UI.Controllers
                              SortDirection sortDirection = 0,
                              Int32 page = 1)
     {
-      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll(availabilityCheck: false)
-                                          join publisher in _publisherManager.GetAll(availabilityCheck: false)
-                                            on book.PublisherFK equals publisher.ID
-                                          join author in _authorManager.GetAll(availabilityCheck: false)
-                                            on book.AuthorFK equals author.ID
-                                          where !availableOnly || book.Quantity > 0
-                                          where book.Title.ToLower().Contains(value: bookQuery?.ToLower() ?? String.Empty)
-                                          where $"{author.FName} {author.LName}".ToLower().Contains(value: authorQuery?.ToLower() ?? String.Empty)
-                                          select new FullBookInfoVM
-                                          {
-                                            Book = book,
-                                            Publisher = publisher,
-                                            Author = author
-                                          };
+      IEnumerable<BookCardVM> books = from book in _bookManager.GetAll(availabilityCheck: false)
+                                      let author = _authorManager.GetByID(book.ID)
+                                      where !availableOnly || book.Quantity > 0
+                                      where book.Title.ToLower().Contains(value: bookQuery?.ToLower() ?? String.Empty)
+                                      where $"{author.FName} {author.LName}".ToLower().Contains(value: authorQuery?.ToLower() ?? String.Empty)
+                                      select new BookCardVM
+                                      {
+                                        Book = book,
+                                        Author = $"{author.FName} {author.LName}"
+                                      };
 
       switch (bookSortType)
       {
@@ -235,10 +232,19 @@ namespace UI.Controllers
           books = books.SortBy(keySelector: obj => obj.Book.Title, sortDirection: sortDirection);
           break;
         case BookSortType.AUTHOR:
-          books = books.SortBy(keySelector: obj => $"{obj.Author.FName} {obj.Author.LName}", sortDirection: sortDirection);
+          books = books.SortBy(keySelector: obj => obj.Author, sortDirection: sortDirection);
           break;
         case BookSortType.PURCHASE_PRICE:
           books = books.SortBy(keySelector: obj => obj.Book.PurchasePrice, sortDirection: sortDirection);
+          break;
+        case BookSortType.CREATE_DATE:
+          books = books.SortBy(keySelector: obj => obj.Book.CreateDate, sortDirection: sortDirection);
+          break;
+        case BookSortType.PAGE_COUNT:
+          books = books.SortBy(keySelector: obj => obj.Book.PageCount, sortDirection: sortDirection);
+          break;
+        case BookSortType.LOAN_COUNT:
+          books = books.SortBy(keySelector: obj => _loanManager.CountByBookFK(obj.Book.ID), sortDirection: sortDirection);
           break;
         default:
           throw new InvalidOperationException();
@@ -247,8 +253,8 @@ namespace UI.Controllers
       return View(viewName: nameof(Search),
                   model: new BookSearchVM
                   {
-                    BookPublishers = books.Skip(count: (page - 1) * PAGE_SIZE)
-                                          .Take(count: PAGE_SIZE),
+                    Books = books.Skip(count: (page - 1) * PAGE_SIZE)
+                                 .Take(count: PAGE_SIZE),
                     PagingInfo = new PagingInfo
                     {
                       CurrentPage = page,

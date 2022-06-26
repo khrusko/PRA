@@ -16,5 +16,6 @@ namespace BLL.Abstract.Manager.Projection
     IEnumerable<LoanProjection> GetActiveByUserFK(Int32 userFK);
     IEnumerable<LoanProjection> GetLoansInTimeout();
     void NotifyTimeout(Int32 ID, BookProjection book, UserProjection user);
+    Int32 CountByBookFK(Int32 bookFK);
   }
 }

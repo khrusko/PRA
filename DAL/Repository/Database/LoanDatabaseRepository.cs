@@ -191,5 +191,21 @@ namespace DAL.Repository.Database
         });
       }
     }
+
+    public Int32 CountByBookFK(Int32 BookFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@BookFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["BookFK"],
+          Value = BookFK,
+        }
+      };
+
+      return Int32.Parse(SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CountByBookFK), parameters.ToArray()).ToString());
+    }
   }
 }

@@ -10,11 +10,14 @@ using BLL.Projection;
 using UI.Infrastructure;
 using UI.Models;
 using UI.Models.Concrete;
+using UI.Models.Enums;
 
 namespace UI.Controllers
 {
   public class LoanController : BaseController
   {
+    private const Int32 PAGE_SIZE = 6;
+
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
     private readonly ILoanManager _loanManager = new LoanManager();
@@ -55,6 +58,12 @@ namespace UI.Controllers
       if (!ModelState.IsValid)
         return Loan(model.BookID);
 
+      if (!model.AcceptRules)
+      {
+        Message = new AlertMessage(message: "Molimo Vas da prihvatite pravila korištenja usluge i naplate zakasnina");
+        return Loan(model.BookID);
+      }
+
       Int32 loanCount = _loanManager.GetActiveByUserFK(LoggedInUser.ID).Count();
 
       if (loanCount == 3)
@@ -87,21 +96,60 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthenticate]
-    public ActionResult History()
+    public ActionResult History(LoanSortType loanSortType = 0,
+                                SortDirection sortDirection = 0,
+                                Int32 page = 1)
     {
-      if (LoggedInUser.IsAdmin) return new HttpStatusCodeResult(404);
+      IEnumerable<LoanVM> loans = LoggedInUser.IsAdmin
+        ? (from loan in _loanManager.GetAll()
+           join book in _bookManager.GetAll()
+             on loan.BookFK equals book.ID
+           join user in _userManager.GetAll()
+             on loan.UserFK equals user.ID
+           where loan.ReturnDate != DateTime.MinValue
+           select new LoanVM
+           {
+             Book = book,
+             Loan = loan,
+             User = user
+           })
+        : (from loan in _loanManager.GetByUserFK(userFK: LoggedInUser.ID)
+           join book in _bookManager.GetAll()
+             on loan.BookFK equals book.ID
+           where loan.ReturnDate != DateTime.MinValue
+           select new LoanVM
+           {
+             Book = book,
+             Loan = loan,
+             User = LoggedInUser
+           });
 
-      IEnumerable<LoanVM> loans = from loan in _loanManager.GetByUserFK(userFK: LoggedInUser.ID)
-                                  join book in _bookManager.GetAll()
-                                    on loan.BookFK equals book.ID
-                                  select new LoanVM
-                                  {
-                                    Book = book,
-                                    Loan = loan,
-                                    User = LoggedInUser
-                                  };
+      switch (loanSortType)
+      {
+        case LoanSortType.LOAN_DATE:
+          loans = loans.SortBy(keySelector: model => model.Loan.LoanDate, sortDirection: sortDirection);
+          break;
+        case LoanSortType.PLANNED_RETURN_DATE:
+          loans = loans.SortBy(keySelector: model => model.Loan.PlannedReturnDate, sortDirection: sortDirection);
+          break;
+        default:
+          throw new InvalidOperationException();
+      }
 
-      return View(viewName: nameof(History), model: loans);
+      return View(viewName: nameof(History),
+                  model: new LoanSearchVM
+                  {
+                    Loans = loans.Skip(count: (page - 1) * PAGE_SIZE)
+                                 .Take(count: PAGE_SIZE),
+                    PagingInfo = new PagingInfo
+                    {
+                      CurrentPage = page,
+                      ItemsPerPage = PAGE_SIZE,
+                      TotalItems = loans.Count()
+                    },
+                    LoanSortType = loanSortType,
+                    SortDirection = sortDirection
+                  });
     }
 
     [HttpGet]

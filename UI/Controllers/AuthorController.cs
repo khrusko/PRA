@@ -25,14 +25,11 @@ namespace UI.Controllers
       AuthorProjection author = _authorManager.GetByID(id);
       if (author is null) return new HttpStatusCodeResult(404);
 
-      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetBooksByAuthorFK(authorFK: author.ID)
-                                          join publisher in _publisherManager.GetAll(availabilityCheck: false)
-                                            on book.PublisherFK equals publisher.ID
-                                          select new FullBookInfoVM
+      IEnumerable<BookCardVM> books = from book in _bookManager.GetBooksByAuthorFK(authorFK: author.ID)
+                                          select new BookCardVM
                                           {
                                             Book = book,
-                                            Publisher = publisher,
-                                            Author = author
+                                            Author = $"{author.FName} {author.LName}"
                                           };
       return View(viewName: nameof(Details),
                   model: new AuthorVM

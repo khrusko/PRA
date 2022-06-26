@@ -11,7 +11,7 @@ namespace UI.Models
 {
   public class BookSearchVM
   {
-    public IEnumerable<FullBookInfoVM> BookPublishers { get; set; }
+    public IEnumerable<BookCardVM> Books { get; set; }
     public PagingInfo PagingInfo { get; set; }
 
     [Display(Name = "Prikaži samo dostupne knjige")]

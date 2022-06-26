@@ -12,5 +12,14 @@ namespace UI.Models.Enums
 
     [Display(Name = "Cijena kupnje")]
     PURCHASE_PRICE,
+
+    [Display(Name = "Datum objave")]
+    CREATE_DATE,
+
+    [Display(Name = "Broj stranica")]
+    PAGE_COUNT,
+
+    [Display(Name = "Broj posudbi")]
+    LOAN_COUNT
   }
 }

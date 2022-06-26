@@ -21,16 +21,15 @@ namespace UI.Controllers
     [HttpGet]
     public ViewResult Index()
     {
-      IEnumerable<FullBookInfoVM> books = from book in _bookManager.GetAll()
+      IEnumerable<BookCardVM> books = from book in _bookManager.GetAll()
                                           join publisher in _publisherManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals publisher.ID
                                           join author in _authorManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals author.ID
-                                          select new FullBookInfoVM
+                                          select new BookCardVM
                                           {
                                             Book = book,
-                                            Publisher = publisher,
-                                            Author = author
+                                            Author = $"{author.FName} {author.LName}"
                                           };
 
       return View(viewName: nameof(Index),
