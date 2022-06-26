@@ -3,7 +3,7 @@
 @model LoanVM
 @{
   UserProjection user = Session["user"] as UserProjection;
-  Int32 daysLeft = (Model.Loan.PlannedReturnDate - Model.Loan.LoanDate).Days;
+  Int32 daysLeft = (Model.Loan.PlannedReturnDate - DateTime.Now).Days;
 
   String borderClass = "";
   if (Model.Loan.ReturnDate == DateTime.MinValue) {
@@ -50,15 +50,15 @@
       </p>
 
       @if (Model.Loan.ReturnDate == DateTime.MinValue) {
-      <p>
-        <span class="fw-bold">Preostalo dana:</span>
-        @if (daysLeft <= 0) {
-          <span class="text-danger">Istekao rok posudbe</span>
-        }
-        else {
-          <span>@daysLeft</span>
-        }
-      </p>
+        <p>
+          <span class="fw-bold">Preostalo dana:</span>
+          @if (daysLeft <= 0) {
+            <span class="text-danger">Istekao rok posudbe</span>
+          }
+          else {
+            <span>@daysLeft</span>
+          }
+        </p>
       }
 
       <p>
@@ -68,8 +68,14 @@
 
       <p>
         <span class="fw-bold">Zakasnina:</span>
-        <span>@(Model.Loan.DelayPricePerDay * Model.Loan.DelayDays) kn</span>
+        @if (daysLeft <= 0) {
+          <span>@((DateTime.Now - Model.Loan.PlannedReturnDate).Days * Model.Loan.DelayPricePerDay) kn</span>
+        }
+        else {
+          <span>0 kn</span>
+        }
       </p>
+
 
       <a href="@Url.Action(actionName: "Details", controllerName: "Loan", routeValues: new { id = Model.Loan.ID })" class="stretched-link"></a>
     </div>

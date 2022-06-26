@@ -1250,8 +1250,30 @@ GO
 -- LOANS
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 1 AND [UserFK] = 4) BEGIN
+  DECLARE @LoanDate AS smalldatetime = DATEADD(DAY, -20, GETDATE())
   DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -10, GETDATE())
-  EXECUTE [dbo].[LoanLoan] 1, 4, @PlannedReturnDate, 1
+  INSERT INTO [dbo].[Loans] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [BookFK],
+    [UserFK],
+    [LoanPrice],
+    [LoanDate],
+    [PlannedReturnDate],
+    [DelayPricePerDay]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    1,
+    4,
+    10.20,
+    @LoanDate,
+    @PlannedReturnDate,
+    2
+  )
 END
 GO
 
@@ -1268,8 +1290,30 @@ END
 GO
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 3 AND [UserFK] = 6) BEGIN
-  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -3, GETDATE())
-  EXECUTE [dbo].[LoanLoan] 3, 6, @PlannedReturnDate, 1
+  DECLARE @LoanDate AS smalldatetime = DATEADD(DAY, -10, GETDATE())
+  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, 3, GETDATE())
+  INSERT INTO [dbo].[Loans] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [BookFK],
+    [UserFK],
+    [LoanPrice],
+    [LoanDate],
+    [PlannedReturnDate],
+    [DelayPricePerDay]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    1,
+    4,
+    10.20,
+    @LoanDate,
+    @PlannedReturnDate,
+    2
+  )
 END
 GO
 
@@ -1280,10 +1324,30 @@ END
 GO
 
 IF NOT EXISTS (SELECT ALL * FROM [dbo].[Loans] WHERE [BookFK] = 3 AND [UserFK] = 4) BEGIN
-  DECLARE @LoanDate AS datetime = DATEADD(DAY, -10, GETDATE())
-  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -6, GETDATE())
-  DECLARE @ReturnDate AS datetime = GETDATE()
-  EXECUTE [dbo].[LoanCreate] 3, 4, 11.00, @LoanDate, @PlannedReturnDate, @ReturnDate, 6, 1, 1
+  DECLARE @LoanDate AS smalldatetime = DATEADD(DAY, -14, GETDATE())
+  DECLARE @PlannedReturnDate AS smalldatetime = DATEADD(DAY, -3, GETDATE())
+  INSERT INTO [dbo].[Loans] 
+  (
+    [CreatedBy],
+    [UpdatedBy],
+    [BookFK],
+    [UserFK],
+    [LoanPrice],
+    [LoanDate],
+    [PlannedReturnDate],
+    [DelayPricePerDay]
+  )
+  VALUES 
+  (
+    1,
+    1,
+    1,
+    4,
+    10.20,
+    @LoanDate,
+    @PlannedReturnDate,
+    2
+  )
 END
 GO
 
