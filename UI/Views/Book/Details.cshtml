@@ -8,278 +8,216 @@
     UserProjection user = Session["user"] as UserProjection;
 }
 
-<h2>Detalji knjige</h2>
-<hr />
+<div class="row">
+    <div class="col-8 offset-2">
+        <h2>Detalji knjige</h2>
+        <hr />
 
-<div>
-  <dl class="dl-horizontal">
-    <dt>
-      ISBN
-    </dt>
-
-    <dd>
-      @Model.Book.ISBN
-    </dd>
-
-    <dt>
-      Naziv
-    </dt>
-
-    <dd>
-      @Model.Book.Title
-    </dd>
-
-    <dt>
-      Autor
-    </dt>
-
-    <dd>
-      @if (Model.Author.IsAvailable) {
-        @Html.ActionLink(linkText: $"{Model.Author.FName} {Model.Author.LName}",
-                                actionName: "Details",
-                                controllerName: "Author",
-                                routeValues: new { id = Model.Author.ID },
-                                htmlAttributes: "link-primary")
-      }
-      else {
-        @: @Model.Author.FName @Model.Author.LName
-      }
-    </dd>
-
-    <dt>
-      Kratki sadržaj
-    </dt>
-
-    <dd>
-      @if (Model.Book.Summary.IsEmpty()) {
-        <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
-      }
-      else {
-        <span>@Model.Book.Summary</span>
-      }
-    </dd>
-
-    <dt>
-      Opis
-    </dt>
-
-    <dd>
-      @Model.Book.Description
-    </dd>
-
-    <dt>
-      Stanje
-    </dt>
-
-    <dd>
-      @if (Model.Book.IsNew) {
-        <span>Novo</span>
-      }
-      else {
-        <span>Rabljeno</span>
-      }
-    </dd>
-
-    <dt>
-      Izdavač
-    </dt>
-
-    <dd>
-      @Model.Publisher.Name
-    </dd>
-
-    <dt>
-      Broj stranica
-    </dt>
-
-    <dd>
-      @Model.Book.PageCount
-    </dd>
-
-    <dt>
-      Cijena kupovine
-    </dt>
-
-    <dd>
-      @Model.Book.PurchasePrice.ToString("C2")
-    </dd>
-
-    <dt>
-      Cijena posudbe
-    </dt>
-
-    <dd>
-      @Model.Book.LoanPrice.ToString("C2")
-    </dd>
-
-    <dt>
-      Dostupna količina
-    </dt>
-
-    <dd>
-      @Model.Book.Quantity
-    </dd>
-
-    <dt>
-      Broj posudbi
-    </dt>
-
-    <dd>
-      @Model.LoanCount
-    </dd>
-
-    <dt>
-      Slika
-    </dt>
-
-    <dd>
-      <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
-           alt="@Model.Book.Title book"
-           class="img-fluid img-thumbnail mb-2"
-           style="width: 150px; z-index: 1">
-    </dd>
-
-  </dl>
-</div>
-
-@if (!(user is null))
-{
-
-    if (user.IsAdmin)
-    {
-        <div class="text-lg-end">
-            <button type="button" class="btn btn-outline-danger me-3" data-bs-toggle="modal" href="#deleteUserModal">Obriši knjigu</button>
-
-            @Html.ActionLink(linkText: "Uredi knjigu",
-                             actionName: "Edit",
-                             controllerName: "Book",
-                             routeValues: new
-                                 {
-                               id = Model.Book.ID
-                             },
-                             htmlAttributes: new
-                                 {
-                               @class = "btn btn-outline-dark ",
-                               style = "z-index: 1;"
-                             })
-
-
-            <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content rounded-3 shadow">
-                        <div class="modal-body p-4 text-center">
-                            <h5 class="mb-0">Jeste li sigurni da želite obrisati knjigu?</h5>
-                            <p class="mb-0 mt-3">Brisanjem knjige gubite mogućnost prikazivanja knjige.</p>
-                            <p class="mb-0">Za vraćanje knjige morati ćete kontaktirati administratora baze podataka.</p>
-                        </div>
-                        <div class="modal-footer flex-nowrap p-0">
-                            @Html.ActionLink(linkText: "Obriši",
-                                             actionName: "Delete",
-                                             controllerName: "Book",
-                                             routeValues: new
-                                                  {
-                                               id = Model.Book.ID
-                                             },
-                                             htmlAttributes: new
-                                                  {
-                                               @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
-                                               style = "z-index: 1;"
-                                             })
-                            <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
-                        </div>
-                    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-2">
+                    <h4>Slika</h4>
+                    <img src="@Url.Content(!String.IsNullOrEmpty(Model.Book.ImagePath) ? Model.Book.ImagePath: "~/Content/DefaultItem.jpg")"
+                         alt="@Model.Book.Title book"
+                         class="img-fluid img-thumbnail mb-2"
+                         style="width: 150px; z-index: 1">
                 </div>
+                <div class="col-4 mt-4">
+                    <b>Naslov Knjige: </b> @Model.Book.Title <br />
+                    <b>Autor Knjige: </b>       @if (Model.Author.IsAvailable)
+                    {
+                        @Html.ActionLink(linkText: $"{Model.Author.FName} {Model.Author.LName}",
+                                                actionName: "Details",
+                                                controllerName: "Author",
+                                                routeValues: new { id = Model.Author.ID },
+                                                htmlAttributes: "link-primary")
+                    }
+                    else
+                    {
+                        @: @Model.Author.FName @Model.Author.LName
+                    } <br />
+                    <b>Izdavac: </b> @Model.Publisher.Name <br />
+                    <b>ISBN: </b> @Model.Book.ISBN <br />
+                    <b>Broj stranice: </b> @Model.Book.PageCount
+                </div>
+
             </div>
-        </div>
-    }
-    else
-    {
+            <div class="row">
+                <div class="col-6 mt-3">
 
-        if (Model.Book.Quantity > 0)
-        { <div class="text-lg-end">
-                <span class="d-inline-block me-2" tabindex="0" data-toggle="tooltip" title="Knjiga je dostupna!">
-                    <button class="btn btn-outline-secondary" disabled>Obavijesti me</button>
-                </span>
-                @Html.ActionLink(linkText: "Posudi",
-                     actionName: "Loan",
-                     controllerName: "Loan",
-                     routeValues: new
-                          {
-                       id = Model.Book.ID
-                     },
-                     htmlAttributes: new
-                          {
-                       @class = "btn btn-primary me-2",
-                     })
+                    <b>Kratki opis: </b>@Model.Book.Description <br />
+                    <b>Kratki sadržaj</b>
 
-                @Html.ActionLink(linkText: "Kupi",
-                                 actionName: "Purchase",
-                                 controllerName: "Purchase",
+
+
+                    @if (Model.Book.Summary.IsEmpty())
+                    {
+                        <span>Za ovu knjigu trenutno ne postoji Kratki sadržaj</span>
+                    }
+                    else
+                    {
+                        <span>@Model.Book.Summary</span>
+                    }
+                </div>
+                <div class="col-6 text-end align-top">
+                    <b>Stanje: </b>
+                    @if (Model.Book.IsNew)
+                    {
+                        <span>Novo</span>
+                    }
+                    else
+                    {
+                        <span>Rabljeno</span>
+                    } <br /><br />
+                    <b>Dostupna kolicina: </b> @Model.Book.Quantity <br /><br />
+                    <b>Cijena knjige: </b> @Model.Book.PurchasePrice <br /><br />
+                    <b>Cijena posudbe: </b>@Model.Book.LoanPrice <br /><br />
+                    @if (!(user is null))
+                    {
+
+                        if (user.IsAdmin)
+                        {
+                            <div class="text-lg-end">
+                                <button type="button" class="btn btn-outline-danger me-3" data-bs-toggle="modal" href="#deleteUserModal">Obriši knjigu</button>
+
+                                @Html.ActionLink(linkText: "Uredi knjigu",
+                                                 actionName: "Edit",
+                                                 controllerName: "Book",
+                                                 routeValues: new
+                                                     {
+                                                   id = Model.Book.ID
+                                                 },
+                                                 htmlAttributes: new
+                                                     {
+                                                   @class = "btn btn-outline-dark ",
+                                                   style = "z-index: 1;"
+                                                 })
+
+
+                                <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content rounded-3 shadow">
+                                            <div class="modal-body p-4 text-center">
+                                                <h5 class="mb-0">Jeste li sigurni da želite obrisati knjigu?</h5>
+                                                <p class="mb-0 mt-3">Brisanjem knjige gubite mogućnost prikazivanja knjige.</p>
+                                                <p class="mb-0">Za vraćanje knjige morati ćete kontaktirati administratora baze podataka.</p>
+                                            </div>
+                                            <div class="modal-footer flex-nowrap p-0">
+                                                @Html.ActionLink(linkText: "Obriši",
+                                                                 actionName: "Delete",
+                                                                 controllerName: "Book",
+                                                                 routeValues: new
+                                                                      {
+                                                                   id = Model.Book.ID
+                                                                 },
+                                                                 htmlAttributes: new
+                                                                      {
+                                                                   @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",
+                                                                   style = "z-index: 1;"
+                                                                 })
+                                                <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 m-0 rounded-0" data-bs-dismiss="modal">Odustani</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+
+                            if (Model.Book.Quantity > 0)
+                            { <div class="text-lg-end">
+                                    <span class="d-inline-block me-2" tabindex="0" data-toggle="tooltip" title="Knjiga je dostupna!">
+                                        <button class="btn btn-outline-secondary" disabled>Obavijesti me</button>
+                                    </span>
+                                    @Html.ActionLink(linkText: "Posudi",
+                                         actionName: "Loan",
+                                         controllerName: "Loan",
+                                         routeValues: new
+                                              {
+                                           id = Model.Book.ID
+                                         },
+                                         htmlAttributes: new
+                                              {
+                                           @class = "btn btn-primary me-2",
+                                         })
+
+                                    @Html.ActionLink(linkText: "Kupi",
+                                                     actionName: "Purchase",
+                                                     controllerName: "Purchase",
+                                                     routeValues: new
+                                                          {
+                                                       id = Model.Book.ID
+                                                     },
+                                                     htmlAttributes: new
+                                                          {
+                                                       @class = "btn btn-primary",
+                                                     })
+                                </div>
+                            }
+                            else
+                            {
+
+                                <span class="d-inline-block me-3" tabindex="0" data-toggle="tooltip" title="Knjiga nije dostupna!">
+                                    <button class="btn btn-outline-secondary" disabled>Kupi</button>
+                                </span>
+                                <span class="d-inline-block me-3" tabindex="0" data-toggle="tooltip" title="Knjiga nije dostupna!">
+                                    <button class="btn btn-outline-secondary" disabled>Posudi</button>
+                                </span>
+                                @Html.ActionLink(linkText: "Obavijesti me",
+                                                          actionName: "Index",
+                                                          controllerName: "Subscription",
+                                                          routeValues: new
+                                                               {
+                                                            id = Model.Book.ID
+                                                          },
+                                                          htmlAttributes: new
+                                                               {
+                                                            @class = "btn btn-primary",
+                                                            style = "z-index: 1;"
+                                                          })
+
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        <p class="text-secondary">Za kupnju, posudbu i obavijesti o dostupnosti knjige potrebna je prijava!</p>
+                        <div class="text-lg-end">
+                            <span class="d-inline-block me-2" tabindex="0" data-toggle="tooltip" title="Knjiga je dostupna!">
+                                <button class="btn btn-outline-secondary" disabled>Obavijesti me</button>
+                            </span>
+                            @Html.ActionLink(linkText: "Posudi",
+                                 actionName: "Loan",
+                                 controllerName: "Loan",
                                  routeValues: new
                                       {
                                    id = Model.Book.ID
                                  },
                                  htmlAttributes: new
                                       {
-                                   @class = "btn btn-primary",
+                                   @class = "btn btn-primary me-2",
                                  })
+
+                            @Html.ActionLink(linkText: "Kupi",
+                                             actionName: "Purchase",
+                                             controllerName: "Purchase",
+                                             routeValues: new
+                                                  {
+                                               id = Model.Book.ID
+                                             },
+                                             htmlAttributes: new
+                                                  {
+                                               @class = "btn btn-primary",
+                                             })
+                        </div>
+                    }
+                </div>
             </div>
-        }
-        else
-        {
+           
 
-            <span class="d-inline-block me-3" tabindex="0" data-toggle="tooltip" title="Knjiga nije dostupna!">
-                <button class="btn btn-outline-secondary" disabled>Kupi</button>
-            </span>
-            <span class="d-inline-block me-3" tabindex="0" data-toggle="tooltip" title="Knjiga nije dostupna!">
-                <button class="btn btn-outline-secondary" disabled>Posudi</button>
-            </span>
-            @Html.ActionLink(linkText: "Obavijesti me",
-                                      actionName: "Index",
-                                      controllerName: "Subscription",
-                                      routeValues: new
-                                           {
-                                        id = Model.Book.ID
-                                      },
-                                      htmlAttributes: new
-                                           {
-                                        @class = "btn btn-primary",
-                                        style = "z-index: 1;"
-                                      })
+        </div>
+     </div>
+</div>
 
-        }
-    }
-
-}
-else
-{
-    <p class="text-secondary">Za kupnju, posudbu i obavijesti o dostupnosti knjige potrebna je prijava!</p>
-    <div class="text-lg-end">
-        <span class="d-inline-block me-2" tabindex="0" data-toggle="tooltip" title="Knjiga je dostupna!">
-            <button class="btn btn-outline-secondary" disabled>Obavijesti me</button>
-        </span>
-        @Html.ActionLink(linkText: "Posudi",
-             actionName: "Loan",
-             controllerName: "Loan",
-             routeValues: new
-                  {
-               id = Model.Book.ID
-             },
-             htmlAttributes: new
-                  {
-               @class = "btn btn-primary me-2",
-             })
-
-        @Html.ActionLink(linkText: "Kupi",
-                         actionName: "Purchase",
-                         controllerName: "Purchase",
-                         routeValues: new
-                              {
-                           id = Model.Book.ID
-                         },
-                         htmlAttributes: new
-                              {
-                           @class = "btn btn-primary",
-                         })
-    </div>
-}

@@ -2,90 +2,100 @@
 @model MessageDetailsVM
 
 @{
-  ViewBag.Title = "Details";
+    ViewBag.Title = "Details";
 }
 
-<h2>Poruka</h2>
 
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Od:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5"> @Model.Message.SenderFName @Model.Message.SenderLName</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Email:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5"> @Model.Message.SenderEmail</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Datum:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5">@($"{Model.Message.SenderDate.ToLongDateString()} u {Model.Message.SenderDate.ToLongTimeString()}") </span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Upit:</span>
-  </div>
-  <div class="col-9">
-    <p class="text-black fs-5">
-      @Model.Message.SenderMessage
-    </p>
-  </div>
-</div>
 
-@if (!(Model.Responder is null)) {
-  <hr />
-  <div class="row">
-    <div class="col-3">
-      <span class="text-black fw-bold fs-5">Odgovorio/la:</span>
-    </div>
-    <div class="col-9">
-      <span class="text-black fs-5"> @Model.Responder.FName @Model.Responder.LName</span>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-3">
-      <span class="text-black fw-bold fs-5">Datum:</span>
-    </div>
-    <div class="col-9">
-      <span class="text-black fs-5">@($"{Model.Message.ResponderDate.ToLongDateString()} u {Model.Message.ResponderDate.ToLongTimeString()}") </span>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-3">
-      <span class="text-black fw-bold fs-5">Upit:</span>
-    </div>
-    <div class="col-9">
-      <p class="text-black fs-5">
-        @Model.Message.ResponderMessage
-      </p>
-    </div>
-  </div>
-}
+ <div class="col-6 offset-3">
+        <div class="row">
+            <h2>Poruka</h2>
+            <div class="row">
+                <div class="col-3">
+                    <span class="text-black fw-bold fs-5">Od:</span>
+                </div>
+                <div class="col-9">
+                    <span class="text-black fs-5"> @Model.Message.SenderFName @Model.Message.SenderLName</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <span class="text-black fw-bold fs-5">Email:</span>
+                </div>
+                <div class="col-9">
+                    <span class="text-black fs-5"> @Model.Message.SenderEmail</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <span class="text-black fw-bold fs-5">Datum:</span>
+                </div>
+                <div class="col-9">
+                    <span class="text-black fs-5">@($"{Model.Message.SenderDate.ToLongDateString()} u {Model.Message.SenderDate.ToLongTimeString()}") </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <span class="text-black fw-bold fs-5">Upit:</span>
+                </div>
+                <div class="col-9">
+                    <p class="text-black fs-5">
+                        @Model.Message.SenderMessage
+                    </p>
+                </div>
+            </div>
 
-@Html.ActionLink(linkText: "Natrag",
-                   actionName: "List",
-                   controllerName: "Message",
-                   routeValues: null,
-                   htmlAttributes: new {
-                     @class = "btn btn-outline-secondary me-3"
-                   })
+            @if (!(Model.Responder is null))
+            {
+                <hr />
+                <div class="row">
+                    <div class="col-3">
+                        <span class="text-black fw-bold fs-5">Odgovorio/la:</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="text-black fs-5"> @Model.Responder.FName @Model.Responder.LName</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span class="text-black fw-bold fs-5">Datum:</span>
+                    </div>
+                    <div class="col-9">
+                        <span class="text-black fs-5">@($"{Model.Message.ResponderDate.ToLongDateString()} u {Model.Message.ResponderDate.ToLongTimeString()}") </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <span class="text-black fw-bold fs-5">Upit:</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="text-black fs-5">
+                            @Model.Message.ResponderMessage
+                        </p>
+                    </div>
+                </div>
+            }
+            <div class="text-lg-end">
+                @Html.ActionLink(linkText: "Natrag",
+                                   actionName: "List",
+                                   controllerName: "Message",
+                                   routeValues: null,
+                                   htmlAttributes: new
+                                   {
+                                     @class = "btn btn-outline-secondary me-3"
+                                   })
 
-@if (Model.Responder is null) {
-  @Html.ActionLink(linkText: "Odgovori",
-                     actionName: "Respond",
-                     controllerName: "Message",
-                     routeValues: new { id = Model.Message.ID },
-                     htmlAttributes: new {
-                       @class = "btn btn-primary"
-                     })
-}
+                @if (Model.Responder is null)
+                {
+                    @Html.ActionLink(linkText: "Odgovori",
+                                       actionName: "Respond",
+                                       controllerName: "Message",
+                                       routeValues: new { id = Model.Message.ID },
+                                       htmlAttributes: new
+                                         {
+                                         @class = "btn btn-primary"
+                                       })
+                }
+            </div>
+        </div>
+</div>

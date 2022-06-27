@@ -2,78 +2,86 @@
 @model PurchaseVM
 
 @{
-  ViewBag.Title = "Detalji kupnje";
+    ViewBag.Title = "Detalji kupnje";
 }
 
-<h2>Detalji kupnje</h2>
+<div class="col-6 offset-3">
+    <div class="row">
+        <h2>Detalji kupnje</h2>
+        <div class="row mt-3">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Knjiga:</span>
+            </div>
+            <div class="col-9">
+                @Html.ActionLink(linkText: Model.Book.Title,
+                                 actionName: "Details",
+                                 controllerName: "Book",
+                                 routeValues: new { id = Model.Book.ID },
+                                 htmlAttributes: new
+                                     {
+                                   @class = "link-text"
+                                 })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Kupio/la:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5"> @Model.User.FName @Model.User.LName</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Email:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5"> @Model.User.Email</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Cijena komada:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5">@Model.Purchase.UnitPrice kn</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Količina:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5">@Model.Purchase.Quantity</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Ukupna cijena:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5">@(Model.Purchase.Quantity * Model.Purchase.UnitPrice) kn</span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <span class="text-black fw-bold fs-5">Datum kupnje:</span>
+            </div>
+            <div class="col-9">
+                <span class="text-black fs-5">@Model.Purchase.PurchaseDate.ToLongDateString()</span>
+            </div>
+        </div>
+        <div class="text-lg-end">
+            @Html.ActionLink(linkText: "Natrag",
+                               actionName: "Index",
+                               controllerName: "Dashboard",
+                               routeValues: null,
+                               htmlAttributes: new
+                               {
+                                 @class = "btn btn-outline-secondary me-3"
+                               })
+        </div>
 
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Knjiga:</span>
-  </div>
-  <div class="col-9">
-    @Html.ActionLink(linkText: Model.Book.Title,
-                     actionName: "Details",
-                     controllerName: "Book",
-                     routeValues: new { id = Model.Book.ID },
-                     htmlAttributes: new {
-                       @class = "link-text"
-                     })
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Kupio/la:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5"> @Model.User.FName @Model.User.LName</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Email:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5"> @Model.User.Email</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Cijena komada:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5">@Model.Purchase.UnitPrice kn</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Količina:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5">@Model.Purchase.Quantity</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Ukupna cijena:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5">@(Model.Purchase.Quantity * Model.Purchase.UnitPrice) kn</span>
-  </div>
-</div>
-<div class="row">
-  <div class="col-3">
-    <span class="text-black fw-bold fs-5">Datum kupnje:</span>
-  </div>
-  <div class="col-9">
-    <span class="text-black fs-5">@Model.Purchase.PurchaseDate.ToLongDateString()</span>
-  </div>
+    </div>
 </div>
 
-@Html.ActionLink(linkText: "Natrag",
-                   actionName: "Index",
-                   controllerName: "Dashboard",
-                   routeValues: null,
-                   htmlAttributes: new {
-                     @class = "btn btn-outline-secondary me-3"
-                   })
