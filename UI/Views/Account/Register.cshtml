@@ -1,10 +1,14 @@
-﻿@model UI.Models.RegisterVM
+﻿@using UI.Models
+@model RegisterVM
 
 @{
-    ViewData["Title"] = "Registracija";
+  ViewBag.Title = "Registracija";
 }
 <div class="row">
   <div class="col-6 offset-3">
+    <h2 class="h2 text-center">Registracija</h2>
+    <hr class="mb-5" />
+
     @using (Html.BeginForm(actionName: "Register",
                            controllerName: "Account",
                            method: FormMethod.Post,
@@ -13,8 +17,6 @@
                            })) {
       @Html.AntiForgeryToken()
 
-      <h4>Registracija</h4>
-      <hr />
 
       <div class="mb-3">
         @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
@@ -55,7 +57,7 @@
       </div>
     }
 
-    <div class="text-center">
+    <div class="text-center mt-5">
       <p class="text-secondary">
         Već imaš korisnički račun?
         @Html.ActionLink(linkText: "Prijavi se!",
@@ -63,7 +65,7 @@
                          controllerName: "Account",
                          routeValues: null,
                          htmlAttributes: new {
-                           @class = "btn btn-outline-secondary"
+                           @class = "ms-3 btn btn-outline-secondary"
                          })
       </p>
     </div>

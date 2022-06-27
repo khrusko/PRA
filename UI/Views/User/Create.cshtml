@@ -1,19 +1,19 @@
 ﻿@using UI.Models
 @model RegisterVM
+@{
+  ViewBag.Title = "Dodaj djelatnika";
+}
 
 <div class="row">
   <div class="col-6 offset-3">
-    @{
-      ViewData["Title"] = "Dodaj djelatnika";
-    }
+    <h2 class="h2 text-center">Dodaj djelatnika</h2>
+    <hr class="mb-5" />
 
     @using (Html.BeginForm(actionName: "Create",
                            controllerName: "User",
                            method: FormMethod.Post)) {
       @Html.AntiForgeryToken()
 
-      <h4>Dodaj djelatnika</h4>
-      <hr />
 
       <div class="mb-3">
         @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })

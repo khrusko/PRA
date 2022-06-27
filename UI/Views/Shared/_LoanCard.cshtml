@@ -23,7 +23,7 @@
   <div class="card @borderClass">
 
     <div class="card-body">
-      <h5 class="card-title">@Model.Book.Title</h5>
+      <h5 class="card-title" style="height: 3rem">@Model.Book.Title</h5>
       <hr />
 
       @if (!(user is null) && user.IsAdmin) {
@@ -40,14 +40,16 @@
       </p>
 
       <p>
-        <span class="fw-bold">Datum posudbe:</span>
+        <span class="fw-bold">Posuđeno:</span>
         <span>@Model.Loan.LoanDate.ToLongDateString()</span>
       </p>
 
-      <p>
-        <span class="fw-bold">Planirani datum vraćanja:</span>
-        <span>@Model.Loan.PlannedReturnDate.ToLongDateString()</span>
-      </p>
+      @if (Model.Loan.ReturnDate == DateTime.MinValue) {
+        <p>
+          <span class="fw-bold">Planirani datum vraćanja:</span>
+          <span>@Model.Loan.PlannedReturnDate.ToLongDateString()</span>
+        </p>
+      }
 
       @if (Model.Loan.ReturnDate == DateTime.MinValue) {
         <p>
@@ -62,7 +64,7 @@
       }
 
       <p>
-        <span class="fw-bold">Stvarni datum vraćanja:</span>
+        <span class="fw-bold">Vraćeno:</span>
         <span>@(Model.Loan.ReturnDate == DateTime.MinValue ? "Nije vraćeno" : Model.Loan.ReturnDate.ToLongDateString())</span>
       </p>
 
@@ -72,7 +74,7 @@
           <span>@((DateTime.Now - Model.Loan.PlannedReturnDate).Days * Model.Loan.DelayPricePerDay) kn</span>
         }
         else {
-          <span>0 kn</span>
+          <span>@(Model.Loan.DelayDays * Model.Loan.DelayPricePerDay) kn</span>
         }
       </p>
 

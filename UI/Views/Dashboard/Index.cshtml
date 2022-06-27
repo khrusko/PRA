@@ -6,7 +6,8 @@
   var user = Session["user"] as UserProjection;
 }
 
-<h2>Kontrolna ploča</h2>
+<h2 class="h2 text-center">Kontrolna ploča</h2>
+<hr class="mb-5" />
 
 @if (user.IsAdmin) {
   @Html.Partial(partialViewName: "_AdminDashboard", model: Model)

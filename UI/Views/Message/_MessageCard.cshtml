@@ -43,23 +43,25 @@
         </div>
       </div>
 
-      @Html.ActionLink(linkText: "Detalji",
-                 actionName: "Details",
-                 controllerName: "Message",
-                 routeValues: new { id = Model.ID },
-                 htmlAttributes: new {
-                   @class = "btn btn-outline-secondary me-3"
-                 })
+      <div class="d-flex justify-content-end">
+        @Html.ActionLink(linkText: "Detalji",
+                   actionName: "Details",
+                   controllerName: "Message",
+                   routeValues: new { id = Model.ID },
+                   htmlAttributes: new {
+                     @class = "btn btn-outline-secondary"
+                   })
 
-      @if (Model.ResponderDate == DateTime.MinValue) {
-        @Html.ActionLink(linkText: "Odgovori",
-                          actionName: "Respond",
-                          controllerName: "Message",
-                          routeValues: new { id = Model.ID },
-                          htmlAttributes: new {
-                            @class = "btn btn-primary"
-                          })
-      }
+        @if (Model.ResponderDate == DateTime.MinValue) {
+          @Html.ActionLink(linkText: "Odgovori",
+                            actionName: "Respond",
+                            controllerName: "Message",
+                            routeValues: new { id = Model.ID },
+                            htmlAttributes: new {
+                              @class = "btn btn-primary ms-3"
+                            })
+        }
+      </div>
 
     </div>
   </div>

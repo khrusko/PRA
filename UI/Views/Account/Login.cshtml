@@ -7,7 +7,7 @@
 
 <div class="row">
   <div class="col-6 offset-3">
-    <h4>Prijava</h4>
+    <h2 class="h2 text-center">Prijava</h2>
     <hr class="mb-5" />
 
     @using (Html.BeginForm(actionName: "Login",
@@ -34,7 +34,7 @@
         <input type="submit" class="btn btn-primary" value="Prijava" />
       </div>
     }
-    <div class="text-center">
+    <div class="text-center mt-5">
       <p class="text-secondary">
         Nemaš korisnički račun?
         @Html.ActionLink(linkText: "Registriraj se!",
@@ -42,7 +42,7 @@
                          controllerName: "Account",
                          routeValues: null,
                          htmlAttributes: new {
-                             @class = "btn btn-outline-secondary"
+                             @class = "ms-3 btn btn-outline-secondary"
                          })
       </p>
     </div>
