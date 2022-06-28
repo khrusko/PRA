@@ -34,9 +34,9 @@ namespace UI.Controllers
       if (LoggedInUser.IsAdmin)
       {
         loans = from loan in _loanManager.GetAll()
-                join book in _bookManager.GetAll()
+                join book in _bookManager.GetAll(availabilityCheck: false)
                   on loan.BookFK equals book.ID
-                join user in _userManager.GetAll()
+                join user in _userManager.GetAll(availabilityCheck: false)
                   on loan.UserFK equals user.ID
                 where loan.ReturnDate == DateTime.MinValue
                 select new LoanVM
@@ -79,7 +79,7 @@ namespace UI.Controllers
       else
       {
         loans = from loan in _loanManager.GetActiveByUserFK(LoggedInUser.ID)
-                join book in _bookManager.GetAll()
+                join book in _bookManager.GetAll(availabilityCheck: false)
                   on loan.BookFK equals book.ID
                 select new LoanVM
                 {

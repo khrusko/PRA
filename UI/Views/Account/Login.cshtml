@@ -62,9 +62,9 @@
                                    htmlAttributes: new {
                                      id = "resetPasswordForm"
                                    })) {
-              <p class="text-secondary">Unesite E-mail zatim ako je email povezan sa korisničkim računom na email će vam biti poslane upute i link za obnovu zaporke​.</p>
+              <p class="text-secondary">Unesite Email zatim ako je email povezan sa korisničkim računom na Email će vam biti poslane upute i link za obnovu zaporke​.</p>
               <div class="mb-3">
-                @Html.Label(expression: "email", labelText: "E-Mail", htmlAttributes: new { @class = "control-label col-md-4" })
+                @Html.Label(expression: "email", labelText: "EMail", htmlAttributes: new { @class = "control-label col-md-4" })
                 @Html.TextBox(name: "email", value: null, htmlAttributes: new { id = "resetPasswordEmail", @class = "form-control", type = "email", required = "true" })
               </div>
               <div class="d-flex justify-content-end">

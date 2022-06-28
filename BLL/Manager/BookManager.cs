@@ -25,7 +25,7 @@ namespace BLL.Manager
       {
         ID = model.ID,
         CreateDate = model.CreateDate,
-        IsAvailable = model.DeleteDate != DateTime.MinValue,
+        IsAvailable = model.DeleteDate == DateTime.MinValue,
         ISBN = model.ISBN,
         Title = model.Title,
         Summary = model.Summary,

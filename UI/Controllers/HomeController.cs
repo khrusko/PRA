@@ -25,7 +25,7 @@ namespace UI.Controllers
                                           join publisher in _publisherManager.GetAll(availabilityCheck: false)
                                             on book.PublisherFK equals publisher.ID
                                           join author in _authorManager.GetAll(availabilityCheck: false)
-                                            on book.PublisherFK equals author.ID
+                                            on book.AuthorFK equals author.ID
                                           select new BookCardVM
                                           {
                                             Book = book,

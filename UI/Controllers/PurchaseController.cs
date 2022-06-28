@@ -103,9 +103,9 @@ namespace UI.Controllers
     {
       IEnumerable<PurchaseVM> purchases = LoggedInUser.IsAdmin
         ? (from purchase in _purchaseManager.GetAll()
-           join book in _bookManager.GetAll()
+           join book in _bookManager.GetAll(availabilityCheck: false)
              on purchase.BookFK equals book.ID
-           join user in _userManager.GetAll()
+           join user in _userManager.GetAll(availabilityCheck: false)
              on purchase.UserFK equals user.ID
            select new PurchaseVM
            {
@@ -114,7 +114,7 @@ namespace UI.Controllers
              User = user
            })
         : (from purchase in _purchaseManager.GetByUserFK(userFK: LoggedInUser.ID)
-           join book in _bookManager.GetAll()
+           join book in _bookManager.GetAll(availabilityCheck: false)
              on purchase.BookFK equals book.ID
            select new PurchaseVM
            {

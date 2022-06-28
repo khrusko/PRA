@@ -16,7 +16,7 @@ namespace UI.Controllers
 {
   public class LoanController : BaseController
   {
-    private const Int32 PAGE_SIZE = 6;
+    private const Int32 PAGE_SIZE = 8;
 
     private readonly IBookManager _bookManager = new BookManager();
     private readonly IAuthorManager _authorManager = new AuthorManager();
@@ -102,9 +102,9 @@ namespace UI.Controllers
     {
       IEnumerable<LoanVM> loans = LoggedInUser.IsAdmin
         ? (from loan in _loanManager.GetAll()
-           join book in _bookManager.GetAll()
+           join book in _bookManager.GetAll(availabilityCheck: false)
              on loan.BookFK equals book.ID
-           join user in _userManager.GetAll()
+           join user in _userManager.GetAll(availabilityCheck: false)
              on loan.UserFK equals user.ID
            where loan.ReturnDate != DateTime.MinValue
            select new LoanVM
@@ -114,7 +114,7 @@ namespace UI.Controllers
              User = user
            })
         : (from loan in _loanManager.GetByUserFK(userFK: LoggedInUser.ID)
-           join book in _bookManager.GetAll()
+           join book in _bookManager.GetAll(availabilityCheck: false)
              on loan.BookFK equals book.ID
            where loan.ReturnDate != DateTime.MinValue
            select new LoanVM
