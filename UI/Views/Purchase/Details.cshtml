@@ -1,8 +1,10 @@
 ﻿@using UI.Models
+@using BLL.Projection
 @model PurchaseVM
 
 @{
-    ViewBag.Title = "Detalji kupnje";
+  ViewBag.Title = "Detalji kupnje";
+  UserProjection user = Session["user"] as UserProjection;
 }
 
 <div class="row">
@@ -29,14 +31,16 @@
         }
       </div>
     </div>
-    <div class="row mb-3">
-      <div class="col-4">
-        <span class="text-black fw-bold fs-5">Kupio/la:</span>
+    @if (!(user is null) && user.IsAdmin) {
+      <div class="row mb-3">
+        <div class="col-4">
+          <span class="text-black fw-bold fs-5">Kupio/la:</span>
+        </div>
+        <div class="col-8">
+          <span class="text-black fs-5"> @Model.User.FName @Model.User.LName</span>
+        </div>
       </div>
-      <div class="col-8">
-        <span class="text-black fs-5"> @Model.User.FName @Model.User.LName</span>
-      </div>
-    </div>
+    }
     <div class="row mb-3">
       <div class="col-4">
         <span class="text-black fw-bold fs-5">Email:</span>

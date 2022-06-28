@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
 using BLL.Projection;
 using BLL.Status;
+
 using DAL.Status;
-using UI.Models.Concrete;
+
 using UI.Models;
 using UI.Models.Abstract;
+using UI.Models.Concrete;
 
 namespace UI.Controllers
 {
@@ -40,7 +39,7 @@ namespace UI.Controllers
         return RedirectToAction(actionName: "Index", controllerName: "Dashboard");
       }
 
-      Message = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Emaila i Zaporke");
+      Message = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Email-a i zaporke");
       return View(viewName: nameof(Login), model: model);
     }
 
@@ -48,6 +47,7 @@ namespace UI.Controllers
     public RedirectToRouteResult Logout()
     {
       LoggedInUser = null;
+      Message = new InfoMessage(message: "Odjavili ste se iz aplikacije");
       return RedirectToAction(actionName: "Index", controllerName: "Home");
     }
 
@@ -64,10 +64,10 @@ namespace UI.Controllers
       switch (status)
       {
         case RequestResetPasswordStatus.SUCCESS:
-          Message = new InfoMessage(message: "Zahtjev za promijenu lozinke poslan je na Vaš E-mail");
+          Message = new InfoMessage(message: "Zahtjev za promijenu lozinke poslan je na Vaš Email");
           break;
         case RequestResetPasswordStatus.INVALID_EMAIL:
-          Message = new AlertMessage(message: "Ne postoji korisnički račun sa unesenim E-mailom");
+          Message = new AlertMessage(message: "Ne postoji korisnički račun sa unesenim Email-om");
           break;
         case RequestResetPasswordStatus.RESET_PENDING:
           Message = new AlertMessage(message: "Već je zatražena obnova zaporke");
@@ -140,7 +140,7 @@ namespace UI.Controllers
                                                         email: model.Email,
                                                         password: model.Password);
       Message = !(projection is null)
-        ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na E-Mail: {projection.Email}")
+        ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na Email: {projection.Email}")
         : (IMessage)new AlertMessage(message: $"Registracija nije uspjela, pokušajte ponovo");
 
       return RedirectToAction(actionName: nameof(Login), controllerName: "Account");

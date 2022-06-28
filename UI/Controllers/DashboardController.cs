@@ -51,14 +51,14 @@ namespace UI.Controllers
           case LoanFilterType.NONE:
             break;
           case LoanFilterType.DELAY_DAYS_SUCCESS:
-            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - model.Loan.LoanDate).Days > 3);
+            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - DateTime.Now).Days > 3);
             break;
           case LoanFilterType.DELAY_DAYS_WARNING:
-            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - model.Loan.LoanDate).Days <= 3 &&
-                                                    (model.Loan.PlannedReturnDate - model.Loan.LoanDate).Days > 0);
+            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - DateTime.Now).Days <= 3 &&
+                                                    (model.Loan.PlannedReturnDate - DateTime.Now).Days > 0);
             break;
           case LoanFilterType.DELAY_DAYS_DANGER:
-            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - model.Loan.LoanDate).Days <= 0);
+            loans = loans.Where(predicate: model => (model.Loan.PlannedReturnDate - DateTime.Now).Days <= 0);
             break;
           default:
             throw new InvalidOperationException();

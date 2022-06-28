@@ -215,8 +215,8 @@ namespace UI.Controllers
                              SortDirection sortDirection = 0,
                              Int32 page = 1)
     {
-      IEnumerable<BookCardVM> books = from book in _bookManager.GetAll(availabilityCheck: false)
-                                      let author = _authorManager.GetByID(book.AuthorFK)
+      IEnumerable<BookCardVM> books = from book in _bookManager.GetAll()
+                                      let author = _authorManager.GetByID(book.AuthorFK, availabilityCheck: false)
                                       where !availableOnly || book.Quantity > 0
                                       where book.Title.ToLower().Contains(value: bookQuery?.ToLower() ?? String.Empty)
                                       where $"{author.FName} {author.LName}".ToLower().Contains(value: authorQuery?.ToLower() ?? String.Empty)

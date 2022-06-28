@@ -155,7 +155,7 @@ namespace UI.Controllers
     }
 
     [HttpGet]
-    public ActionResult Details(Int32 id)
+    public ActionResult Details(Int32 id = 0)
     {
       PurchaseProjection purchase = _purchaseManager.GetByID(ID: id);
 

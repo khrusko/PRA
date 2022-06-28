@@ -154,7 +154,7 @@ namespace UI.Controllers
 
     [HttpGet]
     [UserAuthenticate]
-    public ActionResult Details(Int32 id)
+    public ActionResult Details(Int32 id = 0)
     {
       LoanProjection loan = _loanManager.GetByID(ID: id);
 

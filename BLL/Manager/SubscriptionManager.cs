@@ -84,7 +84,7 @@ namespace BLL.Manager
 
       String subject = $"Dostupna je knjiga {book.Title}";
       StringBuilder body = new StringBuilder().Append($"Poštovani {user.FName} {user.LName},<br /><br />")
-                                              .Append($"Knjiga {book.Title} je dostupna za kupnju i posudbu.<br />")
+                                              .Append($"Knjiga <a href='{link}'>{book.Title}</a> je dostupna za kupnju i posudbu.<br />")
                                               .Append("Obavite željenu radnju klikom na link:<br />")
                                               .Append($"<a href='{link}'>{link}</a>");
 

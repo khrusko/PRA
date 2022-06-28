@@ -18,18 +18,18 @@
         <span class="text-black fw-bold fs-5">Knjiga:</span>
       </div>
       <div class="col-8">
-      @if (Model.Book.IsAvailable) {
-        @Html.ActionLink(linkText: Model.Book.Title,
-                              actionName: "Details",
-                              controllerName: "Book",
-                              routeValues: new { id = Model.Book.ID },
-                              htmlAttributes: new {
-                                @class = "link-text fs-5"
-                              })
-      }
-      else {
-        <span class="text-black fs-5">@Model.Book.Title</span>
-      }
+        @if (Model.Book.IsAvailable) {
+          @Html.ActionLink(linkText: Model.Book.Title,
+                                actionName: "Details",
+                                controllerName: "Book",
+                                routeValues: new { id = Model.Book.ID },
+                                htmlAttributes: new {
+                                  @class = "link-text fs-5"
+                                })
+        }
+        else {
+          <span class="text-black fs-5">@Model.Book.Title</span>
+        }
       </div>
     </div>
     @if (!(user is null) && user.IsAdmin) {

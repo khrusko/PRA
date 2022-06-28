@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
@@ -26,7 +25,7 @@ namespace UI.Controllers
       IEnumerable<MessageProjection> messages = _messageManager.GetAll();
       return View(viewName: nameof(List),
                   model: new MessageListVM
-                  { 
+                  {
                     RespondedMessages = messages.Where(predicate: message => message.ResponderDate != DateTime.MinValue),
                     NotRespondedMessages = messages.Where(predicate: message => message.ResponderDate == DateTime.MinValue),
                   });
@@ -50,18 +49,18 @@ namespace UI.Controllers
     public ActionResult Respond(Int32 id = 0)
     {
       MessageProjection projection = _messageManager.GetByID(id);
-      return (projection is null || projection.ResponderDate != DateTime.MinValue)
+      return projection is null || projection.ResponderDate != DateTime.MinValue
         ? new HttpStatusCodeResult(404)
         : (ActionResult)View(viewName: nameof(Respond),
-                             model: new MessageRespondVM
-                             {
-                               ID = id,
-                               SenderFName = projection.SenderFName,
-                               SenderLName = projection.SenderLName,
-                               SenderDate = projection.SenderDate,
-                               SenderEmail = projection.SenderEmail,
-                               SenderMessage = projection.SenderMessage
-                             });
+                    model: new MessageRespondVM
+                    {
+                      ID = id,
+                      SenderFName = projection.SenderFName,
+                      SenderLName = projection.SenderLName,
+                      SenderDate = projection.SenderDate,
+                      SenderEmail = projection.SenderEmail,
+                      SenderMessage = projection.SenderMessage
+                    });
     }
 
     [HttpPost]
@@ -95,6 +94,7 @@ namespace UI.Controllers
         return View(viewName: nameof(Respond), model: model);
       }
 
+      Message = new InfoMessage(message: "Odgovorili ste na poruku");
       return RedirectToAction(actionName: nameof(List), controllerName: "Message");
     }
   }
