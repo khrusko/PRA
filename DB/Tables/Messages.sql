@@ -15,10 +15,10 @@
   [SenderEmail]       nvarchar(100) NOT NULL,
   [SenderDate]        datetime      NOT NULL
     CONSTRAINT [DF_Messages_SenderDate] DEFAULT GETDATE(),
-  [SenderMessage]     nvarchar(MAX) NOT NULL,
+  [SenderMessage]     nvarchar(2000) NOT NULL,
   [ResponderUserFK]   int           NULL,
   [ResponderDate]     datetime      NULL,
-  [ResponderMessage]  nvarchar(MAX) NULL,
+  [ResponderMessage]  nvarchar(2000) NULL,
 
   CONSTRAINT [PK_Messages] PRIMARY KEY ([ID]),
   CONSTRAINT [FK_Messages_CreatedBy] FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[Users] ([ID]),

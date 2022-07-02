@@ -7,6 +7,7 @@ namespace BLL.Projection
 {
   public class BookProjection : AbstractProjection<Int32>
   {
+    public DateTime CreateDate { get; set; }
     public String ISBN { get; set; }
     public String Title { get; set; }
     public String Summary { get; set; }

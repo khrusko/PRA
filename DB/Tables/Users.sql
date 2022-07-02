@@ -21,7 +21,7 @@
     CONSTRAINT [DF_Users_IsAdmin] DEFAULT 0,
 
   [GUID]                    uniqueidentifier  NOT NULL
-    CONSTRAINT [DF_Users_GUID] DEFAULT NEWID(),
+    CONSTRAINT [DF_Users_GUID] DEFAULT NEWSEQUENTIALID(),
   [RegistrationIsApproved]  bit               NOT NULL
     CONSTRAINT [DF_Users_RegistrationIsApproved] DEFAULT 0,
   [RegistrationDate]        datetime          NULL,
@@ -36,4 +36,7 @@
 
   CONSTRAINT [CK_Users_UserID] CHECK ([UserID] LIKE '[D|K][0-9][0-9][0-1][0-9][0-3][0-9][0-9][0-9][0-9][0-9]')
 )
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Users_Guid] ON [dbo].[Users] ([GUID] ASC)
 GO

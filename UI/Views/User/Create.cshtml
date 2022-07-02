@@ -1,47 +1,59 @@
 ﻿@using UI.Models
 @model RegisterVM
-
 @{
-  ViewData["Title"] = "Dodaj djelatnika";
+  ViewBag.Title = "Dodaj djelatnika";
 }
 
-@using (Html.BeginForm(actionName: "Create",
-                       controllerName: "User",
-                       method: FormMethod.Post)) {
-  @Html.AntiForgeryToken()
+<div class="row">
+  <div class="col-6 offset-3">
+    <h2 class="h2 text-center">Dodaj djelatnika</h2>
+    <hr class="mb-5" />
 
-  <h4>Dodaj djelatnika</h4>
-  <hr />
+    @using (Html.BeginForm(actionName: "Create",
+                           controllerName: "User",
+                           method: FormMethod.Post)) {
+      @Html.AntiForgeryToken()
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.FName, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.FName)
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.FName, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.FName)
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LName, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.LName, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.LName)
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Email, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.Email, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Email)
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Password, htmlAttributes: new { @class = "form-label" })
+        @Html.PasswordFor(expression: model => model.Password, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Password)
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label" })
+        @Html.PasswordFor(expression: model => model.ConfirmPassword, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.ConfirmPassword)
+      </div>
+
+      <div class="text-lg-end">
+        @Html.ActionLink(linkText: "Odustani",
+                         actionName: "Index",
+                         controllerName: "Dashboard",
+                         routeValues: new { },
+                         htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+
+        <input type="submit" class="btn btn-primary" value="Dodaj" />
+      </div>
+    }
   </div>
-
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.LName, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.LName, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.LName)
-  </div>
-
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Email, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.Email, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Email)
-  </div>
-
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Password, htmlAttributes: new { @class = "form-label" })
-    @Html.PasswordFor(expression: model => model.Password, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Password)
-  </div>
-
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.ConfirmPassword, htmlAttributes: new { @class = "form-label" })
-    @Html.PasswordFor(expression: model => model.ConfirmPassword, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.ConfirmPassword)
-  </div>
-
-  <input type="submit" class="btn btn-primary" value="Dodaj" />
-}
+</div>

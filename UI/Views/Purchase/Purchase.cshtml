@@ -5,46 +5,57 @@
   ViewBag.Title = "Kupovina knjiga";
 }
 
-<h2>Kupite @Model.BookInfo.Book.Title</h2>
+<div class="row">
+  <div class="offset-3 col-6">
+    <h2 class="h2 text-center">Kupite @Model.BookInfo.Book.Title</h2>
+    <hr class="mb-5" />
 
-<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.BookInfo.Author.FName @Model.BookInfo.Author.LName</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Stanje: </span>
-<span style="font-size:20px">
-  @if (Model.BookInfo.Book.IsNew) {
-    <span>Novo</span>
-  }
-  else {
-    <span>Rabljeno</span>
-  }
-</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.BookInfo.Book.Quantity kom</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.BookInfo.Book.PurchasePrice kn</span>
-<br />
+    <span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.BookInfo.Author.FName @Model.BookInfo.Author.LName</span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Stanje: </span>
+    <span style="font-size:20px">
+      @if (Model.BookInfo.Book.IsNew) {
+        <span>Novo</span>
+      }
+      else {
+        <span>Rabljeno</span>
+      }
+    </span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.BookInfo.Book.Quantity kom</span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Cijena za kupovinu: </span><span style="font-size:20px">@Model.BookInfo.Book.PurchasePrice kn</span>
+    <br />
 
-<hr />
+    @using (Html.BeginForm(actionName: "Purchase",
+                           controllerName: "Purchase",
+                           method: FormMethod.Post,
+                           htmlAttributes: new {
+                             @class = "mt-5"
+                           })) {
+      @Html.AntiForgeryToken()
 
-@using (Html.BeginForm(actionName: "Purchase",
-                       controllerName: "Purchase",
-                       method: FormMethod.Post)) {
-  @Html.AntiForgeryToken()
+      @Html.HiddenFor(expression: model => model.BookID)
 
-  @Html.HiddenFor(expression: model => model.BookID)
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Quantity)
+      </div>
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-label" })
-    @Html.TextBoxFor(expression: model => model.Quantity, htmlAttributes: new { @class = "form-control" })
-    @Html.ValidationMessageFor(expression: model => model.Quantity)
+      <div class="mb-3">
+        @Html.CheckBoxFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-checkbox me-3" })
+        @Html.LabelFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-label" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        @Html.ActionLink(linkText: "Odustani",
+                   actionName: "Details",
+                   controllerName: "Book",
+                   routeValues: new { id = Model.BookID },
+                   htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+        <button type="submit" class="btn btn-primary">Potvrdi</button>
+      </div>
+    }
   </div>
-
-  <div>
-    <button type="submit" class="btn btn-primary">Potvrdi</button>
-    @Html.ActionLink(linkText: "Odustani",
-               actionName: "Details",
-               controllerName: "Book",
-               routeValues: new { id = Model.BookID },
-               htmlAttributes: new { @class = "btn btn-outline-secondary" })
-  </div>
-}
+</div>

@@ -14,6 +14,7 @@ AS BEGIN
     [Description], 
     [IsNew], 
     [PublisherFK], 
+    [AuthorFK],
     [PageCount],
     [PurchasePrice], 
     [LoanPrice], 

@@ -1,19 +1,46 @@
 ﻿@using UI.Models
+@using BLL.Projection
 @model PurchaseVM
+@{
+  UserProjection user = Session["user"] as UserProjection;
+}
+
 <div class="col">
   <div class="card">
 
     <div class="card-body">
-      <h5 class="card-title" style="height: 3rem;">@Html.DisplayFor(model => model.Book.Title)</h5>
+      <h5 class="card-title" style="height: 3rem">@Model.Book.Title</h5>
       <hr />
 
-      <p><span class="fw-bold">Autor: </span> @Html.DisplayFor(model => model.Author.FName)<span> </span> @Html.DisplayFor(model => model.Author.LName)</p>
+      @if (!(user is null) && user.IsAdmin) {
+        <p>
+          <span class="fw-bold">Kupio/la:</span>
+          <span>@Model.User.FName</span>
+          <span>@Model.User.LName</span>
+        </p>
+      }
 
-      <p><span class="fw-bold">Datum kupovine: </span> @Html.DisplayFor(model => model.Purchase.PurchaseDate) </p>
+      <p>
+        <span class="fw-bold">Cijena komada:</span>
+        <span>@Model.Purchase.UnitPrice kn</span>
+      </p>
 
-      <p><span class="fw-bold">Cijena kupovine: </span> @Html.DisplayFor(model => model.Purchase.UnitPrice) kn</p>
+      <p>
+        <span class="fw-bold">Količina:</span>
+        <span>@Model.Purchase.Quantity</span>
+      </p>
 
-      <a href="@Url.Action(actionName: "Details", controllerName: "Book", routeValues: new { id = Model.Book.ID })" class="stretched-link"></a>
+      <p>
+        <span class="fw-bold">Ukupna cijena:</span>
+        <span>@(Model.Purchase.Quantity * Model.Purchase.UnitPrice) kn</span>
+      </p>
+
+      <p>
+        <span class="fw-bold">Datum kupnje:</span>
+        <span>@Model.Purchase.PurchaseDate.ToLongDateString()</span>
+      </p>
+
+      <a href="@Url.Action(actionName: "Details", controllerName: "Purchase", routeValues: new { id = Model.Purchase.ID })" class="stretched-link"></a>
     </div>
   </div>
 </div>

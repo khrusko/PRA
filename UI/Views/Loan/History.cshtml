@@ -1,0 +1,61 @@
+﻿@using UI.Models
+@model  LoanSearchVM
+
+@{
+  ViewBag.Title = "Povijest posudbi";
+}
+
+<h2 class="h2 text-center">Povijest posudbi</h2>
+<hr class="mb-5" />
+
+@using (Html.BeginForm(actionName: "History",
+                       controllerName: "Loan",
+                       method: FormMethod.Get)) {
+  <div class="row">
+    <div class="col-4 offset-2">
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LoanSortType, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.LoanSortType, htmlAttributes: new { @class = "form-select" })
+      </div>
+    </div>
+
+    <div class="col-4">
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <input type="submit" class="btn btn-primary px-5" value="Pretraži" />
+      </div>
+    </div>
+
+  </div>
+}
+
+<div class="album py-5">
+  <div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+
+      @foreach (var loan in Model.Loans) {
+
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
+
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-end">
+  @Html.PageLinks(pagingInfo: Model.PagingInfo,
+                  pageUrl: page => Url.Action(actionName: "History",
+                                              controllerName: "Loan",
+                                              routeValues: new {
+                                                LoanSortType = (Int32)Model.LoanSortType,
+                                                SortDirection = (Int32)Model.SortDirection,
+                                                page
+                                              }))
+</div>

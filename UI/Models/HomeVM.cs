@@ -6,7 +6,7 @@ namespace UI.Models
 {
   public class HomeVM
   {
-    public IEnumerable<FullBookInfoVM> Books { get; set; }
+    public IEnumerable<BookCardVM> Books { get; set; }
 
     public BookStoreProjection BookStore { get; set; }
   }

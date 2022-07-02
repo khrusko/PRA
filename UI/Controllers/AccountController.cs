@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
 using BLL.Manager;
 using BLL.Projection;
 using BLL.Status;
+
 using DAL.Status;
-using UI.Models.Concrete;
+
 using UI.Models;
 using UI.Models.Abstract;
+using UI.Models.Concrete;
 
 namespace UI.Controllers
 {
@@ -36,12 +35,11 @@ namespace UI.Controllers
       {
         LoggedInUser = projection;
 
-        // TODO: redirect admin and user to dashborad -> replace "Book" with "Dashboard"
         Message = new InfoMessage(message: $"Pozdrav, {projection.FName} {projection.LName}");
-        return RedirectToAction(actionName: "Index", controllerName: "Home");
+        return RedirectToAction(actionName: "Index", controllerName: "Dashboard");
       }
 
-      Message = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Emaila i Zaporke");
+      Message = new AlertMessage(message: "Unijeli ste pogrešnu kombinaciju Email-a i zaporke");
       return View(viewName: nameof(Login), model: model);
     }
 
@@ -49,6 +47,7 @@ namespace UI.Controllers
     public RedirectToRouteResult Logout()
     {
       LoggedInUser = null;
+      Message = new InfoMessage(message: "Odjavili ste se iz aplikacije");
       return RedirectToAction(actionName: "Index", controllerName: "Home");
     }
 
@@ -65,10 +64,10 @@ namespace UI.Controllers
       switch (status)
       {
         case RequestResetPasswordStatus.SUCCESS:
-          Message = new InfoMessage(message: "Zahtjev za promijenu lozinke poslan je na Vaš E-mail");
+          Message = new InfoMessage(message: "Zahtjev za promijenu lozinke poslan je na Vaš Email");
           break;
         case RequestResetPasswordStatus.INVALID_EMAIL:
-          Message = new AlertMessage(message: "Ne postoji korisnički račun sa unesenim E-mailom");
+          Message = new AlertMessage(message: "Ne postoji korisnički račun sa unesenim Email-om");
           break;
         case RequestResetPasswordStatus.RESET_PENDING:
           Message = new AlertMessage(message: "Već je zatražena obnova zaporke");
@@ -126,19 +125,25 @@ namespace UI.Controllers
     public ViewResult Register() => View(viewName: nameof(Register));
 
     [HttpPost]
-    public ViewResult Register(RegisterVM model)
+    public ActionResult Register(RegisterVM model)
     {
       if (!ModelState.IsValid) return View(nameof(Register), model: model);
+
+      if (!model.AcceptRules)
+      {
+        Message = new AlertMessage(message: "Molimo Vas da prihvatite pravila privatnosti");
+        return View(nameof(Register), model: model);
+      }
 
       UserProjection projection = _userManager.Register(fName: model.FName,
                                                         lName: model.LName,
                                                         email: model.Email,
                                                         password: model.Password);
       Message = !(projection is null)
-        ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na E-Mail: {projection.Email}")
+        ? new InfoMessage(message: $"Link za potvrdu registracije je poslan na Email: {projection.Email}")
         : (IMessage)new AlertMessage(message: $"Registracija nije uspjela, pokušajte ponovo");
 
-      return View(viewName: nameof(Register));
+      return RedirectToAction(actionName: nameof(Login), controllerName: "Account");
     }
 
     [HttpGet]
@@ -157,7 +162,7 @@ namespace UI.Controllers
         case RegistrationStatus.VALID:
           Message = new InfoMessage(message: "Registracija uspješna, molimo Vas da se ulogirate");
           _ = _userManager.ConfirmRegistration(GUID: GUID);
-          return View(viewName: nameof(Login));
+          return RedirectToAction(actionName: nameof(Login));
         case RegistrationStatus.APPROVED:
           Message = new AlertMessage(message: "Korisnički račun s danim parametrima već postoji");
           return RedirectToAction(actionName: nameof(Register));

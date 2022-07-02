@@ -100,6 +100,8 @@ namespace UI.Controllers
     {
       _ = _userManager.Remove(LoggedInUser.ID);
       LoggedInUser = null;
+
+      Message = new InfoMessage(message: "Korisnički račun je obrisan");
       return RedirectToAction(actionName: "Login", controllerName: "Account");
     }
   }

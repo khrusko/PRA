@@ -12,45 +12,57 @@
   };
 }
 
-<h2>Posudite @Model.BookInfo.Book.Title</h2>
+<div class="row">
+  <div class="offset-3 col-6">
+    <h2 class="h2 text-center">Posudite @Model.BookInfo.Book.Title</h2>
+    <hr class="mb-5" />
 
-<span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.BookInfo.Author.FName @Model.BookInfo.Author.LName</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Stanje: </span>
-<span style="font-size:20px">
-  @if (Model.BookInfo.Book.IsNew) {
-    <span>Novo</span>
-  }
-  else {
-    <span>Rabljeno</span>
-  }
-</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.BookInfo.Book.Quantity kom</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Cijena za posudbu: </span><span style="font-size:20px">@Model.BookInfo.Book.LoanPrice kn</span>
-<br />
-<span style="font-size:20px" class="fw-bold">Zakasnina: </span><span style="font-size:20px">@Model.BookStore.DelayPricePerDay kn</span>
-<br />
-@using (Html.BeginForm(actionName: "Loan",
-                       controllerName: "Loan",
-                       method: FormMethod.Post)) {
-  @Html.AntiForgeryToken()
+    <span style="font-size:20px" class="fw-bold">Autor: </span><span style="font-size:20px">@Model.BookInfo.Author.FName @Model.BookInfo.Author.LName</span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Stanje: </span>
+    <span style="font-size:20px">
+      @if (Model.BookInfo.Book.IsNew) {
+        <span>Novo</span>
+      }
+      else {
+        <span>Rabljeno</span>
+      }
+    </span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Dostupna količina: </span><span style="font-size:20px">@Model.BookInfo.Book.Quantity kom</span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Cijena za posudbu: </span><span style="font-size:20px">@Model.BookInfo.Book.LoanPrice kn</span>
+    <br />
+    <span style="font-size:20px" class="fw-bold">Zakasnina: </span><span style="font-size:20px">@Model.BookStore.DelayPricePerDay kn</span>
+    <br />
+    @using (Html.BeginForm(actionName: "Loan",
+                           controllerName: "Loan",
+                           method: FormMethod.Post,
+                           htmlAttributes: new {
+                             @class = "mt-5"
+                           })) {
+      @Html.AntiForgeryToken()
 
-  @Html.HiddenFor(expression: model => model.BookID)
+      @Html.HiddenFor(expression: model => model.BookID)
 
-  <div class="mb-3">
-    @Html.LabelFor(expression: model => model.LoanDays, htmlAttributes: new { @class = "form-label" })
-    @Html.DropDownListFor(expression: model => model.LoanDays, selectList: dateList, htmlAttributes: new { @class = "form-select" })
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LoanDays, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(expression: model => model.LoanDays, selectList: dateList, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="mb-3">
+        @Html.CheckBoxFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-checkbox me-3" })
+        @Html.LabelFor(expression: model => model.AcceptRules, htmlAttributes: new { @class = "form-label" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        @Html.ActionLink(linkText: "Odustani",
+                   actionName: "Details",
+                   controllerName: "Book",
+                   routeValues: new { id = Model.BookID },
+                   htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+        <button type="submit" class="btn btn-primary">Potvrdi</button>
+      </div>
+    }
   </div>
-
-  <div>
-    <button type="submit" class="btn btn-primary">Potvrdi</button>
-
-    @Html.ActionLink(linkText: "Odustani",
-               actionName: "Details",
-               controllerName: "Book",
-               routeValues: new { id = Model.BookID },
-               htmlAttributes: new { @class = "btn btn-outline-secondary" })
-  </div>
-}
+</div>
