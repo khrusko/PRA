@@ -12,5 +12,8 @@ namespace UI.Models
     [Display(Name = "Količina")]
     [Required(ErrorMessage = "Količina je obavezna")]
     public Int32 Quantity { get; set; }
+
+    [Display(Name = "Prihvaćam pravila korištenja usluge i naplate zakasnine")]
+    public Boolean AcceptRules { get; set; }
   }
 }

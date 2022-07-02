@@ -177,5 +177,35 @@ namespace DAL.Repository.Database
         });
       }
     }
+
+    public IEnumerable<LoanModel> ReadLoansInTimeout()
+    {
+      SqlDataReader reader = SqlHelper.ExecuteReader(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(ReadLoansInTimeout));
+
+      while (reader.Read())
+      {
+        yield return DbKeyTypePairs.Keys.Aggregate(Activator.CreateInstance<LoanModel>(), (obj, prop) =>
+        {
+          typeof(LoanModel).GetProperty(prop).SetValue(obj, reader[prop] == DBNull.Value ? default : reader[prop]);
+          return obj;
+        });
+      }
+    }
+
+    public Int32 CountByBookFK(Int32 BookFK)
+    {
+      IList<SqlParameter> parameters = new List<SqlParameter>()
+      {
+        new SqlParameter()
+        {
+          ParameterName = "@BookFK",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["BookFK"],
+          Value = BookFK,
+        }
+      };
+
+      return Int32.Parse(SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, EntityName + nameof(CountByBookFK), parameters.ToArray()).ToString());
+    }
   }
 }

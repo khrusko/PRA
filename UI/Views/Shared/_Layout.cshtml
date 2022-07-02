@@ -13,7 +13,7 @@
   @RenderSection("styles", required: false)
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
   @if (!(message is null)) {
     <div class="row justify-content-center fixed-top mt-3">
       <div class="col-4 alert alert-@message.Color alert-dismissible fade show align-items-center" role="alert">

@@ -125,7 +125,7 @@ namespace Udreka.Controllers
 
       public async static Task<HttpResponse> CreateOrder(PayPalSetup setup)
       {
-        Decimal price = setup.Operation == "Purchase" ? setup.Book.PurchasePrice : setup.Book.LoanPrice;
+        Decimal price = (setup.Operation == "Purchase" ? setup.Book.PurchasePrice : setup.Book.LoanPrice) / 7.6M;
         String priceString = setup.Quantity > 1
           ? (price * setup.Quantity).ToString("0.00", CultureInfo.InvariantCulture)
           : price.ToString("0.00", CultureInfo.InvariantCulture);

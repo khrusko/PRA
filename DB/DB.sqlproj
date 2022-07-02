@@ -155,6 +155,8 @@
     <Build Include="Programmability\Stored Procedures\Users\BL\EditProfile.sql" />
     <Build Include="Programmability\Stored Procedures\Subscriptions\BL\ReadAllUnresolved.sql" />
     <Build Include="Programmability\Stored Procedures\Subscriptions\BL\Resolve.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\ReadLoansInTimeout.sql" />
+    <Build Include="Programmability\Stored Procedures\Loans\BL\CountByBookFK.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment.sql" />

@@ -15,9 +15,9 @@ namespace UI.Models
     [MaxLength(length: 50)]
     public String LName { get; set; }
 
-    [Display(Name = "E-mail")]
-    [Required(ErrorMessage = "E-mail je obavezan")]
-    [EmailAddress(ErrorMessage = "Nije valjani E-mail")]
+    [Display(Name = "Email")]
+    [Required(ErrorMessage = "Email je obavezan")]
+    [EmailAddress(ErrorMessage = "Nije valjani Email")]
     public String Email { get; set; }
 
     [Display(Name = "Zaporka")]
@@ -30,5 +30,8 @@ namespace UI.Models
     [Compare("Password", ErrorMessage = "Zaporke se ne podudaraju")]
     [DataType(DataType.Password)]
     public String ConfirmPassword { get; set; }
+
+    [Display(Name = "Prihvaćam pravila privatnosti")]
+    public Boolean AcceptRules { get; set; }
   }
 }

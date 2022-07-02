@@ -24,7 +24,8 @@ namespace BLL.Manager
       => new BookProjection
       {
         ID = model.ID,
-        IsAvailable = model.DeleteDate != DateTime.MinValue,
+        CreateDate = model.CreateDate,
+        IsAvailable = model.DeleteDate == DateTime.MinValue,
         ISBN = model.ISBN,
         Title = model.Title,
         Summary = model.Summary,

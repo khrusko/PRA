@@ -250,7 +250,9 @@
     <Compile Include="Infrastructure\UserAuthenticateAttribute.cs" />
     <Compile Include="Infrastructure\UserAuthorizeAttribute.cs" />
     <Compile Include="Models\Abstract\IMessage.cs" />
+    <Compile Include="Models\AuthorEditVM.cs" />
     <Compile Include="Models\AuthorVM.cs" />
+    <Compile Include="Models\BookCardVM.cs" />
     <Compile Include="Models\BookStoreVM.cs" />
     <Compile Include="Models\BookVM.cs" />
     <Compile Include="Models\BookPublisherVM.cs" />
@@ -260,6 +262,11 @@
     <Compile Include="Models\Concrete\AlertMessage.cs" />
     <Compile Include="Models\Abstract\MessageBase.cs" />
     <Compile Include="Models\ContactFormVM.cs" />
+    <Compile Include="Models\Enums\PurchaseSortType.cs" />
+    <Compile Include="Models\PurchaseSearchVM.cs" />
+    <Compile Include="Models\LoanSearchVM.cs" />
+    <Compile Include="Models\Enums\LoanFilterType.cs" />
+    <Compile Include="Models\Enums\LoanSortType.cs" />
     <Compile Include="Models\LoanVM.cs" />
     <Compile Include="Models\MessageDetailsVM.cs" />
     <Compile Include="Models\MessageListVM.cs" />
@@ -328,11 +335,8 @@
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Dashboard\_AdminDashboard.cshtml" />
     <Content Include="Views\Dashboard\_UserDashboard.cshtml" />
-    <Content Include="Views\Dashboard\LoanHistory.cshtml" />
-    <Content Include="Views\Dashboard\ShoppingHistory.cshtml" />
     <Content Include="Views\Shared\_LoanCard.cshtml" />
     <Content Include="Views\Shared\_PurchaseCard.cshtml" />
-    <Content Include="Views\Dashboard\SalesHistory.cshtml" />
     <Content Include="Views\Author\Details.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Author\Create.cshtml" />
@@ -346,6 +350,10 @@
     <Content Include="Views\Message\Respond.cshtml" />
     <Content Include="Views\Purchase\Purchase.cshtml" />
     <Content Include="Views\Loan\Loan.cshtml" />
+    <Content Include="Views\Loan\History.cshtml" />
+    <Content Include="Views\Loan\Details.cshtml" />
+    <Content Include="Views\Purchase\History.cshtml" />
+    <Content Include="Views\Purchase\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -383,7 +391,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55141</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50513/</IISUrl>
+          <IISUrl>http://localhost:50880/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

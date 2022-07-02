@@ -69,23 +69,24 @@ namespace DAL.Abstract.Repository.Database
     public virtual Int32 Delete(K ID, T entity) => Delete(ID, entity.DeletedBy);
     public virtual Int32 Delete(K ID, K DeletedBy)
     {
-      IList<SqlParameter> parameters = new List<SqlParameter>();
-
-      parameters.Add(new SqlParameter()
+      IList<SqlParameter> parameters = new List<SqlParameter>
       {
-        ParameterName = "@ID",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["ID"],
-        Value = ID,
-      });
+        new SqlParameter()
+        {
+          ParameterName = "@ID",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["ID"],
+          Value = ID,
+        },
 
-      parameters.Add(new SqlParameter()
-      {
-        ParameterName = "@DeletedBy",
-        Direction = ParameterDirection.Input,
-        SqlDbType = DbKeyTypePairs["DeletedBy"],
-        Value = DeletedBy,
-      });
+        new SqlParameter()
+        {
+          ParameterName = "@DeletedBy",
+          Direction = ParameterDirection.Input,
+          SqlDbType = DbKeyTypePairs["DeletedBy"],
+          Value = DeletedBy,
+        }
+      };
 
       var returnValue = new SqlParameter()
       {

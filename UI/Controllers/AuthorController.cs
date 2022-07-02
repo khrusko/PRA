@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 using BLL.Abstract.Manager.Projection;
@@ -14,25 +16,38 @@ namespace UI.Controllers
   public class AuthorController : BaseController
   {
     private readonly IAuthorManager _authorManager = new AuthorManager();
+    private readonly IBookManager _bookManager = new BookManager();
+    private readonly IPublisherManager _publisherManager = new PublisherManager();
 
     [HttpGet]
     public ActionResult Details(Int32 id = 0)
     {
-      AuthorProjection projection = _authorManager.GetByID(id);
-      return projection is null
-        ? new HttpStatusCodeResult(404)
-        : (ActionResult)View(viewName: nameof(Details), model: projection);
+      AuthorProjection author = _authorManager.GetByID(id);
+      if (author is null) return new HttpStatusCodeResult(404);
+
+      IEnumerable<BookCardVM> books = from book in _bookManager.GetBooksByAuthorFK(authorFK: author.ID)
+                                          select new BookCardVM
+                                          {
+                                            Book = book,
+                                            Author = $"{author.FName} {author.LName}"
+                                          };
+      return View(viewName: nameof(Details),
+                  model: new AuthorVM
+                  {
+                    Author = author,
+                    Books = books
+                  });
     }
 
     [HttpGet]
     [UserAuthorize]
     public ViewResult Create()
       => View(viewName: nameof(Create),
-              model: new AuthorVM() { BirthDate = DateTime.Now });
+              model: new AuthorEditVM() { BirthDate = DateTime.Now });
 
     [HttpPost]
     [UserAuthorize]
-    public ActionResult Create(AuthorVM model)
+    public ActionResult Create(AuthorEditVM model)
     {
       if (!ModelState.IsValid)
         return View(viewName: nameof(Create), model: model);
@@ -77,7 +92,7 @@ namespace UI.Controllers
       return projection is null
         ? new HttpStatusCodeResult(404)
         : (ActionResult)View(viewName: nameof(Edit),
-                             model: new AuthorVM
+                             model: new AuthorEditVM
                              {
                                ID = projection.ID,
                                FName = projection.FName,
@@ -90,7 +105,7 @@ namespace UI.Controllers
 
     [HttpPost]
     [UserAuthorize]
-    public ActionResult Edit(AuthorVM model)
+    public ActionResult Edit(AuthorEditVM model)
     {
       AuthorProjection projection = _authorManager.GetByID(model.ID);
       if (projection is null)

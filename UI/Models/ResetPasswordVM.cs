@@ -12,7 +12,7 @@ namespace UI.Models
     [DataType(DataType.Password)]
     public String Password { get; set; }
 
-    [Display(Name = "Ponovi Zaporku")]
+    [Display(Name = "Ponovi zaporku")]
     [Required(ErrorMessage = "Polje Ponovi Zaporku je obavezno")]
     [Compare("Password", ErrorMessage = "Zaporke se ne podudaraju")]
     [DataType(DataType.Password)]

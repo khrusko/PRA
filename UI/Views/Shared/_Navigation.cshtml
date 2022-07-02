@@ -13,48 +13,46 @@
         </svg>
       </a>
 
-      <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small">
+      <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small d-flex align-content-center">
         <li>
-          <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white">
-            <svg class="bi" width="24" height="24" fill="currentColor">
+          <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white d-flex align-content-center">
+            <svg class="bi me-2" width="24" height="24" fill="currentColor">
               <use xlink:href="~/Content/bootstrap-icons.svg#house" />
             </svg>
+            Naslovna
           </a>
         </li>
         <li>
-          <a href="@Url.Action(actionName: "Search", controllerName: "Book")" class="nav-link text-white">
-            <svg class="bi" width="24" height="24" fill="currentColor">
+          <a href="@Url.Action(actionName: "Search", controllerName: "Book")" class="nav-link text-white d-flex align-content-center">
+            <svg class="bi me-2" width="24" height="24" fill="currentColor">
               <use xlink:href="~/Content/bootstrap-icons.svg#search" />
             </svg>
+            Pretraživanje
           </a>
         </li>
-        <li>
-          <a href="@Url.Action(actionName: "ContactUs", controllerName: "Home")" class="nav-link text-white">
-            <svg width="24" height="24" fill="currentColor">
-              <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
-            </svg>
-          </a>
-        </li>
+        @if ((user is null) || (!(user is null) && !user.IsAdmin)) {
+          <li>
+            <a href="@Url.Action(actionName: "ContactUs", controllerName: "Home")" class="nav-link text-white d-flex align-content-center">
+              <svg class="bi me-2" width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
+              </svg>
+              Upit
+            </a>
+          </li>
+        }
       </ul>
 
       @if (!(user is null)) {
+        <a href="@Url.Action(actionName: "Index", controllerName: "Dashboard")" class="nav-link text-white d-flex align-content-center me-3">
+          <svg class="bi me-2" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
+          </svg>
+          Kontrolna ploča
+        </a>
         <div class="text-end d-flex align-items-center">
-          @if (!user.IsAdmin) {
-            <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white">
-              <svg class="bi" width="24" height="24" fill="currentColor">
-                <use xlink:href="~/Content/bootstrap-icons.svg#cart" />
-              </svg>
-            </a>
-          }
-
-          <a href="@Url.Action(actionName: "Index", controllerName: "Dashboard")" class="nav-link text-white me-4">
-            <svg class="bi" width="24" height="24" fill="currentColor">
-              <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
-            </svg>
-          </a>
-          <a href="@Url.Action(actionName: "Index", controllerName: "User")" class="d-block link-dark text-decoration-none dropdown-toggle me-4">
-            <span class="me-3 text-white">@user.FName @user.LName</span>
-            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle">
+          <a href="@Url.Action(actionName: "Index", controllerName: "User")" class=" d-flex link-dark text-decoration-none me-4">
+            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle me-3">
+            <span class="text-white align-self-center">@user.FName @user.LName</span>
           </a>
           @Html.ActionLink(linkText: "Odjava", actionName: "Logout", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
         </div>

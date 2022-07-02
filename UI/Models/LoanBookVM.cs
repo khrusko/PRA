@@ -15,5 +15,8 @@ namespace UI.Models
     [Display(Name = "Trajanje posudbe")]
     [Required(ErrorMessage = "Trajanje posudbe je obavezno")]
     public Int32 LoanDays { get; set; }
+
+    [Display(Name = "Prihvaćam pravila korištenja usluge i naplate zakasnine")]
+    public Boolean AcceptRules { get; set; }
   }
 }

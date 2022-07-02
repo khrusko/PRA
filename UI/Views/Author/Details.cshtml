@@ -1,8 +1,9 @@
-﻿@using BLL.Projection
-@model AuthorProjection
+﻿@using UI.Models
+@using BLL.Projection
+@model AuthorVM
 
 @{
-  ViewBag.Title = $"{Model.FName} {Model.LName}";
+  ViewBag.Title = $"{Model.Author.FName} {Model.Author.LName}";
   UserProjection user = Session["user"] as UserProjection;
 }
 
@@ -14,28 +15,28 @@
         <div class="card">
           <div class="rounded-top text-white d-flex flex-row bg-dark">
             <div class="ms-4 mt-5 d-flex align-items-end" style="width: 150px;">
-              <img src="@Url.Content(!String.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "~/Content/DefaultUser.jpg")"
-                   alt="@Model.FName @Model.LName profile picture"
+              <img src="@Url.Content(!String.IsNullOrEmpty(Model.Author.ImagePath) ? Model.Author.ImagePath : "~/Content/DefaultUser.jpg")"
+                   alt="@Model.Author.FName @Model.Author.LName profile picture"
                    class="img-fluid img-thumbnail mb-2"
                    style="width: 150px; z-index: 1">
             </div>
             <div class="ms-3 mt-5">
-              <h5>@Model.FName @Model.LName</h5>
-              <p class="mb-1">@Model.BirthDate.ToLongDateString()</p>
+              <h5>@Model.Author.FName @Model.Author.LName</h5>
+              <p class="mb-1">@Model.Author.BirthDate.ToLongDateString()</p>
             </div>
           </div>
           <div class="p-4 text-black d-flex flex-column justify-content-between" style="background-color: #f8f9fa;">
             <div class="d-flex align-items-center">
-              @Model.Biography
+              @Model.Author.Biography
             </div>
-            <div class="d-flex align-items-center mt-5">
-              @if (!(user is null) && user.IsAdmin) {
 
+            <div class="d-flex align-items-center justify-content-end mt-5">
+              @if (!(user is null) && user.IsAdmin) {
                 @Html.ActionLink(linkText: "Uredi autora",
                                         actionName: "Edit",
                                         controllerName: "Author",
                                         routeValues: new {
-                                          id = Model.ID
+                                          id = Model.Author.ID
                                         },
                                         htmlAttributes: new {
                                           @class = "btn btn-outline-dark me-3",
@@ -54,6 +55,20 @@
   </div>
 </section>
 
+<div class="album py-5">
+  <div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+
+      @foreach (BookCardVM book in Model.Books) {
+
+        @Html.Partial(partialViewName: "_BookCard", model: book)
+
+      }
+
+    </div>
+  </div>
+</div>
+
 @if (!(user is null) && user.IsAdmin) {
 
   <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">
@@ -69,7 +84,7 @@
                         actionName: "Delete",
                         controllerName: "Author",
                         routeValues: new {
-                          id = Model.ID
+                          id = Model.Author.ID
                         },
                         htmlAttributes: new {
                           @class = "btn btn-lg btn-link fs-6 text-decoration-none text-danger col-6 m-0 rounded-0 border-end",

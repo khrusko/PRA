@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Web;
 
 using BLL.Abstract.Helper;
@@ -77,16 +78,19 @@ namespace BLL.Manager
     }
 
     private void SendResolvedSubscriptionMail(BookProjection book, UserProjection user)
-{
-      String verificationLink = $"/Book/Details/{book.ID}";
-      String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, verificationLink);
+    {
+      String bookLink = $"/Book/Details/{book.ID}";
+      String link = HttpContext.Current.Request.Url.AbsoluteUri.Replace(HttpContext.Current.Request.Url.PathAndQuery, bookLink);
 
       String subject = $"Dostupna je knjiga {book.Title}";
-      String body = $"<br />Knjiga {book.Title} je dostupna za kupnju ili posudbu.<br />Obavite željenu radnju klikom na link:<br /><br /><a href='{link}'>{link}</a>";
+      StringBuilder body = new StringBuilder().Append($"Poštovani {user.FName} {user.LName},<br /><br />")
+                                              .Append($"Knjiga <a href='{link}'>{book.Title}</a> je dostupna za kupnju i posudbu.<br />")
+                                              .Append("Obavite željenu radnju klikom na link:<br />")
+                                              .Append($"<a href='{link}'>{link}</a>");
 
       IEmailSender emailSender = EmailSenderFactory.GetEmailSender();
       emailSender.To = new MailAddress(user.Email, $"{user.FName} {user.LName}");
-      emailSender.SendEmail(subject, body);
+      emailSender.SendEmail(subject, body.ToString());
     }
   }
 }
