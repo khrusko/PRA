@@ -1,5 +1,9 @@
 ﻿@using UI.Models
+@using BLL.Projection
 @model PurchaseVM
+@{
+  UserProjection user = Session["user"] as UserProjection;
+}
 
 <div class="col">
   <div class="card">
@@ -8,11 +12,13 @@
       <h5 class="card-title" style="height: 3rem">@Model.Book.Title</h5>
       <hr />
 
-      <p>
-        <span class="fw-bold">Kupio/la:</span>
-        <span>@Model.User.FName</span>
-        <span>@Model.User.LName</span>
-      </p>
+      @if (!(user is null) && user.IsAdmin) {
+        <p>
+          <span class="fw-bold">Kupio/la:</span>
+          <span>@Model.User.FName</span>
+          <span>@Model.User.LName</span>
+        </p>
+      }
 
       <p>
         <span class="fw-bold">Cijena komada:</span>

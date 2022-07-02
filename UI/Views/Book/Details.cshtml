@@ -66,8 +66,6 @@
 
             if (user.IsAdmin) {
               <div class="text-lg-end">
-                <button type="button" class="btn btn-outline-danger me-3" data-bs-toggle="modal" href="#deleteUserModal">Obriši knjigu</button>
-
                 @Html.ActionLink(linkText: "Uredi knjigu",
                                  actionName: "Edit",
                                  controllerName: "Book",
@@ -75,9 +73,11 @@
                                    id = Model.Book.ID
                                  },
                                  htmlAttributes: new {
-                                   @class = "btn btn-outline-dark ",
+                                   @class = "btn btn-outline-dark me-3",
                                    style = "z-index: 1;"
                                  })
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" href="#deleteUserModal">Obriši knjigu</button>
+
 
 
                 <div class="modal modal-alert fade" tabindex="-1" role="dialog" id="deleteUserModal">

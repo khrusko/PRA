@@ -42,8 +42,8 @@
       </div>
 
       <div class="mb-3">
+        @Html.CheckBoxFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-checkbox me-1" })
         @Html.LabelFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-label" })
-        @Html.CheckBoxFor(expression: model => model.IsNew, htmlAttributes: new { @class = "form-checkbox" })
         @Html.ValidationMessageFor(expression: model => model.IsNew)
       </div>
 

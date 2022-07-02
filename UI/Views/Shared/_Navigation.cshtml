@@ -30,7 +30,7 @@
             Pretraživanje
           </a>
         </li>
-        @if (!(user is null) && !user.IsAdmin) {
+        @if ((user is null) || (!(user is null) && !user.IsAdmin)) {
           <li>
             <a href="@Url.Action(actionName: "ContactUs", controllerName: "Home")" class="nav-link text-white d-flex align-content-center">
               <svg class="bi me-2" width="24" height="24" fill="currentColor">

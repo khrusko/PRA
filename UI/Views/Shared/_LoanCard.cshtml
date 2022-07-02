@@ -3,11 +3,12 @@
 @model LoanVM
 @{
   UserProjection user = Session["user"] as UserProjection;
-  Int32 daysLeft = (Model.Loan.PlannedReturnDate - DateTime.Now).Days;
+  Int32 hoursLeft = (Model.Loan.PlannedReturnDate - DateTime.Now).Hours;
+  Int32 daysLeft = (Model.Loan.PlannedReturnDate - DateTime.Now).Days + (hoursLeft <= 24 ? 1 : 0);
 
   String borderClass = "";
   if (Model.Loan.ReturnDate == DateTime.MinValue) {
-    if (daysLeft <= 0) {
+    if (daysLeft < 0) {
       borderClass = "border-danger";
     }
     else if (daysLeft <= 3) {
@@ -54,7 +55,7 @@
       @if (Model.Loan.ReturnDate == DateTime.MinValue) {
         <p>
           <span class="fw-bold">Preostalo dana:</span>
-          @if (daysLeft <= 0) {
+          @if (daysLeft < 0) {
             <span class="text-danger">Istekao rok posudbe</span>
           }
           else {
