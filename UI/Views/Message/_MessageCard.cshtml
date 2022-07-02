@@ -1,0 +1,68 @@
+﻿@using BLL.Projection
+@model MessageProjection
+<div class="col">
+  <div class="card">
+
+    <div class="card-body container">
+      <div class="row">
+        <div class="col-3">
+          <span class="text-black fw-bold fs-5">Od:</span>
+        </div>
+        <div class="col-9">
+          <span class="text-black fs-5"> @Model.SenderFName @Model.SenderLName</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <span class="text-black fw-bold fs-5">Email:</span>
+        </div>
+        <div class="col-9">
+          <span class="text-black fs-5"> @Model.SenderEmail</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <span class="text-black fw-bold fs-5">Datum:</span>
+        </div>
+        <div class="col-9">
+          <span class="text-black fs-5">@($"{Model.SenderDate.ToLongDateString()} u {Model.SenderDate.ToLongTimeString()}") </span>
+        </div>
+      </div>
+
+      <hr />
+      <div class="row">
+        <div class="col-3">
+          <span class="text-black fw-bold fs-5">Upit:</span>
+        </div>
+        <div class="col-9">
+          <p class="text-black fs-5">
+            @(
+              $"{Model.SenderMessage.Substring(startIndex: 0, length: Model.SenderMessage.Length > 25 ? 25 : Model.SenderMessage.Length)}{(Model.SenderMessage.Length > 25 ? "..." : "")}"
+            )
+          </p>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        @Html.ActionLink(linkText: "Detalji",
+                   actionName: "Details",
+                   controllerName: "Message",
+                   routeValues: new { id = Model.ID },
+                   htmlAttributes: new {
+                     @class = "btn btn-outline-secondary"
+                   })
+
+        @if (Model.ResponderDate == DateTime.MinValue) {
+          @Html.ActionLink(linkText: "Odgovori",
+                            actionName: "Respond",
+                            controllerName: "Message",
+                            routeValues: new { id = Model.ID },
+                            htmlAttributes: new {
+                              @class = "btn btn-primary ms-3"
+                            })
+        }
+      </div>
+
+    </div>
+  </div>
+</div>

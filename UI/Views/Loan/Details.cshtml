@@ -1,0 +1,115 @@
+﻿@using UI.Models
+@using BLL.Projection
+@model LoanVM
+@{
+  ViewBag.Title = "Detalji posudbe";
+  UserProjection user = Session["user"] as UserProjection;
+  Int32 daysLeft = (Model.Loan.PlannedReturnDate - DateTime.Now).Days;
+}
+
+<div class="row">
+  <div class="col-8 offset-2">
+
+    <h2 class="h2 text-center">Detalji posudbe</h2>
+    <hr class="mb-5" />
+
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Knjiga:</span>
+      </div>
+      <div class="col-8">
+        @if (Model.Book.IsAvailable) {
+          @Html.ActionLink(linkText: Model.Book.Title,
+                                actionName: "Details",
+                                controllerName: "Book",
+                                routeValues: new { id = Model.Book.ID },
+                                htmlAttributes: new {
+                                  @class = "link-text fs-5"
+                                })
+        }
+        else {
+          <span class="text-black fs-5">@Model.Book.Title</span>
+        }
+      </div>
+    </div>
+    @if (!(user is null) && user.IsAdmin) {
+      <div class="row mb-3">
+        <div class="col-4">
+          <span class="text-black fw-bold fs-5">Posudio/la:</span>
+        </div>
+        <div class="col-8">
+          <span class="text-black fs-5"> @Model.User.FName @Model.User.LName</span>
+        </div>
+      </div>
+    }
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Email:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5"> @Model.User.Email</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Cijena posudbe:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@Model.Loan.LoanPrice.ToString("C2")</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Datum posudbe:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@Model.Loan.LoanDate.ToLongDateString()</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Planirani datum vraćanja:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@Model.Loan.PlannedReturnDate.ToLongDateString()</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Stvarni datum vraćanja:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@(Model.Loan.ReturnDate == DateTime.MinValue ? "Nije vraćeno" : Model.Loan.ReturnDate.ToLongDateString())</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Zakasnina:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@(Model.Loan.DelayPricePerDay * Model.Loan.DelayDays) kn</span>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mt-5">
+      @Html.ActionLink(linkText: "Natrag",
+                         actionName: "Index",
+                         controllerName: "Dashboard",
+                         routeValues: null,
+                         htmlAttributes: new {
+                           @class = "btn btn-outline-secondary me-3"
+                         })
+
+
+      @if (!(user is null) && user.IsAdmin && Model.Loan.ReturnDate == DateTime.MinValue) {
+        @Html.ActionLink(linkText: "Vrati knjigu",
+                         actionName: "Return",
+                         controllerName: "Loan",
+                         routeValues: new { id = Model.Loan.ID },
+                         htmlAttributes: new {
+                           @class = "btn btn-primary"
+                         })
+
+      }
+    </div>
+  </div>
+</div>

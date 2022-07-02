@@ -1,0 +1,97 @@
+﻿@using UI.Models
+@model MessageDetailsVM
+
+@{
+  ViewBag.Title = "Detalji poruke";
+}
+
+<div class="row">
+  <div class="offset-2 col-8">
+    <h2 class="h2 text-center">Detalji poruke</h2>
+    <hr class="mb-5" />
+
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Od:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5"> @Model.Message.SenderFName @Model.Message.SenderLName</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Email:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5"> @Model.Message.SenderEmail</span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Datum:</span>
+      </div>
+      <div class="col-8">
+        <span class="text-black fs-5">@($"{Model.Message.SenderDate.ToLongDateString()} u {Model.Message.SenderDate.ToLongTimeString()}") </span>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-4">
+        <span class="text-black fw-bold fs-5">Upit:</span>
+      </div>
+      <div class="col-8">
+        <p class="text-black fs-5">
+          @Model.Message.SenderMessage
+        </p>
+      </div>
+    </div>
+
+    @if (!(Model.Responder is null)) {
+      <div class="row mb-3">
+        <div class="col-4">
+          <span class="text-black fw-bold fs-5">Odgovorio/la:</span>
+        </div>
+        <div class="col-8">
+          <span class="text-black fs-5"> @Model.Responder.FName @Model.Responder.LName</span>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-4">
+          <span class="text-black fw-bold fs-5">Datum:</span>
+        </div>
+        <div class="col-8">
+          <span class="text-black fs-5">@($"{Model.Message.ResponderDate.ToLongDateString()} u {Model.Message.ResponderDate.ToLongTimeString()}") </span>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col-4">
+          <span class="text-black fw-bold fs-5">Upit:</span>
+        </div>
+        <div class="col-8">
+          <p class="text-black fs-5">
+            @Model.Message.ResponderMessage
+          </p>
+        </div>
+      </div>
+    }
+
+    <div class="d-flex justify-content-end mt-5">
+      @Html.ActionLink(linkText: "Natrag",
+                         actionName: "List",
+                         controllerName: "Message",
+                         routeValues: null,
+                         htmlAttributes: new {
+                           @class = "btn btn-outline-secondary me-3"
+                         })
+
+      @if (Model.Responder is null) {
+        @Html.ActionLink(linkText: "Odgovori",
+                           actionName: "Respond",
+                           controllerName: "Message",
+                           routeValues: new { id = Model.Message.ID },
+                           htmlAttributes: new {
+                             @class = "btn btn-primary"
+                           })
+      }
+    </div>
+  </div>
+</div>

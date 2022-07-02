@@ -1,0 +1,41 @@
+﻿@using BLL.Projection
+@{
+  IMessage message = TempData["message"] as IMessage;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width" />
+  <title>@ViewBag.Title</title>
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+  @RenderSection("styles", required: false)
+
+</head>
+<body class="d-flex flex-column min-vh-100">
+  @if (!(message is null)) {
+    <div class="row justify-content-center fixed-top mt-3">
+      <div class="col-4 alert alert-@message.Color alert-dismissible fade show align-items-center" role="alert">
+        <svg class="bi me-3" width="24" height="24" fill="currentColor">
+          <use xlink:href="~/Content/bootstrap-icons.svg#@message.Icon" />
+        </svg>
+        <span>@message.Message</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+  }
+
+  @Html.Partial(partialViewName: "_Navigation")
+
+  <div class="container mt-5 mb-5">
+    @RenderBody()
+  </div>
+
+  @Html.Partial(partialViewName: "_Footer")
+
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @RenderSection("scripts", required: false)
+</body>
+</html>

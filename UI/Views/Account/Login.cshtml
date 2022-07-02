@@ -1,0 +1,107 @@
+﻿@using UI.Models
+@model LoginVM
+
+@{
+  ViewBag.Title = "Prijava";
+}
+
+<div class="row">
+  <div class="col-6 offset-3">
+    <h2 class="h2 text-center">Prijava</h2>
+    <hr class="mb-5" />
+
+    @using (Html.BeginForm(actionName: "Login",
+                           controllerName: "Account",
+                           method: FormMethod.Post,
+                           htmlAttributes: new {
+                             @class = "mb-4"
+                           })) {
+      @Html.AntiForgeryToken()
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Email, htmlAttributes: new { @class = "form-label" })
+        @Html.TextBoxFor(expression: model => model.Email, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Email)
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.Password, htmlAttributes: new { @class = "form-label" })
+        @Html.PasswordFor(expression: model => model.Password, htmlAttributes: new { @class = "form-control" })
+        @Html.ValidationMessageFor(expression: model => model.Password)
+      </div>
+
+      <div class="text-lg-end">
+        <input data-bs-toggle="modal" data-bs-target="#modalResetPassword" type="button" class="btn btn-outline-secondary me-3" value="Obnova zaporke">
+        <input type="submit" class="btn btn-primary" value="Prijava" />
+      </div>
+    }
+    <div class="text-center mt-5">
+      <p class="text-secondary">
+        Nemaš korisnički račun?
+        @Html.ActionLink(linkText: "Registriraj se!",
+                         actionName: "Register",
+                         controllerName: "Account",
+                         routeValues: null,
+                         htmlAttributes: new {
+                             @class = "ms-3 btn btn-outline-secondary"
+                         })
+      </p>
+    </div>
+
+    <div id="modalResetPassword" class="modal">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Obnova zaporke</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body">
+            @using (Html.BeginForm(actionName: "RequestResetPassword",
+                                   controllerName: "Account",
+                                   method: FormMethod.Post,
+                                   htmlAttributes: new {
+                                     id = "resetPasswordForm"
+                                   })) {
+              <p class="text-secondary">Unesite Email zatim ako je email povezan sa korisničkim računom na Email će vam biti poslane upute i link za obnovu zaporke​.</p>
+              <div class="mb-3">
+                @Html.Label(expression: "email", labelText: "Email", htmlAttributes: new { @class = "control-label col-md-4" })
+                @Html.TextBox(name: "email", value: null, htmlAttributes: new { id = "resetPasswordEmail", @class = "form-control", type = "email", required = "true" })
+              </div>
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-outline-secondary me-3" data-bs-dismiss="modal" type="button" value="Odustani">Odustani</button>
+                <button id="btnResetPassword" class="btn btn-primary" type="submit" value="Pošalji">Pošalji</button>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section scripts{
+  @Scripts.Render("~/bundles/jqueryval")
+  <script>
+    $(() => {
+      const form = $("#resetPasswordForm").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true
+          }
+        },
+        messages: {
+          email: {
+            required: "Unesite valjani Email",
+            email: "Unesite valjani Email"
+          }
+        }
+      });
+      $("#modalResetPassword").on("hide.bs.modal", () => {
+        $("#resetPasswordEmail").val("");
+        form.resetForm();
+      });
+    });
+  </script>
+}

@@ -1,0 +1,17 @@
+﻿@using UI.Models
+@using BLL.Projection
+@model  LoanSearchVM
+@{
+  ViewBag.Title = "Kontrolna ploča";
+  var user = Session["user"] as UserProjection;
+}
+
+<h2 class="h2 text-center">Kontrolna ploča</h2>
+<hr class="mb-5" />
+
+@if (user.IsAdmin) {
+  @Html.Partial(partialViewName: "_AdminDashboard", model: Model)
+}
+else {
+  @Html.Partial(partialViewName: "_UserDashboard", model: Model.Loans)
+}

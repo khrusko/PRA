@@ -1,0 +1,71 @@
+﻿@using UI.Models
+@model MessageRespondVM
+
+@{
+  ViewBag.Title = $"Odgovori na upit";
+}
+<div class="col-6 offset-3">
+  <div class="row">
+    <h2 class="h2 text-center">Odgovori na upit</h2>
+    <hr class="mb-5" />
+
+    <div class="row">
+      <div class="col-3">
+        <span class="text-black">Od:</span>
+      </div>
+      <div class="col-9">
+        <span class="text-black fs-5"> @Model.SenderFName @Model.SenderLName</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <span class="text-black">Email:</span>
+      </div>
+      <div class="col-9">
+        <span class="text-black fs-5"> @Model.SenderEmail</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <span class="text-black">Datum:</span>
+      </div>
+      <div class="col-9">
+        <span class="text-black fs-5">@($"{Model.SenderDate.ToLongDateString()} u {Model.SenderDate.ToLongTimeString()}") </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-3">
+        <span class="text-black">Upit:</span>
+      </div>
+      <div class="col-9">
+        <p class="text-black fs-5">
+          @Model.SenderMessage
+        </p>
+      </div>
+    </div>
+    <div>
+      @using (Html.BeginForm(actionName: "Respond",
+                             controllerName: "Message",
+                             method: FormMethod.Post)) {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(expression: model => model.ID)
+
+        <div class="mb-3">
+          @Html.LabelFor(expression: model => model.ResponderMessage, htmlAttributes: new { @class = "form-label" })
+          @Html.TextAreaFor(expression: model => model.ResponderMessage, htmlAttributes: new { @class = "form-control", rows = "8" })
+          @Html.ValidationMessageFor(expression: model => model.ResponderMessage)
+        </div>
+
+        <div class="d-flex justify-content-end">
+          @Html.ActionLink(linkText: "Odustani",
+                           actionName: "List",
+                           controllerName: "Message",
+                           routeValues: null,
+                           htmlAttributes: new { @class = "btn btn-outline-secondary  me-3" })
+          <input type="submit" value="Odgovori" class="btn btn-primary" />
+        </div>
+      }
+    </div>
+  </div>
+</div>

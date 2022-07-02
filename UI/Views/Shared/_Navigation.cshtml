@@ -1,0 +1,68 @@
+﻿@using BLL.Projection
+
+@{
+  var user = Session["user"] as UserProjection;
+}
+
+<header>
+  <div class="px-5 py-2 bg-dark text-white">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-5 text-white text-decoration-none">
+        <svg class="bi" width="32" height="32" fill="currentColor">
+          <use xlink:href="~/Content/bootstrap-icons.svg#book" />
+        </svg>
+      </a>
+
+      <ul class="nav col-12 col-lg-auto my-2 me-lg-auto justify-content-center my-md-0 text-small d-flex align-content-center">
+        <li>
+          <a href="@Url.Action(actionName: "Index", controllerName: "Home")" class="nav-link text-white d-flex align-content-center">
+            <svg class="bi me-2" width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#house" />
+            </svg>
+            Naslovna
+          </a>
+        </li>
+        <li>
+          <a href="@Url.Action(actionName: "Search", controllerName: "Book")" class="nav-link text-white d-flex align-content-center">
+            <svg class="bi me-2" width="24" height="24" fill="currentColor">
+              <use xlink:href="~/Content/bootstrap-icons.svg#search" />
+            </svg>
+            Pretraživanje
+          </a>
+        </li>
+        @if ((user is null) || (!(user is null) && !user.IsAdmin)) {
+          <li>
+            <a href="@Url.Action(actionName: "ContactUs", controllerName: "Home")" class="nav-link text-white d-flex align-content-center">
+              <svg class="bi me-2" width="24" height="24" fill="currentColor">
+                <use xlink:href="~/Content/bootstrap-icons.svg#envelope" />
+              </svg>
+              Upit
+            </a>
+          </li>
+        }
+      </ul>
+
+      @if (!(user is null)) {
+        <a href="@Url.Action(actionName: "Index", controllerName: "Dashboard")" class="nav-link text-white d-flex align-content-center me-3">
+          <svg class="bi me-2" width="24" height="24" fill="currentColor">
+            <use xlink:href="~/Content/bootstrap-icons.svg#card-list" />
+          </svg>
+          Kontrolna ploča
+        </a>
+        <div class="text-end d-flex align-items-center">
+          <a href="@Url.Action(actionName: "Index", controllerName: "User")" class=" d-flex link-dark text-decoration-none me-4">
+            <img src="@Url.Content(!String.IsNullOrEmpty(user.ImagePath) ? user.ImagePath : "~/Content/DefaultUser.jpg")" alt="@user.FName @user.LName profile picture" width="38" height="38" class="rounded-circle me-3">
+            <span class="text-white align-self-center">@user.FName @user.LName</span>
+          </a>
+          @Html.ActionLink(linkText: "Odjava", actionName: "Logout", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
+        </div>
+      }
+      else {
+        <div class="text-end">
+          @Html.ActionLink(linkText: "Prijava", actionName: "Login", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-light me-2" })
+          @Html.ActionLink(linkText: "Registracija", actionName: "Register", controllerName: "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-light" })
+        </div>
+      }
+    </div>
+  </div>
+</header>

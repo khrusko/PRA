@@ -1,0 +1,47 @@
+﻿@using UI.Models
+@model HomeVM
+
+@{
+  ViewBag.Title = "Naslovna";
+
+  IEnumerable<BookCardVM> top4NewBooks = Model.Books
+                                              .Where(predicate: book => book.Book.IsNew && book.Book.Quantity > 0)
+                                              .Take(count: 4);
+
+  IEnumerable<BookCardVM> top4AvailableBooks = Model.Books
+                                                    .Where(predicate: book => book.Book.Quantity > 0)
+                                                    .Take(count: 4);
+}
+
+<h1 class="h1 text-center">@Model.BookStore.Name</h1>
+<hr class="mb-5" />
+
+<h2 class="h2 ms-5">Nove knjige</h2>
+<div class="album py-3">
+  <div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+
+      @foreach (BookCardVM book in top4NewBooks) {
+
+        @Html.Partial(partialViewName: "_BookCard", model: book)
+
+      }
+
+    </div>
+  </div>
+</div>
+
+<h2 class="h2 ms-5 mt-5">Dostupne knjige</h2>
+<div class="album py-3">
+  <div class="container">
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+
+      @foreach (BookCardVM book in top4AvailableBooks) {
+
+        @Html.Partial(partialViewName: "_BookCard", model: book)
+
+      }
+
+    </div>
+  </div>
+</div>

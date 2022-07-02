@@ -1,0 +1,116 @@
+﻿@using UI.Models
+@model  LoanSearchVM
+
+<div class="d-flex">
+  @Html.ActionLink(linkText: "Povijest kupnji",
+                   actionName: "History",
+                   controllerName: "Purchase",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Povijest posudbi",
+                   actionName: "History",
+                   controllerName: "Loan",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Korisničke poruke",
+                   actionName: "List",
+                   controllerName: "Message",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Promijeni podatke o knjižari",
+                   actionName: "Edit",
+                   controllerName: "BookStore",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Dodaj autora",
+                   actionName: "Create",
+                   controllerName: "Author",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Dodaj knjigu",
+                   actionName: "Create",
+                   controllerName: "Book",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Dodaj djelatnika",
+                   actionName: "Create",
+                   controllerName: "User",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+</div>
+
+<h3 class="h3 ms-5 my-5">Aktivne posudbe</h3>
+
+@using (Html.BeginForm(actionName: "Index",
+                       controllerName: "Dashboard",
+                       method: FormMethod.Get)) {
+  <div class="row">
+    <div class="col-4 offset-2">
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LoanFilterType, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.LoanFilterType, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="mb-3"></div>
+    </div>
+
+    <div class="col-4">
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.LoanSortType, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.LoanSortType, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="mb-3">
+        @Html.LabelFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-label" })
+        @Html.EnumDropDownListFor(expression: model => model.SortDirection, htmlAttributes: new { @class = "form-select" })
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <input type="submit" class="btn btn-primary px-5" value="Pretraži" />
+      </div>
+    </div>
+
+  </div>
+}
+
+<div class="album py-5">
+
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var loan in Model.Loans) {
+
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
+
+      }
+
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-end">
+  @Html.PageLinks(pagingInfo: Model.PagingInfo,
+                  pageUrl: page => Url.Action(actionName: "Index",
+                                              controllerName: "Dashboard",
+                                              routeValues: new {
+                                                LoanFilterType = (Int32)Model.LoanFilterType,
+                                                LoanSortType = (Int32)Model.LoanSortType,
+                                                SortDirection = (Int32)Model.SortDirection,
+                                                page
+                                              }))
+</div>

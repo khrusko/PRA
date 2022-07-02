@@ -1,0 +1,38 @@
+﻿@using UI.Models
+@model  IEnumerable<LoanVM>
+
+@{
+}
+
+<div>
+  @Html.ActionLink(linkText: "Povijest posudbi",
+                   actionName: "History",
+                   controllerName: "Loan",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary me-1"
+                   })
+  @Html.ActionLink(linkText: "Povijest kupnji",
+                   actionName: "History",
+                   controllerName: "Purchase",
+                   routeValues: null,
+                   htmlAttributes: new {
+                     @class = "btn btn-primary"
+                   })
+</div>
+
+<div class="album py-5">
+  <h3>Trenutno posuđene knjige</h3>
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+      @foreach (var loan in Model) {
+
+        @Html.Partial(partialViewName: "_LoanCard",
+                      model: loan)
+
+      }
+
+    </div>
+  </div>
+</div>

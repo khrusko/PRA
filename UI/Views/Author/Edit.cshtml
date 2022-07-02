@@ -1,0 +1,69 @@
+﻿@using UI.Models
+@model AuthorEditVM
+
+@{
+    ViewBag.Title = $"Uredi | {Model.FName} {Model.LName}";
+}
+<div class="row">
+    <div class="col-8 offset-2">
+        <h2>Uredi autora</h2>
+        <hr />
+
+        @using (Html.BeginForm(actionName: "Edit",
+                               controllerName: "Author",
+                               method: FormMethod.Post,
+                               htmlAttributes: new
+                               {
+                                   enctype = "multipart/form-data"
+                               }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.HiddenFor(expression: model => model.ID)
+            @Html.HiddenFor(expression: model => model.ImagePath)
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.FName, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.FName, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.FName)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.LName, htmlAttributes: new { @class = "form-label" })
+                @Html.TextBoxFor(expression: model => model.LName, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(expression: model => model.LName)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.BirthDate, htmlAttributes: new { @class = "form-label" })
+                @Html.EditorFor(expression: model => model.BirthDate, additionalViewData: new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(expression: model => model.BirthDate)
+            </div>
+
+            <div class="mb-3">
+                @Html.LabelFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-label" })
+                @Html.TextAreaFor(expression: model => model.Biography, htmlAttributes: new { @class = "form-control", rows = "8" })
+                @Html.ValidationMessageFor(expression: model => model.Biography)
+            </div>
+
+            <div class="mb-3">
+                <img src="@Url.Content(!String.IsNullOrEmpty(Model.ImagePath) ? Model.ImagePath : "~/Content/DefaultUser.jpg")"
+                     alt="@Model.FName @Model.LName profile picture"
+                     class="img-fluid img-thumbnail mb-2"
+                     style="width: 150px; z-index: 1">
+
+                @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { @class = "form-control", type = "file" })
+                @Html.ValidationMessageFor(expression: model => model.Image)
+            </div>
+
+            <div class="text-lg-end">
+                @Html.ActionLink(linkText: "Odustani",
+                                 actionName: "Details",
+                                 controllerName: "Author",
+                                 routeValues: new { id = Model.ID },
+                                 htmlAttributes: new { @class = "btn btn-outline-secondary me-3" })
+                <input type="submit" value="Spremi" class="btn btn-primary me-3" />
+            </div>
+        }
+        </div>
+    </div>
